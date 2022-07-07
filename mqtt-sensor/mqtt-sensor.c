@@ -16,6 +16,7 @@
 
 #include <string.h>
 #include <strings.h>
+#include <time.h>
 /*---------------------------------------------------------------------------*/
 #define LOG_MODULE "mqtt-sensor"
 #ifdef MQTT_CLIENT_CONF_LOG_LEVEL
@@ -83,7 +84,7 @@ static char pub_topic[BUFFER_SIZE];
 //topic to which the sensor has to be subscribed
 static char sub_topic[BUFFER_SIZE];
 
-//The maximum reachable temperature is MAX_TEMP and the mininmum one is MIN_TEMP
+//The maximum reachable temperature is MAX_TEMP and the minimum one is MIN_TEMP
 #define MAX_TEMP 2000
 //MIN_TEMP is an approximation of the ambient possible temperature
 #define MIN_TEMP 10
@@ -93,12 +94,13 @@ static bool heater_on = false;
 /*---------------------------------------------------------------------------*/
 
 static void simulate_temperature_change(){
-	//the temperature raises with a probability of 1/2 when the heater is ON
+	srand(time(NULL));
+	//the temperature raises with a probability of 4/5 when the heater is ON
 	if(heater_on){
 		if(current_temperature >= MAX_TEMP)
 			return;
 		else{
-			if(rand()%10 < 5)
+			if(rand()%10 < 8)
 				current_temperature++;
 		}
 	}
@@ -121,12 +123,14 @@ PROCESS(mqtt_sensor_process, "MQTT Client");
 static void received_chunk_handler(const char* topic, const uint8_t* chunk){
 	printf("New value at topic %s has been received: %s\n", topic, chunk);
 
-	if(strcmp(chunk, "ON") == 0)
+	char chunk_string[4];
+	sprintf(chunk_string, "%s", chunk);	
+	if(strcmp(chunk_string, "ON") == 0)
 		heater_on = true;
-	else if (strcmp(chunk, "OFF") == 0)
+	else if (strcmp(chunk_string, "OFF") == 0)
 		heater_on = false;
 	else
-		printf("Received unrecognised command, the heater state remains the same\n");
+		printf("An unrecognised command has been received, the heater state remains the same\n");
 	return;
 }
 
@@ -193,7 +197,7 @@ PROCESS_THREAD(mqtt_sensor_process, ev, data){
 					linkaddr_node_addr.u8[2], linkaddr_node_addr.u8[5],
 					linkaddr_node_addr.u8[6], linkaddr_node_addr.u8[7]);
 	
-	mqtt_register(&conn, &mqtt_client_process, client_id, mqtt_event,
+	mqtt_register(&conn, &mqtt_sensor_process, client_id, mqtt_event,
                   MAX_TCP_SEGMENT_SIZE);
 
 	//Setting the initial state 
@@ -235,11 +239,11 @@ PROCESS_THREAD(mqtt_sensor_process, ev, data){
 					strcpy(heater_state, "ON");
 				else
 					strcpy(heater_state, "OFF");
-				sprintf(app_buffer, "Current temperature is %d °C, heater is %s", current_temperature, heater_state);
+				sprintf(app_buffer, "Current temperature is %f °C, heater is %s", current_temperature, heater_state);
 				simulate_temperature_change();
 				status = mqtt_publish(&conn, NULL, pub_topic, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 				if(status != MQTT_STATUS_OK){
-					LOG_ERR("Error during publishing registration message\n");
+					LOG_ERR("Error during publishing a message\n");
 					switch (status){
 						case  MQTT_STATUS_OUT_QUEUE_FULL:
 						LOG_ERR("Error: MQTT_STATUS_OUT_QUEUE_FULL\n");

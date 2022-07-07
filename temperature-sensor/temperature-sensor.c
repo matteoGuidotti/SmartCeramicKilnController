@@ -17,6 +17,7 @@
 #include <string.h>
 #include <strings.h>
 #include <time.h>
+#include"os/dev/button-hal-h"
 /*---------------------------------------------------------------------------*/
 #define LOG_MODULE "mqtt-sensor"
 #ifdef MQTT_CLIENT_CONF_LOG_LEVEL
@@ -272,6 +273,15 @@ PROCESS_THREAD(mqtt_sensor_process, ev, data){
 			}
 
 			etimer_set(&periodic_timer, MEASUREMENT_PERIOD);
+		}
+		else if(ev == button_hal_press_event){
+			button_hal_button_T* btn = (button_hal_button_t*) data;
+			//if the left button is pressed, the heater is turned on
+			if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_LEFT)
+				heater_on = true;
+			//if the right button is pressed, the heater is turned off
+			else if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_RIGHT)
+				heater_on = false;
 		}
 	}
 

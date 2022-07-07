@@ -1,4 +1,4 @@
-CONTIKI_PROJECT = mqtt-sensor
+CONTIKI_PROJECT = temperature-sensor
 all: $(CONTIKI_PROJECT)
 
 CONTIKI = ../../..

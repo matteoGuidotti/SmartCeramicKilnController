@@ -19,7 +19,7 @@
 #include <time.h>
 #include"os/dev/button-hal-h"
 /*---------------------------------------------------------------------------*/
-#define LOG_MODULE "mqtt-sensor"
+#define LOG_MODULE "temperature-sensor"
 #ifdef MQTT_CLIENT_CONF_LOG_LEVEL
 #define LOG_LEVEL MQTT_CLIENT_CONF_LOG_LEVEL
 #else
@@ -48,8 +48,8 @@ static uint8_t state;
 #define STATE_DISCONNECTED    5
 
 /*---------------------------------------------------------------------------*/
-PROCESS_NAME(mqtt_sensor_process);
-AUTOSTART_PROCESSES(&mqtt_sensor_process);
+PROCESS_NAME(mqtt_temperature_sensor);
+AUTOSTART_PROCESSES(&mqtt_temperature_sensor);
 
 /*---------------------------------------------------------------------------*/
 /* Maximum TCP segment size for outgoing segments of our socket */
@@ -117,7 +117,7 @@ static void simulate_temperature_change(){
 }
 
 /*---------------------------------------------------------------------------*/
-PROCESS(mqtt_sensor_process, "MQTT Client");
+PROCESS(mqtt_temperature_sensor, "MQTT temperature Client");
 
 /*---------------------------------------------------------------------------*/
 
@@ -144,7 +144,7 @@ static void mqtt_event(struct mqtt_connection* m, mqtt_event_t event, void* data
 		case MQTT_EVENT_DISCONNECTED:
 			printf("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 			state = STATE_DISCONNECTED;
-			process_poll(&mqtt_sensor_process);
+			process_poll(&mqtt_temperature_sensor);
 			break;
 		case MQTT_EVENT_PUBLISH:
 			msg_ptr = data;
@@ -182,7 +182,7 @@ static bool have_connectivity(){
 }
 
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(mqtt_sensor_process, ev, data){
+PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 	PROCESS_BEGIN();
 
 	mqtt_status_t status;
@@ -190,7 +190,7 @@ PROCESS_THREAD(mqtt_sensor_process, ev, data){
 	strcpy(pub_topic, "current_air_temperature");
 	strcpy(sub_topic, "target_air_temperature");
 
-	printf("MQTT client sensor process\n");
+	printf("MQTT client temperature sensor process\n");
 
 	// Initialize the ClientID as MAC address
   	snprintf(client_id, BUFFER_SIZE, "%02x%02x%02x%02x%02x%02x",
@@ -198,7 +198,7 @@ PROCESS_THREAD(mqtt_sensor_process, ev, data){
 					linkaddr_node_addr.u8[2], linkaddr_node_addr.u8[5],
 					linkaddr_node_addr.u8[6], linkaddr_node_addr.u8[7]);
 	
-	mqtt_register(&conn, &mqtt_sensor_process, client_id, mqtt_event,
+	mqtt_register(&conn, &mqtt_temperature_sensor, client_id, mqtt_event,
                   MAX_TCP_SEGMENT_SIZE);
 
 	//Setting the initial state 

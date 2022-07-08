@@ -13,7 +13,7 @@
 #include "dev/button-hal.h"
 #include "dev/leds.h"
 #include "os/sys/log.h"
-#include "os/dev/button-hal-h"
+#include "os/dev/button-hal.h"
 
 #include <string.h>
 #include <strings.h>

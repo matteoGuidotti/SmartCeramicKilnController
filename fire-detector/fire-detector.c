@@ -13,7 +13,7 @@
 #include "dev/button-hal.h"
 #include "dev/leds.h"
 #include "os/sys/log.h"
-#include "os/dev/button-hal-h"
+#include "os/dev/button-hal.h"
 #include "os/dev/leds.h"
 
 #include <string.h>
@@ -58,8 +58,10 @@ AUTOSTART_PROCESSES(&mqtt_fire_detector);
 #define CONFIG_IP_ADDR_STR_LEN   64
 /*---------------------------------------------------------------------------*/
 
-// Periodic timer to check the temperature (30 seconds)
+// The sensor checks for a fire every second
+// when the fire is sensed, the sensor will send an alarm message every minute
 #define CHECK_PERIOD     CLOCK_SECOND
+#define ALARM_PERIOD	 CLOCK_SECOND * 60
 static struct etimer periodic_timer;
 
 /*---------------------------------------------------------------------------*/
@@ -93,12 +95,16 @@ static bool fire_detected = false;
 /*---------------------------------------------------------------------------*/
 //returns true if the fire is detected, false otherwise
 static bool simulate_fire_detection(){
-	srand(time(NULL));
+	//srand(time(NULL));
 	//the fire raises with a probability of 1%
-	if(rand()%100 < 1)
+	if(rand()%100 < 1){
+		printf("Fire detected!\n");
 		return true;
-	else 
+	}
+	else{
+		printf("No fire detected\n"); 
 		return false;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -114,6 +120,9 @@ static void received_chunk_handler(const char* topic, const uint8_t* chunk){
 	if(strcmp((char*)chunk, STOP_ALARM) == 0){
 		fire_detected = false;
 		leds_set(LEDS_GREEN);
+	}
+	else{
+		printf("An unrecognised message has been received\n");
 	}
 }
 
@@ -254,8 +263,11 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 				//when the application is disconnected, it tries to reconnect to the broker
 		   		state = STATE_INIT;
 			}
-
-			etimer_set(&periodic_timer, CHECK_PERIOD);
+			
+			if(fire_detected)
+				etimer_set(&periodic_timer, ALARM_PERIOD);
+			else
+				etimer_set(&periodic_timer, CHECK_PERIOD);
 		}
 		else if (ev == button_hal_periodic_event){
 			//by holding a button for 5 seconds, a use can stop the alarm

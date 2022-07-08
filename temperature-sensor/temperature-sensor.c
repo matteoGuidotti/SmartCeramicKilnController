@@ -80,18 +80,17 @@ static struct mqtt_connection conn;
 #define BUFFER_SIZE 64
 
 static char client_id[BUFFER_SIZE];
-//topic in which the sensor will publish
-static char pub_topic[BUFFER_SIZE];
-//topic to which the sensor has to be subscribed
-static char sub_topic[BUFFER_SIZE];
 
+//topic in which the sensor will publish
 #define PUB_TOPIC	"current_temperature"
+//topic to which the sensor has to be subscribed
 #define SUB_TOPIC	"heater_state"
 
 //The maximum reachable temperature is MAX_TEMP and the minimum one is MIN_TEMP
 #define MAX_TEMP 2000
 //MIN_TEMP is an approximation of the ambient possible temperature
 #define MIN_TEMP 10
+
 #define START_HEATER	"{\"heater_on\":true}"
 #define STOP_HEATER		"{\"heater_on\":false}"
 static int current_temperature = MIN_TEMP;
@@ -191,9 +190,6 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 	PROCESS_BEGIN();
 
 	mqtt_status_t status;
-	//Initializing the topics
-	strcpy(pub_topic, "current_temperature");
-	strcpy(sub_topic, "heater_status");
 
 	printf("MQTT client temperature sensor process\n");
 
@@ -230,7 +226,6 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 
 			if(state == STATE_CONNECTED){
 				//Subscribe to a topic
-				//status = mqtt_subscribe(&conn, NULL, sub_topic, MQTT_QOS_LEVEL_0);
 				status = mqtt_subscribe(&conn, NULL, SUB_TOPIC, MQTT_QOS_LEVEL_0);
 
 				if(status == MQTT_STATUS_OUT_QUEUE_FULL){
@@ -248,7 +243,6 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 					strcpy(heater_state, "OFF");
 				simulate_temperature_change();
 				sprintf(app_buffer, "{\"current_temperature\": %d, \"heater_state\": \"%s\"}", current_temperature, heater_state);
-				//status = mqtt_publish(&conn, NULL, pub_topic, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 				status = mqtt_publish(&conn, NULL, PUB_TOPIC, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 				if(status != MQTT_STATUS_OK){
 					LOG_ERR("Error during publishing a message\n");

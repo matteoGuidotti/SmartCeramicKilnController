@@ -83,12 +83,10 @@ static struct mqtt_connection conn;
 #define BUFFER_SIZE 64
 
 static char client_id[BUFFER_SIZE];
-//topic in which the sensor will publish
-static char pub_topic[BUFFER_SIZE];
-//topic to which the sensor has to be subscribed
-static char sub_topic[BUFFER_SIZE];
 
+//topic to which the sensor has to be subscribed
 #define SUB_TOPIC "stop_alarm"
+//topic in which the sensor will publish
 #define PUB_TOPIC "fire_alarm"
 
 #define FIRE_ALARM	"{\"fire_detected\":true}"
@@ -180,9 +178,6 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 	PROCESS_BEGIN();
 
 	mqtt_status_t status;
-	//Initializing the topics
-	//strcpy(pub_topic, "fire_alarm");
-	//strcpy(sub_topic, "stop_alarm");
 
 	printf("MQTT client fire-detection sensor process\n");
 

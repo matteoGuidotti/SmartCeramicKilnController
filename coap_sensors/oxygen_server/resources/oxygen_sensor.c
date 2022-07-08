@@ -29,8 +29,8 @@ static bool oxygen_emitter = false;
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
 
-//enum Emitter_mode{INC, DEC};
-char * e_mod  = "DEC";
+enum Emitter_mode{INC, DEC};
+static enum Emitter_mode e_mode  = DEC;
 
 
 static void
@@ -47,18 +47,29 @@ res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t 
   } else {
     success = 0;
   } if(success && (len = coap_get_post_variable(request, "mode", &mode))) {
-    LOG_DBG("mode %s\n", mode);
-	
-	if(strcmp(mode, "on") == 0){
-	        printf("Switch ON oxygen emitter\n");
-	        oxygen_emitter = true;
-	        e_mod = (char*)type;
-	    }else if (strcmp(mode, "off")==0){
-	        printf("Switch OFF oxygen emitter\n");
-	        oxygen_emitter = false;
+	LOG_DBG("mode %s\n", mode);
+	if(strncmp((char*)type, "INC", len) == 0){
+		e_mode = INC;
+		printf("Sono nel caso INC");
+	}
+		
+	else if (strncmp((char*)type, "DEC", len) == 0){
+		e_mode = DEC;
+		printf("Sono nel caso DEC");
+	}
+		
+
+	if(strncmp(mode, "on", len) == 0){
+		printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
+		oxygen_emitter = true;
+		
+	    }else if (strncmp(mode, "off",len)==0){
+		printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
+		oxygen_emitter = false;
+	       
 	    }else{
-	        printf("ERROR: UNKNOWN COMMAND\n");
-	        success = 0;
+		printf("ERROR: UNKNOWN COMMAND\n");
+		success = 0;
 	    }
   } else { success = 0;}
 	
@@ -72,17 +83,26 @@ res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 /*---------------------------------------------------------------------------*/
 
 static enum Risk simulate_oxygen_change(){
+	
 	srand(time(NULL));
 	int type = 0;
 	double variation = (double)(rand() % 10) / 10;
+	
+	
+	printf("%d\n", oxygen_emitter);
+	
+	
 	// oxygen emitter ON -> oxygen rises
 	// oxygen emitter OFF -> 3/10 oxygen change, 50% inc, 50% dec
-	if(oxygen_emitter && strcmp("INC", e_mod) ==0){
+	if(oxygen_emitter && e_mode == INC){
+		printf("Sto incrementando");
 		oxygen_level = oxygen_level + 0.3;
-	} else if(oxygen_emitter && strcmp("DEC", e_mod) ==0){
+	} else if(oxygen_emitter && e_mode == DEC){
+		printf("Sto decrementando");
 		oxygen_level = oxygen_level - 0.3;
 	}
 	else {
+		printf("A caso");
 		type = rand()%2;
 		if( ((rand()%10) < 3) && type == 0)
 			oxygen_level = oxygen_level - variation;
@@ -146,6 +166,7 @@ static void oxygen_event_handler(void)
 	}
   }
   // Da rivedere
+  printf("Oxygen level: %f \n", oxygen_level);
   coap_notify_observers(&oxygen_sensor);
   
 }

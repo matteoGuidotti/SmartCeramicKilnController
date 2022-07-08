@@ -14,12 +14,13 @@
 #include "dev/leds.h"
 #include "os/sys/log.h"
 #include "os/dev/button-hal-h"
+#include "os/dev/leds.h"
 
 #include <string.h>
 #include <strings.h>
 #include <time.h>
 /*---------------------------------------------------------------------------*/
-#define LOG_MODULE "temperature-sensor"
+#define LOG_MODULE "fire-detector"
 #ifdef MQTT_CLIENT_CONF_LOG_LEVEL
 #define LOG_LEVEL MQTT_CLIENT_CONF_LOG_LEVEL
 #else
@@ -48,8 +49,8 @@ static uint8_t state;
 #define STATE_DISCONNECTED    5
 
 /*---------------------------------------------------------------------------*/
-PROCESS_NAME(mqtt_temperature_sensor);
-AUTOSTART_PROCESSES(&mqtt_temperature_sensor);
+PROCESS_NAME(mqtt_fire_detector);
+AUTOSTART_PROCESSES(&mqtt_fire_detector);
 
 /*---------------------------------------------------------------------------*/
 /* Maximum TCP segment size for outgoing segments of our socket */
@@ -58,7 +59,7 @@ AUTOSTART_PROCESSES(&mqtt_temperature_sensor);
 /*---------------------------------------------------------------------------*/
 
 // Periodic timer to check the temperature (30 seconds)
-#define MEASUREMENT_PERIOD     CLOCK_SECOND * 30
+#define CHECK_PERIOD     CLOCK_SECOND
 static struct etimer periodic_timer;
 
 /*---------------------------------------------------------------------------*/
@@ -85,41 +86,23 @@ static char pub_topic[BUFFER_SIZE];
 //topic to which the sensor has to be subscribed
 static char sub_topic[BUFFER_SIZE];
 
-//The maximum reachable temperature is MAX_TEMP and the minimum one is MIN_TEMP
-#define MAX_TEMP 2000
-//MIN_TEMP is an approximation of the ambient possible temperature
-#define MIN_TEMP 10
-#define START_HEATER	"{\"heater_on\":true}"
-#define STOP_HEATER		"{\"heater_on\":false}"
-static int current_temperature = MIN_TEMP;
-//when the heater is on, the temperature tends to encrease, decrease otherwise
-static bool heater_on = false;
-/*---------------------------------------------------------------------------*/
+#define FIRE_ALARM	"{\"fire_detected\":true}"
+#define STOP_ALARM 	"{\"stop_alarm\":true}"
 
-static void simulate_temperature_change(){
+static bool fire_detected = false;
+/*---------------------------------------------------------------------------*/
+//returns true if the fire is detected, false otherwise
+static bool simulate_fire_detection(){
 	srand(time(NULL));
-	//the temperature raises with a probability of 4/5 when the heater is ON
-	if(heater_on){
-		if(current_temperature >= MAX_TEMP)
-			return;
-		else{
-			if(rand()%10 < 8)
-				current_temperature++;
-		}
-	}
-	//the temperature decreases with a probability of 1/5 when the heater is OFF
-	else {
-		if(current_temperature <= MIN_TEMP)
-			return;
-		else {
-			if(rand()%10 < 2)
-				current_temperature--;
-		}
-	}
+	//the fire raises with a probability of 1%
+	if(rand()%100 < 1)
+		return true;
+	else 
+		return false;
 }
 
 /*---------------------------------------------------------------------------*/
-PROCESS(mqtt_temperature_sensor, "MQTT temperature Client");
+PROCESS(mqtt_fire_detector, "MQTT fire-detector Client");
 
 /*---------------------------------------------------------------------------*/
 
@@ -128,13 +111,10 @@ static void received_chunk_handler(const char* topic, const uint8_t* chunk){
 
 	//char chunk_string[4];
 	//sprintf(chunk_string, "%s", chunk);	
-	if(strcmp((char*)chunk, START_HEATER) == 0)
-		heater_on = true;
-	else if (strcmp((char*)chunk, STOP_HEATER) == 0)
-		heater_on = false;
-	else
-		printf("An unrecognised command has been received, the heater state remains the same\n");
-	return;
+	if(strcmp((char*)chunk, STOP_ALARM) == 0){
+		fire_detected = false;
+		leds_set(LEDS_GREEN);
+	}
 }
 
 static void mqtt_event(struct mqtt_connection* m, mqtt_event_t event, void* data){
@@ -146,7 +126,7 @@ static void mqtt_event(struct mqtt_connection* m, mqtt_event_t event, void* data
 		case MQTT_EVENT_DISCONNECTED:
 			printf("MQTT Disconnect. Reason %u\n", *((mqtt_event_t *)data));
 			state = STATE_DISCONNECTED;
-			process_poll(&mqtt_temperature_sensor);
+			process_poll(&mqtt_fire_detector);
 			break;
 		case MQTT_EVENT_PUBLISH:
 			msg_ptr = data;
@@ -184,15 +164,15 @@ static bool have_connectivity(){
 }
 
 /*---------------------------------------------------------------------------*/
-PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
+PROCESS_THREAD(mqtt_fire_detector, ev, data){
 	PROCESS_BEGIN();
 
 	mqtt_status_t status;
 	//Initializing the topics
-	strcpy(pub_topic, "current_air_temperature");
-	strcpy(sub_topic, "target_air_temperature");
+	strcpy(pub_topic, "fire_alarm");
+	strcpy(sub_topic, "stop_alarm");
 
-	printf("MQTT client temperature sensor process\n");
+	printf("MQTT client fire-detection sensor process\n");
 
 	// Initialize the ClientID as MAC address
   	snprintf(client_id, BUFFER_SIZE, "%02x%02x%02x%02x%02x%02x",
@@ -200,14 +180,15 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 					linkaddr_node_addr.u8[2], linkaddr_node_addr.u8[5],
 					linkaddr_node_addr.u8[6], linkaddr_node_addr.u8[7]);
 	
-	mqtt_register(&conn, &mqtt_temperature_sensor, client_id, mqtt_event,
+	mqtt_register(&conn, &mqtt_fire_detector, client_id, mqtt_event,
                   MAX_TCP_SEGMENT_SIZE);
 
 	//Setting the initial state 
   	state=STATE_INIT;
+	leds_set(LEDS_GREEN);
 				    
 	// Initialize periodic timer to check the status 
-	etimer_set(&periodic_timer, MEASUREMENT_PERIOD);
+	etimer_set(&periodic_timer, CHECK_PERIOD);
 
 	while(1){
 		PROCESS_YIELD();
@@ -237,33 +218,33 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 			}
 
 			if(state == STATE_SUBSCRIBED){
-				char heater_state[4];
-				if(heater_on)
-					strcpy(heater_state, "ON");
-				else
-					strcpy(heater_state, "OFF");
-				simulate_temperature_change();
-				sprintf(app_buffer, "{\"current_temperature\": %d, \"heater_state\": \"%s\"}", current_temperature, heater_state);
-				status = mqtt_publish(&conn, NULL, pub_topic, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
-				if(status != MQTT_STATUS_OK){
-					LOG_ERR("Error during publishing a message\n");
-					switch (status){
-						case  MQTT_STATUS_OUT_QUEUE_FULL:
-						LOG_ERR("Error: MQTT_STATUS_OUT_QUEUE_FULL\n");
-						break;
-						case  MQTT_STATUS_NOT_CONNECTED_ERROR:
-						LOG_ERR("Error: MQTT_STATUS_NOT_CONNECTED_ERROR\n");
-						break;
-						case   MQTT_STATUS_INVALID_ARGS_ERROR:
-						LOG_ERR("Error:  MQTT_STATUS_INVALID_ARGS_ERROR\n");
-						break;
-						case   MQTT_STATUS_DNS_ERROR:
-						LOG_ERR("Error:  MQTT_STATUS_DNS_ERROR\n");
-						break;
-						default:
-						// It should never enter default case. 
-						LOG_ERR("Error:  Unknown\n"); 
-						break;
+				//the alarm stays up until the application does not send the stop or someone press the button
+				if(!fire_detected)
+					fire_detected = simulate_fire_detection();
+				if(fire_detected){
+					leds_set(LEDS_RED);
+					strcpy(app_buffer, FIRE_ALARM);
+					status = mqtt_publish(&conn, NULL, pub_topic, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
+					if(status != MQTT_STATUS_OK){
+						LOG_ERR("Error during publishing a message\n");
+						switch (status){
+							case  MQTT_STATUS_OUT_QUEUE_FULL:
+							LOG_ERR("Error: MQTT_STATUS_OUT_QUEUE_FULL\n");
+							break;
+							case  MQTT_STATUS_NOT_CONNECTED_ERROR:
+							LOG_ERR("Error: MQTT_STATUS_NOT_CONNECTED_ERROR\n");
+							break;
+							case   MQTT_STATUS_INVALID_ARGS_ERROR:
+							LOG_ERR("Error:  MQTT_STATUS_INVALID_ARGS_ERROR\n");
+							break;
+							case   MQTT_STATUS_DNS_ERROR:
+							LOG_ERR("Error:  MQTT_STATUS_DNS_ERROR\n");
+							break;
+							default:
+							// It should never enter default case. 
+							LOG_ERR("Error:  Unknown\n"); 
+							break;
+						}
 					}
 				}
 			}
@@ -274,16 +255,15 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 		   		state = STATE_INIT;
 			}
 
-			etimer_set(&periodic_timer, MEASUREMENT_PERIOD);
+			etimer_set(&periodic_timer, CHECK_PERIOD);
 		}
-		else if(ev == button_hal_press_event){
-			button_hal_button_T* btn = (button_hal_button_t*) data;
-			//if the left button is pressed, the heater is turned on
-			if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_LEFT)
-				heater_on = true;
-			//if the right button is pressed, the heater is turned off
-			else if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_RIGHT)
-				heater_on = false;
+		else if (ev == button_hal_periodic_event){
+			//by holding a button for 5 seconds, a use can stop the alarm
+			button_hal_button_t* btn = (button_hal_button_t*) data;
+			if(btn -> press_duration_seconds > 5){
+				fire_detected = false;
+				leds_set(LEDS_GREEN);
+			}
 		}
 	}
 

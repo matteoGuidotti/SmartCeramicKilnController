@@ -130,17 +130,17 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	char *data = NULL;
 	int len;
 
-	//converting the level of oxygen in string
 	
 	sprintf(message, "%g", oxygen_level);
-	//data =	&message[0];
+	data =	&message[0];
 	printf("message: %s, length of the message: %d\n", message, strlen(message));
 	printf("data: %s, length of the data: %d\n", data, strlen(data));
 
-	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\":" + message + "}", ((unsigned long long)time(NULL))*1000);
+	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
 
 	len = sizeof(json_response) -1;
       
+	
     memset(data, 0, len);
 
     memcpy(data, json_response, strlen(json_response));

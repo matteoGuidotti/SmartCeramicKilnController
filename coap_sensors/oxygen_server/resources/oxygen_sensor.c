@@ -95,7 +95,7 @@ static enum Risk simulate_oxygen_change(){
 	
 	
 	// oxygen emitter ON -> oxygen rises
-	// oxygen emitter OFF -> 10/100 oxygen change, 50% inc, 50% dec
+	// oxygen emitter OFF -> 10/100 oxygen change, 2% inc, 98% dec
 	if(oxygen_emitter && e_mode == INC){
 		printf("Sto incrementando");
 		oxygen_level = oxygen_level + 0.3;
@@ -105,10 +105,10 @@ static enum Risk simulate_oxygen_change(){
 	}
 	else {
 		printf("A caso");
-		type = rand()%2;
-		if( ((rand()%100) < 10) && type == 0)
+		type = rand()%100;
+		if( ((rand()%100) < 10) && type < 2)
 			oxygen_level = oxygen_level - variation;
-		else if( ((rand()%100) < 10) && type == 1)
+		else if( ((rand()%100) < 10) && type >= 2 )
 			oxygen_level = oxygen_level + variation;
 	}
 	

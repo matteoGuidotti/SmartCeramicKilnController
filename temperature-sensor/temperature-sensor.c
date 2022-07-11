@@ -13,7 +13,7 @@
 #include "dev/button-hal.h"
 #include "dev/leds.h"
 #include "os/sys/log.h"
-#include "os/dev/button-hal-h"
+#include "os/dev/button-hal.h"
 
 #include <string.h>
 #include <strings.h>
@@ -80,15 +80,17 @@ static struct mqtt_connection conn;
 #define BUFFER_SIZE 64
 
 static char client_id[BUFFER_SIZE];
+
 //topic in which the sensor will publish
-static char pub_topic[BUFFER_SIZE];
+#define PUB_TOPIC	"current_temperature"
 //topic to which the sensor has to be subscribed
-static char sub_topic[BUFFER_SIZE];
+#define SUB_TOPIC	"heater_state"
 
 //The maximum reachable temperature is MAX_TEMP and the minimum one is MIN_TEMP
 #define MAX_TEMP 2000
 //MIN_TEMP is an approximation of the ambient possible temperature
 #define MIN_TEMP 10
+
 #define START_HEATER	"{\"heater_on\":true}"
 #define STOP_HEATER		"{\"heater_on\":false}"
 static int current_temperature = MIN_TEMP;
@@ -97,7 +99,7 @@ static bool heater_on = false;
 /*---------------------------------------------------------------------------*/
 
 static void simulate_temperature_change(){
-	srand(time(NULL));
+	//srand(time(NULL));
 	//the temperature raises with a probability of 4/5 when the heater is ON
 	if(heater_on){
 		if(current_temperature >= MAX_TEMP)
@@ -188,9 +190,6 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 	PROCESS_BEGIN();
 
 	mqtt_status_t status;
-	//Initializing the topics
-	strcpy(pub_topic, "current_air_temperature");
-	strcpy(sub_topic, "target_air_temperature");
 
 	printf("MQTT client temperature sensor process\n");
 
@@ -227,7 +226,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 
 			if(state == STATE_CONNECTED){
 				//Subscribe to a topic
-				status = mqtt_subscribe(&conn, NULL, sub_topic, MQTT_QOS_LEVEL_0);
+				status = mqtt_subscribe(&conn, NULL, SUB_TOPIC, MQTT_QOS_LEVEL_0);
 
 				if(status == MQTT_STATUS_OUT_QUEUE_FULL){
 					LOG_ERR("Tried to subscribe but command queue was full!\n");
@@ -244,7 +243,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 					strcpy(heater_state, "OFF");
 				simulate_temperature_change();
 				sprintf(app_buffer, "{\"current_temperature\": %d, \"heater_state\": \"%s\"}", current_temperature, heater_state);
-				status = mqtt_publish(&conn, NULL, pub_topic, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
+				status = mqtt_publish(&conn, NULL, PUB_TOPIC, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 				if(status != MQTT_STATUS_OK){
 					LOG_ERR("Error during publishing a message\n");
 					switch (status){
@@ -266,6 +265,8 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 						break;
 					}
 				}
+				else
+					printf("Message correctly published: the current temperatute is %d °C, the heater is %s\n", current_temperature, heater_state);
 			}
 
 			if(state == STATE_DISCONNECTED){
@@ -275,16 +276,16 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 			}
 
 			etimer_set(&periodic_timer, MEASUREMENT_PERIOD);
-		}
+		}/*
 		else if(ev == button_hal_press_event){
-			button_hal_button_T* btn = (button_hal_button_t*) data;
+			button_hal_button_t* btn = (button_hal_button_t*) data;
 			//if the left button is pressed, the heater is turned on
 			if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_LEFT)
 				heater_on = true;
 			//if the right button is pressed, the heater is turned off
 			else if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_RIGHT)
 				heater_on = false;
-		}
+		}*/
 	}
 
 	PROCESS_END();

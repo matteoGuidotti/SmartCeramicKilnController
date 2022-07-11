@@ -1,4 +1,4 @@
-// MQTT sensor that publishes the current temperature value and receives the desired temperature
+// MQTT sensor that publishes an alarm message if a fire is detected
 
 /*---------------------------------------------------------------------------*/
 #include "contiki.h"
@@ -13,7 +13,7 @@
 #include "dev/button-hal.h"
 #include "dev/leds.h"
 #include "os/sys/log.h"
-#include "os/dev/button-hal-h"
+#include "os/dev/button-hal.h"
 #include "os/dev/leds.h"
 
 #include <string.h>
@@ -58,8 +58,10 @@ AUTOSTART_PROCESSES(&mqtt_fire_detector);
 #define CONFIG_IP_ADDR_STR_LEN   64
 /*---------------------------------------------------------------------------*/
 
-// Periodic timer to check the temperature (30 seconds)
+// The sensor checks for a fire every second
+// when the fire is sensed, the sensor will send an alarm message every minute
 #define CHECK_PERIOD     CLOCK_SECOND
+#define ALARM_PERIOD	 CLOCK_SECOND * 60
 static struct etimer periodic_timer;
 
 /*---------------------------------------------------------------------------*/
@@ -81,10 +83,11 @@ static struct mqtt_connection conn;
 #define BUFFER_SIZE 64
 
 static char client_id[BUFFER_SIZE];
-//topic in which the sensor will publish
-static char pub_topic[BUFFER_SIZE];
+
 //topic to which the sensor has to be subscribed
-static char sub_topic[BUFFER_SIZE];
+#define SUB_TOPIC "stop_alarm"
+//topic in which the sensor will publish
+#define PUB_TOPIC "fire_alarm"
 
 #define FIRE_ALARM	"{\"fire_detected\":true}"
 #define STOP_ALARM 	"{\"stop_alarm\":true}"
@@ -93,12 +96,16 @@ static bool fire_detected = false;
 /*---------------------------------------------------------------------------*/
 //returns true if the fire is detected, false otherwise
 static bool simulate_fire_detection(){
-	srand(time(NULL));
+	//srand(time(NULL));
 	//the fire raises with a probability of 1%
-	if(rand()%100 < 1)
+	if(rand()%100 < 1){
+		printf("Fire detected!\n");
 		return true;
-	else 
+	}
+	else{
+		printf("No fire detected\n"); 
 		return false;
+	}
 }
 
 /*---------------------------------------------------------------------------*/
@@ -113,7 +120,10 @@ static void received_chunk_handler(const char* topic, const uint8_t* chunk){
 	//sprintf(chunk_string, "%s", chunk);	
 	if(strcmp((char*)chunk, STOP_ALARM) == 0){
 		fire_detected = false;
-		leds_set(LEDS_GREEN);
+		leds_toggle(LEDS_GREEN);
+	}
+	else{
+		printf("An unrecognised message has been received\n");
 	}
 }
 
@@ -168,9 +178,6 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 	PROCESS_BEGIN();
 
 	mqtt_status_t status;
-	//Initializing the topics
-	strcpy(pub_topic, "fire_alarm");
-	strcpy(sub_topic, "stop_alarm");
 
 	printf("MQTT client fire-detection sensor process\n");
 
@@ -185,7 +192,7 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 
 	//Setting the initial state 
   	state=STATE_INIT;
-	leds_set(LEDS_GREEN);
+	leds_toggle(LEDS_GREEN);
 				    
 	// Initialize periodic timer to check the status 
 	etimer_set(&periodic_timer, CHECK_PERIOD);
@@ -208,7 +215,7 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 
 			if(state == STATE_CONNECTED){
 				//Subscribe to a topic
-				status = mqtt_subscribe(&conn, NULL, sub_topic, MQTT_QOS_LEVEL_0);
+				status = mqtt_subscribe(&conn, NULL, SUB_TOPIC, MQTT_QOS_LEVEL_0);
 
 				if(status == MQTT_STATUS_OUT_QUEUE_FULL){
 					LOG_ERR("Tried to subscribe but command queue was full!\n");
@@ -224,7 +231,7 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 				if(fire_detected){
 					leds_set(LEDS_RED);
 					strcpy(app_buffer, FIRE_ALARM);
-					status = mqtt_publish(&conn, NULL, pub_topic, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
+					status = mqtt_publish(&conn, NULL, PUB_TOPIC, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 					if(status != MQTT_STATUS_OK){
 						LOG_ERR("Error during publishing a message\n");
 						switch (status){
@@ -254,15 +261,18 @@ PROCESS_THREAD(mqtt_fire_detector, ev, data){
 				//when the application is disconnected, it tries to reconnect to the broker
 		   		state = STATE_INIT;
 			}
-
-			etimer_set(&periodic_timer, CHECK_PERIOD);
+			
+			if(fire_detected)
+				etimer_set(&periodic_timer, ALARM_PERIOD);
+			else
+				etimer_set(&periodic_timer, CHECK_PERIOD);
 		}
 		else if (ev == button_hal_periodic_event){
-			//by holding a button for 5 seconds, a use can stop the alarm
+			//by holding a button for 5 seconds, an user can stop the alarm
 			button_hal_button_t* btn = (button_hal_button_t*) data;
 			if(btn -> press_duration_seconds > 5){
 				fire_detected = false;
-				leds_set(LEDS_GREEN);
+				leds_toggle(LEDS_GREEN);
 			}
 		}
 	}

@@ -24,6 +24,7 @@ EVENT_RESOURCE(oxygen_sensor,
 
 
 static double oxygen_level = 21.0;
+static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
@@ -31,6 +32,8 @@ static enum Risk current_risk = LOW;
 
 enum Emitter_mode{INC, DEC};
 static enum Emitter_mode e_mode  = DEC;
+
+char json_response[512];
 
 
 static void
@@ -83,17 +86,16 @@ res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 /*---------------------------------------------------------------------------*/
 
 static enum Risk simulate_oxygen_change(){
-	
-	srand(time(NULL));
+
 	int type = 0;
 	double variation = (double)(rand() % 10) / 10;
 	
-	
-	printf("%d\n", oxygen_emitter);
+	old_oxygen_level = oxygen_level;
+	//printf("%d\n", oxygen_emitter);
 	
 	
 	// oxygen emitter ON -> oxygen rises
-	// oxygen emitter OFF -> 3/10 oxygen change, 50% inc, 50% dec
+	// oxygen emitter OFF -> 10/100 oxygen change, 50% inc, 50% dec
 	if(oxygen_emitter && e_mode == INC){
 		printf("Sto incrementando");
 		oxygen_level = oxygen_level + 0.3;
@@ -104,9 +106,9 @@ static enum Risk simulate_oxygen_change(){
 	else {
 		printf("A caso");
 		type = rand()%2;
-		if( ((rand()%10) < 3) && type == 0)
+		if( ((rand()%100) < 10) && type == 0)
 			oxygen_level = oxygen_level - variation;
-		else if( ((rand()%10) < 3) && type == 1)
+		else if( ((rand()%100) < 10) && type == 1)
 			oxygen_level = oxygen_level + variation;
 	}
 	
@@ -130,12 +132,23 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	//converting the level of oxygen in string
 	
 	sprintf(message, "%g", oxygen_level);
-	data =	&message[0];
+	//data =	&message[0];
 	printf("message: %s, length of the message: %d\n", message, strlen(message));
 	printf("data: %s, length of the data: %d\n", data, strlen(data));
+
+	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\":" + message + "}", ((unsigned long long)time(NULL))*1000);
+
+	len = sizeof(json_response) -1;
+      
+    memset(data, 0, len);
+
+    memcpy(data, json_response, strlen(json_response));
   
-	coap_set_header_content_format(response, TEXT_PLAIN);
+
+	coap_set_header_content_format(response, APPLICATION_JSON);
+	coap_set_header_etag(response, (uint8_t *)&len, 1);
 	coap_set_payload(response, data, strlen(data));
+
 }
 
 
@@ -166,8 +179,11 @@ static void oxygen_event_handler(void)
 	}
   }
   // Da rivedere
-  printf("Oxygen level: %f \n", oxygen_level);
-  coap_notify_observers(&oxygen_sensor);
+   	printf("Old Oxygen level: %f \n", old_oxygen_level);
+	printf("Oxygen level: %f \n", oxygen_level);
+ 	
+	if(old_oxygen_level != oxygen_level)
+  		coap_notify_observers(&oxygen_sensor);
   
 }
 

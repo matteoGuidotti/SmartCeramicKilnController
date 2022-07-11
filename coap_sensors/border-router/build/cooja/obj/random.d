@@ -1,6 +1,6 @@
-build/cooja/obj/random.o: ../../../os/lib/random.c \
- ../../../os/services/rpl-border-router/module-macros.h \
- ../../../os/lib/random.h
-../../../os/lib/random.c :
- ../../../os/services/rpl-border-router/module-macros.h :
- ../../../os/lib/random.h :
+build/cooja/obj/random.o: /home/user/contiki-ng/os/lib/random.c \
+ /home/user/contiki-ng/os/services/rpl-border-router/module-macros.h \
+ /home/user/contiki-ng/os/lib/random.h
+/home/user/contiki-ng/os/lib/random.c :
+ /home/user/contiki-ng/os/services/rpl-border-router/module-macros.h :
+ /home/user/contiki-ng/os/lib/random.h :

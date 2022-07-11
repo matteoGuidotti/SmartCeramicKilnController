@@ -27,6 +27,9 @@ static double oxygen_level = 21.0;
 static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 
+//True the furnace is on, False otherwise
+static state = true;
+
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
 
@@ -104,13 +107,28 @@ static enum Risk simulate_oxygen_change(){
 		oxygen_level = oxygen_level - 0.3;
 	}
 	else {
-		printf("A caso");
-		type = rand()%100;
-		if( ((rand()%100) < 10) && type >= 2)
-			oxygen_level = oxygen_level - variation;
-		else if( ((rand()%100) < 10) && type < 2 )
-			oxygen_level = oxygen_level + variation;
+		if(state){
+			printf("Fornuce on\n");
+			type = rand()%100;
+			//We emulate the increase or decrease in oxygen assuming that there is a change in 10% of the cases
+			if((rand()%100) < 10)
+			{
+				//With a high probability, oxygen is decreasing due to internal combustion in the furnace
+				if(type >= 2)
+					oxygen_level = oxygen_level - variation;
+				//With a low probability (2%) the oxygen level inside the furnace increases due to a failure
+				else if(type < 2 )
+					oxygen_level = oxygen_level + variation;
+			}	
+		}
+		else {
+			printf("Fornuce off\n");
+			//Oxygen level increases faster
+			oxygen_level = oxygen_level + variation*2;
+			
+		}
 	}
+	
 	
 	if (oxygen_level >= 20.0)
 		return LOW;

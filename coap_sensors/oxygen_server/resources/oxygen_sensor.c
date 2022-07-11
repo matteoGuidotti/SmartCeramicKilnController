@@ -146,6 +146,7 @@ static void oxygen_event_handler(void)
 	}
   }
   // Da rivedere
+  LOG_INFO("Oxygen level: %f \n", oxygen_level);
   coap_notify_observers(&oxygen_sensor);
   
 }

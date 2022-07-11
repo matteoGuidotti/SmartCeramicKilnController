@@ -106,9 +106,9 @@ static enum Risk simulate_oxygen_change(){
 	else {
 		printf("A caso");
 		type = rand()%100;
-		if( ((rand()%100) < 10) && type < 2)
+		if( ((rand()%100) < 10) && type >= 2)
 			oxygen_level = oxygen_level - variation;
-		else if( ((rand()%100) < 10) && type >= 2 )
+		else if( ((rand()%100) < 10) && type < 2 )
 			oxygen_level = oxygen_level + variation;
 	}
 	
@@ -137,6 +137,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	printf("data: %s, length of the data: %d\n", data, strlen(data));
 
 	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
+	printf(json_response);
 
 	/*len = sizeof(json_response) -1;
       

@@ -204,13 +204,6 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
 	printf(json_response);
 
-	/*len = sizeof(json_response) -1;
-      
-	
-    memset(data, 0, len);
-
-    memcpy(data, json_response, strlen(json_response));*/
-  
 
 	coap_set_header_content_format(response, APPLICATION_JSON);
 	coap_set_header_etag(response, (uint8_t *)&len, 1);

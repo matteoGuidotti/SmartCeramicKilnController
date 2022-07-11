@@ -11,7 +11,8 @@
 
 /* A simple actuator example, depending on the type query parameter and post variable mode, the actuator is turn on or off */
 
-static void res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
 EVENT_RESOURCE(oxygen_sensor,
@@ -138,7 +139,7 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 static enum Risk simulate_oxygen_change(){
 
 	int type = 0;
-	double variationF = (double)(rand() % 10) / 10;
+	double variation = (double)(rand() % 10) / 10;
 	double variationFast = 0.5;
 	double variationCTRL = 0.1;
 	

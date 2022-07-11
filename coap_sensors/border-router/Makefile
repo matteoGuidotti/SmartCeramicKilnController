@@ -1,7 +1,7 @@
 CONTIKI_PROJECT = border-router
 all: $(CONTIKI_PROJECT)
 CFLAGS += -DPROJECT_CONF_H=\"project-conf.h\"
-CONTIKI = ../../..
+CONTIKI = /home/user/contiki-ng
 # The BR is either native or embedded, and in the latter case must support SLIP
 PLATFORMS_EXCLUDE = nrf52dk
 

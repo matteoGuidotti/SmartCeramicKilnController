@@ -15,10 +15,10 @@ static void res_post_put_handler(coap_message_t *request, coap_message_t *respon
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
 EVENT_RESOURCE(oxygen_sensor,
-         "title=\"Oxygen sensor: ?type=INC|DEC, POST/PUT mode=on|off\";obs",
+         "title=\"Oxygen sensor: ?type=FIRE|CTRL, POST/PUT mode=on|off\";obs",
          get_oxygen_handler,
-         res_post_put_handler,
-         res_post_put_handler,
+         res_post_handler,
+         res_put_handler,
          NULL,
          oxygen_event_handler);
 
@@ -26,21 +26,20 @@ EVENT_RESOURCE(oxygen_sensor,
 static double oxygen_level = 21.0;
 static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
-
-//True the furnace is on, False otherwise
-static state = true;
+static bool oxygen_filter = false;
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
 
-enum Emitter_mode{INC, DEC};
-static enum Emitter_mode e_mode  = DEC;
+enum Cause{CTRL, FIRE, ADMIN};
+static enum Cause filtration_cause  = CTRL;
+static enum Cause emission_cause  = CTRL;
 
 char json_response[512];
 
 
 static void
-res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   const char *type = NULL;
@@ -54,24 +53,72 @@ res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t 
     success = 0;
   } if(success && (len = coap_get_post_variable(request, "mode", &mode))) {
 	LOG_DBG("mode %s\n", mode);
-	if(strncmp((char*)type, "INC", len) == 0){
-		e_mode = INC;
-		printf("Sono nel caso INC");
+	if(strncmp((char*)type, "CTRL", len) == 0){
+		emission_cause = CTRL;
+		printf("Sono nel caso CTRL");
 	}
 		
-	else if (strncmp((char*)type, "DEC", len) == 0){
-		e_mode = DEC;
-		printf("Sono nel caso DEC");
+	else if (strncmp((char*)type, "ADMIN", len) == 0){
+		emission_cause = ADMIN;
+		printf("Sono nel caso ADMIN");
 	}
 		
 
 	if(strncmp(mode, "on", len) == 0){
 		printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
 		oxygen_emitter = true;
+		oxygen_filter = false;
 		
 	    }else if (strncmp(mode, "off",len)==0){
 		printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
 		oxygen_emitter = false;
+	       
+	    }else{
+		printf("ERROR: UNKNOWN COMMAND\n");
+		success = 0;
+	    }
+  } else { success = 0;}
+	
+ if(!success) {
+    coap_set_status_code(response, BAD_REQUEST_4_00);
+  }
+}
+
+//Put for oxygen filtering in case of fire or for control reasons
+static void
+res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+{
+  size_t len = 0;
+  const char *type = NULL;
+  const char *mode = NULL;
+  int success = 1;
+
+  if((len = coap_get_query_variable(request, "type", &type))) {
+    LOG_DBG("type %.*s\n", (int)len, type);
+
+  } else {
+    success = 0;
+  } if(success && (len = coap_get_post_variable(request, "mode", &mode))) {
+	LOG_DBG("mode %s\n", mode);
+	if(strncmp((char*)type, "CTRL", len) == 0){
+		filtration_cause = CTRL;
+		printf("Sono nel caso CONTROL");
+	}
+		
+	else if (strncmp((char*)type, "FIRE", len) == 0){
+		filtration_cause = FIRE;
+		printf("Sono nel caso FIRE");
+	}
+		
+
+	if(strncmp(mode, "on", len) == 0){
+		printf("Switch ON oxygen filtering with type: %s\n", (char*)type);
+		oxygen_filter = true;
+		oxygen_emitter = false;
+		
+	    }else if (strncmp(mode, "off",len)==0){
+		printf("Switch OFF oxygen filtering with type: %s\n", (char*)type);
+		oxygen_filter = false;
 	       
 	    }else{
 		printf("ERROR: UNKNOWN COMMAND\n");
@@ -91,24 +138,30 @@ res_post_put_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 static enum Risk simulate_oxygen_change(){
 
 	int type = 0;
-	double variation = (double)(rand() % 10) / 10;
+	double variationF = (double)(rand() % 10) / 10;
+	double variationFast = 0.5;
+	double variationCTRL = 0.1;
 	
 	old_oxygen_level = oxygen_level;
-	//printf("%d\n", oxygen_emitter);
 	
-	
-	// oxygen emitter ON -> oxygen rises
-	// oxygen emitter OFF -> 10/100 oxygen change, 2% inc, 98% dec
-	if(oxygen_emitter && e_mode == INC){
-		printf("Sto incrementando");
-		oxygen_level = oxygen_level + 0.3;
-	} else if(oxygen_emitter && e_mode == DEC){
-		printf("Sto decrementando");
-		oxygen_level = oxygen_level - 0.3;
+
+	if(oxygen_filter && filtration_cause == FIRE){
+		printf("Sto decrementando velocemente");
+		oxygen_level = oxygen_level - variationFast;
+		
+	} else if(oxygen_filter && filtration_cause == CTRL){
+		printf("Sto decrementando lentamente");
+		oxygen_level = oxygen_level - variationCTRL;
 	}
-	else {
-		if(state){
-			printf("Fornuce on\n");
+	else if(oxygen_emitter && emission_cause == CTRL) {
+		printf("Sto incrementando lentamente");
+		oxygen_level = oxygen_level + variationCTRL;
+	}
+	else if(oxygen_emitter && emission_cause == ADMIN){
+		printf("Sto incrementando velocemente");
+		oxygen_level = oxygen_level + variationFast;
+	}
+	else{
 			type = rand()%100;
 			//We emulate the increase or decrease in oxygen assuming that there is a change in 10% of the cases
 			if((rand()%100) < 10)
@@ -121,13 +174,6 @@ static enum Risk simulate_oxygen_change(){
 					oxygen_level = oxygen_level + variation;
 			}	
 		}
-		else {
-			printf("Fornuce off\n");
-			//Oxygen level increases faster
-			oxygen_level = oxygen_level + variation*2;
-			
-		}
-	}
 	
 	
 	if (oxygen_level >= 20.0)

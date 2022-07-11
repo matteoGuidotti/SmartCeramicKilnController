@@ -128,6 +128,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 {
 	char message[30];
 	char *data = NULL;
+	int len;
 
 	//converting the level of oxygen in string
 	

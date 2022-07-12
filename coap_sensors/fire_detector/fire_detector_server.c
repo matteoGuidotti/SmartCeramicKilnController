@@ -35,7 +35,7 @@ static struct etimer periodic_timer;
 
 
 PROCESS(ethylene_server, "Server for fire detector");
-AUTOSTART_PROCESSES(&fire_detector);
+AUTOSTART_PROCESSES(&fire_detector_server);
 
 char *service_url = "/registration";
 
@@ -121,7 +121,7 @@ PROCESS_THREAD(fire_detector_server, ev, data)
 		
   	LOG_INFO("Starting fire detector Server\n");
 
-  	coap_activate_resource(&ethylene_sensor, "fire_detector");
+  	coap_activate_resource(&fire_detector, "fire_detector");
   
   	// Initialize periodic timer to check the status 
 	etimer_set(&periodic_timer, CHECK_PERIOD);

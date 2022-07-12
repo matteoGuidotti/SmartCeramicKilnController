@@ -118,16 +118,13 @@ static void fire_detector_event_handler(void)
 				coap_notify_observers(&fire_detector);
 				printf("Notificato agli observers!\n");
 				counter_fire++;
-				printf("counter_fire: %d\n", counter_fire);
 			}
 			else if(counter_fire ==  SECONDS_ALARM_PERIOD -1 ){
 				counter_fire = 0;
-				printf("counter_fire: %d\n", counter_fire);
 			}	
 			else 
 			{
 				counter_fire++;
-				printf("counter_fire: %d\n", counter_fire);
 				
 			}
 			

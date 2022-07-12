@@ -2,6 +2,7 @@ package iot.unipi.it;
 
 import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 import org.eclipse.californium.core.CoapResource;
 import org.eclipse.californium.core.CoapServer;
@@ -11,11 +12,11 @@ import org.eclipse.californium.core.server.resources.CoapExchange;
 import iot.unipi.it.Utils;
 
 public class RegistrationServer extends CoapServer {
-	private final static CoapHandler coapHandler;
+	private static CoapNetworkHandler coapHandler;
 	
 	public RegistrationServer(float oxygen_target) throws SocketException {
         this.add(new RegistrationResource());
-		coapHandler = CoapHandler.getInstance(oxygen_target);
+		coapHandler = CoapNetworkHandler.getInstance(oxygen_target);
     }
 
 	class RegistrationResource extends CoapResource{

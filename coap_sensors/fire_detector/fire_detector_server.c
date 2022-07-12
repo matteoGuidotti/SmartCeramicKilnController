@@ -34,7 +34,7 @@
 static struct etimer periodic_timer;
 
 
-PROCESS(ethylene_server, "Server for fire detector");
+PROCESS(fire_detector_server, "Server for fire detector");
 AUTOSTART_PROCESSES(&fire_detector_server);
 
 char *service_url = "/registration";
@@ -44,7 +44,6 @@ static bool registered = false;
 
 static struct etimer wait_connectivity;
 static struct etimer wait_registration;
-static struct etimer simulation;
 
 extern coap_resource_t fire_detector; 
 

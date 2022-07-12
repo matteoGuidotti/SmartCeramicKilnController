@@ -15,6 +15,7 @@
 
 #include "coap-engine.h"
 #include "coap-blocking-api.h"
+#include <../utils/constants.h>
 
 /* Log configuration */
 #include "sys/log.h"

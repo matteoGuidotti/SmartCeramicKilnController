@@ -19,6 +19,8 @@
 
 /* Log configuration */
 #include "sys/log.h"
+#define LOG_MODULE "App"
+#define LOG_LEVEL LOG_LEVEL_APP
 
 static struct etimer periodic_timer;
 

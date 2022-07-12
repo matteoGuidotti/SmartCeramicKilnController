@@ -1,10 +1,6 @@
 #ifndef SENSOR_CONSTANTS_H
 #define SENSOR_CONSTANTS_H
 
-/* Common constants */
-#define LOG_MODULE "App"
-#define LOG_LEVEL LOG_LEVEL_APP
-
 /* Fire detector sensor constants */
 #define FIRE_ALARM	                            "{\"fire_detected\":true}"
 #define SECONDS_ALARM_PERIOD 	                60

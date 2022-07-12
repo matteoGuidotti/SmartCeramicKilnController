@@ -19,6 +19,8 @@
 
 /* Log configuration */
 #include "sys/log.h"
+#define LOG_MODULE "App"
+#define LOG_LEVEL LOG_LEVEL_APP
 
 
 
@@ -100,7 +102,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
 		coap_set_header_uri_path(request, service_url);
 		coap_set_header_content_format(request, APPLICATION_JSON);
 		coap_set_payload(request, (uint8_t *)JSON_OXYGEN, sizeof(JSON_OXYGEN) - 1);
-		
+
 		COAP_BLOCKING_REQUEST(&server_ep, request, client_chunk_handler);
 		
     	PROCESS_WAIT_UNTIL(etimer_expired(&wait_registration));

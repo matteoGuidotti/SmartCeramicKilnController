@@ -19,6 +19,8 @@
 
 /* Log configuration */
 #include "sys/log.h"
+#define LOG_MODULE "App"
+#define LOG_LEVEL LOG_LEVEL_APP
 
 
 PROCESS(oxygen_server, "Server for oxygen sensor");

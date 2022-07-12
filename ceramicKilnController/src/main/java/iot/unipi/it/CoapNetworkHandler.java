@@ -30,13 +30,14 @@ public class CoapNetworkHandler{
 
 	private static CoapNetworkHandler instance = null;
 
-	public CoapNetworkHandler(float oxygen_target){
+	public CoapNetworkHandler(double oxygen_target, double acceptableRange){
 		this.oxygen_target = oxygen_target;
+		this.acceptableRange = acceptableRange;
 	}
 
-    public static CoapNetworkHandler getInstance(float oxygen_target) {
+    public static CoapNetworkHandler getInstance(double oxygen_target, double acceptableRange) {
         if (instance == null)
-            instance = new CoapNetworkHandler(oxygen_target);
+            instance = new CoapNetworkHandler(oxygen_target, acceptableRange);
         return instance;
 	}
 

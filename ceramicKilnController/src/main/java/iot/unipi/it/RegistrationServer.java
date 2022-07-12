@@ -14,9 +14,9 @@ import iot.unipi.it.Utils;
 public class RegistrationServer extends CoapServer {
 	private static CoapNetworkHandler coapHandler;
 	
-	public RegistrationServer(float oxygen_target) throws SocketException {
+	public RegistrationServer(double oxygen_target, double acceptableRange) throws SocketException {
         this.add(new RegistrationResource());
-		coapHandler = CoapNetworkHandler.getInstance(oxygen_target);
+		coapHandler = CoapNetworkHandler.getInstance(oxygen_target, acceptableRange);
     }
 
 	class RegistrationResource extends CoapResource{

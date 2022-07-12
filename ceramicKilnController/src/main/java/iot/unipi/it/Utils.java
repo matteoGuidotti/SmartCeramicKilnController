@@ -12,13 +12,7 @@ import com.google.gson.JsonParseException;
 
 public final class Utils {
 	
-	/**
-	 * Function that parses a JSON message returning the corresponding Map of the key-value pairs. 
-	 * contained in the JSON message. 
-	 * 
-	 * @param requestText The JSON message passed as a string
-	 * @return	The Map<String, Object> of the key-value pairs found in the JSON message
-	 */
+	//Function that parses a JSON message returning the corresponding Map of the key-value pairs contained in the JSON message. 
 	public static Map<String, Object> jsonParser(String requestText) {
 			
 		Map<String, Object> responseJsonObject = new HashMap<String, Object>();
@@ -34,5 +28,12 @@ public final class Utils {
 			return null;
         }
 		return responseJsonObject;
+	}
+
+	//Function that creates a JSON string starting from a map of the key-value pairs
+	public static String jsonToString(Map<String, Object> map){
+		String res;
+		res = (String) new Gson().toJson(map);
+		return res;
 	}
 }

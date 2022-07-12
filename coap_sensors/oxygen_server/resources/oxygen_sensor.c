@@ -82,14 +82,14 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			oxygen_filter = false;
 			emission_cause = CTRL;
 	}
-	else if(success && strcmp((char*)payloadpayload, "{\"mode\":\"on\", \"type\":\"ADMIN\"}"))
+	else if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"ADMIN\"}"))
 	{	
 			oxygen_emitter = true;
 			oxygen_filter = false;
 			emission_cause = ADMIN;
 
 	}
-	else if(success && strcmp((char*)payloadpayload, "{\"mode\":\"off\"}"))
+	else if(success && strcmp((char*)payload, "{\"mode\":\"off\"}"))
 	{	
 			oxygen_emitter = false;
 

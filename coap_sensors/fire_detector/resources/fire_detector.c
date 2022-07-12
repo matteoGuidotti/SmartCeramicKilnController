@@ -85,10 +85,12 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 		if(strncmp(alarm_mode, "on", len) == 0){
 			printf("Switch ON fire alarm\n");
 			fire_detected = true;
+			counter_fire = 0;
 			
 		}else if (strncmp(alarm_mode, "off",len)==0){
 			printf("Switch OFF fire alarm\n");
 			fire_detected = false;
+			counter_fire = 0;
 			
 		}else{
 			printf("ERROR: UNKNOWN COMMAND\n");
@@ -106,22 +108,26 @@ static void fire_detector_event_handler(void)
 {
 
 		
-		if(!fire_detected)
+		if(!fire_detected){
 			fire_detected = simulate_fire_detection();
+		}
+			
 		
 		if(fire_detected){
 			if(counter_fire == 0){
 				coap_notify_observers(&fire_detector);
 				printf("Notificato agli observers!\n");
 				counter_fire++;
+				printf("counter_fire: %d\n", counter_fire);
 			}
-			else if(counter_fire > 0 && counter_fire < SECONDS_ALARM_PERIOD ){
-				counter_fire++;
+			else if(counter_fire ==  SECONDS_ALARM_PERIOD -1 ){
+				counter_fire = 0;
 				printf("counter_fire: %d\n", counter_fire);
 			}	
-			else
+			else 
 			{
-				counter_fire = 0;
+				counter_fire++;
+				printf("counter_fire: %d\n", counter_fire);
 				
 			}
 			

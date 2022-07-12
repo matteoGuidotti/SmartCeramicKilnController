@@ -154,7 +154,7 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 			oxygen_emitter = false;
 			filtration_cause = CTRL;
 	}
-	else if(success && strcmp((char*)payloadpayload, "{\"mode\":\"on\", \"type\":\"FIRE\"}"))
+	else if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"FIRE\"}"))
 	{	
 			oxygen_filter = true;
 			oxygen_emitter = false;

@@ -4,6 +4,11 @@
 #include <time.h>
 #include <../utils/constants.h>
 
+/* Log configuration */
+#include "sys/log.h"
+#define LOG_MODULE "App"
+#define LOG_LEVEL LOG_LEVEL_APP
+
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void fire_detector_event_handler(void);
@@ -12,7 +17,7 @@ static void fire_detector_event_handler(void);
 static int counter_fire = 0;
 
 
-EVENT_RESOURCE(ethylene_sensor,
+EVENT_RESOURCE(fire_detector,
          "title=\"Fire detector\", POST alarm_mode=on|off\";obs",
          get_fire_detection_handler,
          res_post_handler,
@@ -22,6 +27,7 @@ EVENT_RESOURCE(ethylene_sensor,
 
 
 static bool fire_detected = false;
+char json_response[512];
 
 /*---------------------------------------------------------------------------*/
 //returns true if the fire is detected, false otherwise
@@ -41,7 +47,7 @@ static bool simulate_fire_detection(){
 
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-	char message[30];
+	//char message[30];
 	char *data = NULL;
 	if(fire_detected)
 	{
@@ -62,7 +68,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
   const char *alarm_mode = NULL;
   int success = 1;
 
-  	if(len = coap_get_post_variable(request, "alarm", &alarm_mode)) {
+  	if((len = coap_get_post_variable(request, "alarm", &alarm_mode))) {
 		LOG_DBG("alarm mode %s\n", alarm_mode);
 		
 		//Forse non serve ma lo lascerei se uno volesse attivare l'allarme manualmente dal controller

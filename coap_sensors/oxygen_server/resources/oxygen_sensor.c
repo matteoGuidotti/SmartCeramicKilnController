@@ -73,7 +73,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 	} else 
 			success = 0;
-   if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+   if(success && strcmp(payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -82,14 +82,14 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			oxygen_filter = false;
 			emission_cause = CTRL;
 	}
-	else if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"ADMIN\"}"))
+	else if(success && strcmp(payload, "{\"mode\":\"on\", \"type\":\"ADMIN\"}"))
 	{	
 			oxygen_emitter = true;
 			oxygen_filter = false;
 			emission_cause = ADMIN;
 
 	}
-	else if(success && strncmp(payload, "{\"mode\":\"off\"}"))
+	else if(success && strcmp(payload, "{\"mode\":\"off\"}"))
 	{	
 			oxygen_emitter = false;
 
@@ -145,7 +145,7 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 
 	} else 
 			success = 0;
-   if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+   if(success && strcmp(payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -154,14 +154,14 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 			oxygen_emitter = false;
 			filtration_cause = CTRL;
 	}
-	else if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"FIRE\"}"))
+	else if(success && strcmp(payload, "{\"mode\":\"on\", \"type\":\"FIRE\"}"))
 	{	
 			oxygen_filter = true;
 			oxygen_emitter = false;
 			filtration_cause = FIRE;
 
 	}
-	else if(success && strncmp(payload, "{\"mode\":\"off\"}"))
+	else if(success && strcmp(payload, "{\"mode\":\"off\"}"))
 	{	
 			oxygen_filter = false;
 

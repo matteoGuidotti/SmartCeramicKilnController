@@ -8,9 +8,6 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void fire_detection_event_handler(void);
 
-//#define FIRE_ALARM	"{\"fire_detected\":true}"
-//#define STOP_ALARM 	"{\"stop_alarm\":true}"
-
 //Counter for fire's alarm timing
 static int counter_fire = 0;
 

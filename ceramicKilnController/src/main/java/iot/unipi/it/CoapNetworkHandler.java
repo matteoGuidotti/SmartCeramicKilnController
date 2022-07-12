@@ -60,6 +60,7 @@ public class CoapNetworkHandler{
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 			if((Boolean)jsonResponse.get("fire_detected")){
 				//TODO: invia a sensore ossigeno di abbassare velocemente
+				//TODO: inserisci dato in database
 			}
 		} catch (Exception e){
 			System.err.println("The message received was not valid");
@@ -86,5 +87,6 @@ public class CoapNetworkHandler{
 		Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 		double new_oxygenLevel = (Double)jsonResponse.get("oxygen_sensor");
 		//TODO: controllare il livello di ossigeno rispetto al (target +/- acceptableRange) e attuare di conseguenza
+		//TODO: inserisci dato nel database
 	}
 }

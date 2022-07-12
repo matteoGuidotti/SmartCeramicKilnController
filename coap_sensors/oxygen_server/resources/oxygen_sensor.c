@@ -41,27 +41,63 @@ static enum Cause emission_cause  = CTRL;
 char json_response[512];
 
 
+//Oxygen filtering
+//"{\"mode\":\"on\", \"type\":\"CTRL\"}"
+//"{\"mode\":\"on\", \"type\":\"FIRE\"}"
+//"{\"mode\":\"off\"}"
+
+//Oxygen emitter
+//"{\"mode\":\"off\", \"type\":\"CTRL\"}"
+//"{\"mode\":\"off\", \"type\":\"ADMIN\"}"
+//"{\"mode\":\"off\"}"
+
+
+//Oxygen emitter
 static void
 res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
-  const char *type = NULL;
-  const char *mode = NULL;
+  //const char *type = NULL;
+  //const char *mode = NULL;
+  const char *payload = NULL;
   int success = 1;
 
-  if((len = coap_get_query_variable(request, "type", &type))) {
-    LOG_DBG("type %.*s\n", (int)len, type);
+  //if((len = coap_get_query_variable(request, "type", &type))) {
+	if((coap_get_payload(request, &payload))) {
 
-  } else {
-    success = 0;
-  } if(success && (len = coap_get_post_variable(request, "mode", &mode))) {
-	LOG_DBG("mode %s\n", mode);
-	if(strncmp((char*)type, "CTRL", len) == 0){
-		emission_cause = CTRL;
-		printf("Sono nel caso CTRL");
+		char data[20];
+		strncpy(data, (char*)payload, len);	
+		data[len] = '\0';	
+		LOG_INFO("Received the message: %s", data);
+    //LOG_DBG("type %.*s\n", (int)len, type);
+
+	} else 
+			success = 0;
+   if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+		//LOG_DBG("mode %s\n", mode);
+		/*if(strncmp((char*)type, "CTRL", len) == 0){
+			emission_cause = CTRL;
+			printf("Sono nel caso CTRL");*/
+			oxygen_emitter = true;
+			oxygen_filter = false;
+			emission_cause = CTRL;
 	}
+	else if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"ADMIN\"}"))
+	{	
+			oxygen_emitter = true;
+			oxygen_filter = false;
+			emission_cause = ADMIN;
+
+	}
+	else if(success && strncmp(payload, "{\"mode\":\"off\"}"))
+	{	
+			oxygen_emitter = false;
+
+	}
+	else
+		success = 0;
 		
-	else if (strncmp((char*)type, "ADMIN", len) == 0){
+	/*else if (strncmp((char*)type, "ADMIN", len) == 0){
 		emission_cause = ADMIN;
 		printf("Sono nel caso ADMIN");
 	}
@@ -79,15 +115,88 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 	    }else{
 		printf("ERROR: UNKNOWN COMMAND\n");
 		success = 0;
-	    }
-  } else { success = 0;}
+	    }*/
+  //} else { success = 0;}
 	
  if(!success) {
     coap_set_status_code(response, BAD_REQUEST_4_00);
   }
 }
 
-//Put for oxygen filtering in case of fire or for control reasons
+
+//Oxygen emitter
+static void
+res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+{
+  size_t len = 0;
+  //const char *type = NULL;
+  //const char *mode = NULL;
+  const char *payload = NULL;
+  int success = 1;
+
+  //if((len = coap_get_query_variable(request, "type", &type))) {
+	if((coap_get_payload(request, &payload))) {
+
+		char data[20];
+		strncpy(data, (char*)payload, len);	
+		data[len] = '\0';	
+		LOG_INFO("Received the message: %s", data);
+    //LOG_DBG("type %.*s\n", (int)len, type);
+
+	} else 
+			success = 0;
+   if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+		//LOG_DBG("mode %s\n", mode);
+		/*if(strncmp((char*)type, "CTRL", len) == 0){
+			emission_cause = CTRL;
+			printf("Sono nel caso CTRL");*/
+			oxygen_filter = true;
+			oxygen_emitter = false;
+			filtration_cause = CTRL;
+	}
+	else if(success && strncmp(payload, "{\"mode\":\"on\", \"type\":\"FIRE\"}"))
+	{	
+			oxygen_filter = true;
+			oxygen_emitter = false;
+			filtration_cause = FIRE;
+
+	}
+	else if(success && strncmp(payload, "{\"mode\":\"off\"}"))
+	{	
+			oxygen_filter = false;
+
+	}
+	else
+		success = 0;
+		
+	/*else if (strncmp((char*)type, "ADMIN", len) == 0){
+		emission_cause = ADMIN;
+		printf("Sono nel caso ADMIN");
+	}
+		
+
+	if(strncmp(mode, "on", len) == 0){
+		printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
+		oxygen_emitter = true;
+		oxygen_filter = false;
+		
+	    }else if (strncmp(mode, "off",len)==0){
+		printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
+		oxygen_emitter = false;
+	       
+	    }else{
+		printf("ERROR: UNKNOWN COMMAND\n");
+		success = 0;
+	    }*/
+  //} else { success = 0;}
+	
+ if(!success) {
+    coap_set_status_code(response, BAD_REQUEST_4_00);
+  }
+}
+
+/*
+//Oxygen filtering
 static void
 res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
@@ -134,7 +243,7 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
   }
 }
 
-
+*/
 
 /*---------------------------------------------------------------------------*/
 

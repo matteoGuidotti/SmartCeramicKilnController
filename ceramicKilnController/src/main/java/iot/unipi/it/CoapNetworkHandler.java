@@ -58,6 +58,7 @@ public class CoapNetworkHandler{
 	public void handleFireAlarm(CoapResponse response){
 		try{
 			String responseText = response.getResponseText();
+			CoapResponse postResponse;
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 			if((Boolean)jsonResponse.get("fire_detected")){
 				//TODO: invia a sensore ossigeno di abbassare velocemente

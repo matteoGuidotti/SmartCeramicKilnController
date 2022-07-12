@@ -18,7 +18,7 @@ static void res_put_handler(coap_message_t *request, coap_message_t *response, u
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
 EVENT_RESOURCE(oxygen_sensor,
-         "title=\"Oxygen sensor: ?type=FIRE|CTRL, POST/PUT mode=on|off\";obs",
+         "title=\"Oxygen sensor;obs",
          get_oxygen_handler,
          res_post_handler,
          res_put_handler,
@@ -54,7 +54,7 @@ char json_response[512];
 
 //Oxygen emitter
 static void
-res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   //const char *type = NULL;
@@ -73,7 +73,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 	} else 
 			success = 0;
-   if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+   if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW)) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -82,14 +82,14 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			oxygen_filter = false;
 			emission_cause = CTRL;
 	}
-	else if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"ADMIN\"}"))
+	else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST))
 	{	
 			oxygen_emitter = true;
 			oxygen_filter = false;
 			emission_cause = ADMIN;
 
 	}
-	else if(success && strcmp((char*)payload, "{\"mode\":\"off\"}"))
+	else if(success && strcmp((char*)payload, JSON_OX_OFF))
 	{	
 			oxygen_emitter = false;
 
@@ -124,9 +124,9 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 }
 
 
-//Oxygen emitter
+//Oxygen filter
 static void
-res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   //const char *type = NULL;
@@ -145,7 +145,7 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 
 	} else 
 			success = 0;
-   if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+   if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW)) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -154,14 +154,14 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 			oxygen_emitter = false;
 			filtration_cause = CTRL;
 	}
-	else if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"FIRE\"}"))
+	else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST))
 	{	
 			oxygen_filter = true;
 			oxygen_emitter = false;
 			filtration_cause = FIRE;
 
 	}
-	else if(success && strcmp((char*)payload, "{\"mode\":\"off\"}"))
+	else if(success && strcmp((char*)payload, JSON_OX_OFF))
 	{	
 			oxygen_filter = false;
 

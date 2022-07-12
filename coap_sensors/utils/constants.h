@@ -20,8 +20,13 @@
 
 /* Oxygen sensor server constants */
 #define OXYGEN_SENSOR                           "oxygen_sensor"
-#define JSON_OX_ON_FAST	                        "{\"mode\":\"on\", \"type\":\"fast\"}"
-#define JSON_OX_ON_SLOW	                        "{\"mode\":\"on\", \"type\":\"slow\"}"
+
+#define JSON_OX_EMITTER_FAST	                "{\"mode\":\"on\", \"type\":\"ADMIN\"}"
+#define JSON_OX_EMITTER_SLOW	                "{\"mode\":\"on\", \"type\":\"CTRL\"}"
+
+#define JSON_OX_FILTER_FAST	                    "{\"mode\":\"on\", \"type\":\"FIRE\"}"
+#define JSON_OX_FILTER_SLOW	                    "{\"mode\":\"on\", \"type\":\"CTRL\"}"
+
 #define JSON_OX_OFF	                            "{\"mode\":\"off\"}"
 
 

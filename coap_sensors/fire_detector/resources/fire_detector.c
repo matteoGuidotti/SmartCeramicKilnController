@@ -105,17 +105,24 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 static void fire_detector_event_handler(void)
 {
 
+		
 		if(!fire_detected)
 			fire_detected = simulate_fire_detection();
 		
 		if(fire_detected){
 			if(counter_fire == 0){
 				coap_notify_observers(&fire_detector);
+				printf("Notificato agli observers!\n");
 				counter_fire++;
 			}
 			else if(counter_fire == SECONDS_ALARM_PERIOD){
 				counter_fire = 0;
 			}	
+			else
+			{
+				printf("Sto continuando..\n");
+				printf("counter_fire: %d\n", counter_fire);
+			}
 		}
 }
 

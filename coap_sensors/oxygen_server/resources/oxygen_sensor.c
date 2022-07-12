@@ -3,11 +3,11 @@
 #include "coap-engine.h"
 #include "dev/leds.h"
 #include <time.h>
+#include <../utils/constants.h>
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "App"
-#define LOG_LEVEL LOG_LEVEL_APP
+
 
 /* A simple actuator example, depending on the type query parameter and post variable mode, the actuator is turn on or off */
 

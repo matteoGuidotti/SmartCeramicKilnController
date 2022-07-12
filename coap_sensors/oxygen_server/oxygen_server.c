@@ -15,17 +15,11 @@
 
 #include "coap-engine.h"
 #include "coap-blocking-api.h"
-
-#define SERVER_EP "coap://[fd00::1]:5683"
-#define CONNECTION_TRY_INTERVAL 1
-#define REGISTRATION_TRY_INTERVAL 1
-#define SIMULATION_INTERVAL 1
-#define SENSOR_TYPE "oxygen_sensor"
+#include <../utils/constants.h>
 
 /* Log configuration */
 #include "sys/log.h"
-#define LOG_MODULE "App"
-#define LOG_LEVEL LOG_LEVEL_APP
+
 
 
 PROCESS(oxygen_server, "Server for oxygen sensor");

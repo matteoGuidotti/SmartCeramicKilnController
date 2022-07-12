@@ -6,14 +6,14 @@
 
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
-static void fire_detection_event_handler(void);
+static void fire_detector_event_handler(void);
 
 //Counter for fire's alarm timing
 static int counter_fire = 0;
 
 
 EVENT_RESOURCE(ethylene_sensor,
-         "title=\"Fire detector\", POST/PUT alarm_mode=on|off\";obs",
+         "title=\"Fire detector\", POST alarm_mode=on|off\";obs",
          get_fire_detection_handler,
          res_post_handler,
          NULL,
@@ -66,11 +66,11 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 		LOG_DBG("alarm mode %s\n", alarm_mode);
 		
 		//Forse non serve ma lo lascerei se uno volesse attivare l'allarme manualmente dal controller
-		if(strncmp(mode, "on", len) == 0){
+		if(strncmp(alarm_mode, "on", len) == 0){
 			printf("Switch ON fire alarm\n");
 			fire_detected = true;
 			
-		}else if (strncmp(mode, "off",len)==0){
+		}else if (strncmp(alarm_mode, "off",len)==0){
 			printf("Switch OFF fire alarm\n");
 			fire_detected = false;
 			

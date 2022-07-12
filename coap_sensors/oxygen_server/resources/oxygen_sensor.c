@@ -196,12 +196,14 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	int len;
 
 	
-	sprintf(message, "%g", oxygen_level);
-	data =	&message[0];
+	//sprintf(message, "%g", oxygen_level);
+	//data =	&message[0];
 	printf("message: %s, length of the message: %d\n", message, strlen(message));
-	printf("data: %s, length of the data: %d\n", data, strlen(data));
+	//printf("data: %s, length of the data: %d\n", data, strlen(data));
+	printf("data: %f\n", oxygen_level);
 
-	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
+	//sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
+	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %f}", ((unsigned long long)time(NULL))*1000, oxygen_level);
 	printf(json_response);
 
 

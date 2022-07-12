@@ -3,8 +3,7 @@
 
 /* Fire detector sensor constants */
 #define FIRE_ALARM	            "{\"fire_detected\":true}"
-
-#define ALARM_PERIOD 	         60
+#define SECONDS_ALARM_PERIOD 	         60
 
 
 

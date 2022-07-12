@@ -22,7 +22,7 @@ EVENT_RESOURCE(ethylene_sensor,
 
 
 static bool fire_detected = false;
-static bool alarm_on = false;
+
 /*---------------------------------------------------------------------------*/
 //returns true if the fire is detected, false otherwise
 static bool simulate_fire_detection(){
@@ -68,11 +68,10 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 		//Forse non serve ma lo lascerei se uno volesse attivare l'allarme manualmente dal controller
 		if(strncmp(mode, "on", len) == 0){
 			printf("Switch ON fire alarm\n");
-			alarm_on = true;
+			fire_detected = true;
 			
 		}else if (strncmp(mode, "off",len)==0){
 			printf("Switch OFF fire alarm\n");
-			alarm_on = false;
 			fire_detected = false;
 			
 		}else{
@@ -89,22 +88,18 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 static void fire_detector_event_handler(void)
 {
-	
-		if(fire_detected || alarm_on)
-		{
-			if(counter_fire == 0)
-				counter_fire++;
-			else if(counter_fire == ALARM_PERIOD){
-				coap_notify_observers(&fire_detector);
-				counter_fire = 0;
-			}
-			return;
-		}
+
+		if(!fire_detected)
+			fire_detected = simulate_fire_detection();
 		
-		//Da rivedere
-		fire_detected = simulate_fire_detection();
-		if(fire_detected)
-			counter_fire = 0;
-    
+		if(fire_detected){
+			if(counter_fire == 0){
+				coap_notify_observers(&fire_detector);
+				counter_fire++;
+			}
+			else if(counter_fire == SECONDS_ALARM_PERIOD){
+				counter_fire = 0;
+			}	
+		}
 }
 

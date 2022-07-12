@@ -59,11 +59,11 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
   size_t len = 0;
   //const char *type = NULL;
   //const char *mode = NULL;
-  const char *payload = NULL;
+  const uint8_t* payload = NULL;
   int success = 1;
 
   //if((len = coap_get_query_variable(request, "type", &type))) {
-	if((coap_get_payload(request, &payload))) {
+	if((len = coap_get_payload(request, &payload))) {
 
 		char data[20];
 		strncpy(data, (char*)payload, len);	
@@ -73,7 +73,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 	} else 
 			success = 0;
-   if(success && strcmp((char*)payloadpayload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
+   if(success && strcmp((char*)payload, "{\"mode\":\"on\", \"type\":\"CTRL\"}")) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -131,11 +131,11 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
   size_t len = 0;
   //const char *type = NULL;
   //const char *mode = NULL;
-  const char *payload = NULL;
+  const uint8_t* payload = NULL;
   int success = 1;
 
   //if((len = coap_get_query_variable(request, "type", &type))) {
-	if((coap_get_payload(request, &payload))) {
+	if((len = coap_get_payload(request, &payload))) {
 
 		char data[20];
 		strncpy(data, (char*)payload, len);	

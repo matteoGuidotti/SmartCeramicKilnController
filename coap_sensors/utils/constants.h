@@ -16,6 +16,8 @@
 #define SIMULATION_INTERVAL                     1
 #define FIRE_DETECTOR_SENSOR                    "fire_detector"
 #define CHECK_PERIOD     CLOCK_SECOND
+#define JSON_FIRE_DETECT	                    "{\"deviceType\":\"fire_detector\"}"
+#define JSON_OXYGEN	                            "{\"deviceType\":\"oxygen_controller\"}"
 
 /* Oxygen sensor server constants */
 #define OXYGEN_SENSOR                           "oxygen_sensor"

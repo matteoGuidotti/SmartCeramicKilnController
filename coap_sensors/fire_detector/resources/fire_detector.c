@@ -47,8 +47,27 @@ static bool simulate_fire_detection(){
 
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-	//char message[30];
+
+	char message[30];
 	char *data = NULL;
+	int len;
+
+	
+	sprintf(message, "%g", FIRE_ALARM);
+	data =	&message[0];
+	printf("message: %s, length of the message: %d\n", message, strlen(message));
+	printf("data: %s, length of the data: %d\n", data, strlen(data));
+
+	sprintf(json_response, FIRE_ALARM);
+	printf(json_response);
+
+
+	coap_set_header_content_format(response, APPLICATION_JSON);
+	coap_set_header_etag(response, (uint8_t *)&len, 1);
+	coap_set_payload(response, data, strlen(json_response));
+
+	//char message[30];
+	/*char *data = NULL;
 	if(fire_detected)
 	{
 		sprintf(json_response, FIRE_ALARM);
@@ -56,7 +75,7 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 
 		coap_set_header_content_format(response, APPLICATION_JSON);
 		coap_set_payload(response, data, strlen(json_response));
-	}
+	}*/
 	
 
 }

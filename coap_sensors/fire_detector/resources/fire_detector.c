@@ -75,7 +75,7 @@ static void
 res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
-  const char *alarm_mode = NULL;
+  //const char *alarm_mode = NULL;
   const uint8_t* payload = NULL;
   int success = 1;
 
@@ -91,7 +91,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 	} else 
 			success = 0;
-			
+
    if(success && strcmp((char*)payload, JSON_ALARM_ON)) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){

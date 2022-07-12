@@ -119,10 +119,11 @@ static void fire_detector_event_handler(void)
 			}	
 			else
 			{
-				counter_fire++;
+				
 				printf("Sto continuando..\n");
 				printf("counter_fire: %d\n", counter_fire);
 			}
+			counter_fire++;
 		}
 }
 

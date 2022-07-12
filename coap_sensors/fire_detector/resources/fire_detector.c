@@ -92,7 +92,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 	} else 
 			success = 0;
 
-   if(success && strcmp((char*)payload, JSON_ALARM_ON)) {
+   if(success && strcmp((char*)payload, JSON_ALARM_ON) == 0) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -101,7 +101,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			fire_detected = true;
 			counter_fire = 0;
 	}
-	else if(success && strcmp((char*)payload, JSON_ALARM_OFF)) {
+	else if(success && strcmp((char*)payload, JSON_ALARM_OFF) == 0) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;

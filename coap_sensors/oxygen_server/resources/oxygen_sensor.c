@@ -73,7 +73,7 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 
 	} else 
 			success = 0;
-   if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW)) {
+   if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -82,14 +82,14 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
 			oxygen_filter = false;
 			emission_cause = CTRL;
 	}
-	else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST))
+	else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST) == 0)
 	{	
 			oxygen_emitter = true;
 			oxygen_filter = false;
 			emission_cause = ADMIN;
 
 	}
-	else if(success && strcmp((char*)payload, JSON_OX_OFF))
+	else if(success && strcmp((char*)payload, JSON_OX_OFF) == 0)
 	{	
 			oxygen_emitter = false;
 
@@ -145,7 +145,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 	} else 
 			success = 0;
-   if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW)) {
+   if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW) == 0) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -154,14 +154,14 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			oxygen_emitter = false;
 			filtration_cause = CTRL;
 	}
-	else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST))
+	else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST) == 0)
 	{	
 			oxygen_filter = true;
 			oxygen_emitter = false;
 			filtration_cause = FIRE;
 
 	}
-	else if(success && strcmp((char*)payload, JSON_OX_OFF))
+	else if(success && strcmp((char*)payload, JSON_OX_OFF) == 0)
 	{	
 			oxygen_filter = false;
 

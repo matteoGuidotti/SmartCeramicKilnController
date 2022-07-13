@@ -41,8 +41,8 @@ static enum Cause emission_cause  = CTRL;
 
 char json_response[512];
 
-//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=emitter&cause=ADMIN|CTRL -e mode=on|off
-//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL -e mode=on|off
+//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=emitter&cause=ADMIN|CTRL&mode=on|off
+//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL&mode=on|off
 
 //Oxygen filters
 static void
@@ -57,7 +57,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
   int success = 1;
 
 
-   if((len_mode = coap_get_post_variable(request, "mode", &mode))) {
+   if((len_mode = coap_get_query_variable(request, "mode", &mode))) {
 
 		if(strncmp(mode, "on", len_mode) == 0){
 

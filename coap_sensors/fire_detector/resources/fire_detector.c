@@ -71,7 +71,7 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 
 }
 
-//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector -e alarm=on|off
+//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector&alarm=on|off
 
 static void
 res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
@@ -81,7 +81,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
   
   int success = 1;
 
-  	if((len = coap_get_post_variable(request, "alarm", &alarm_mode))) {
+  	if((len = coap_get_query_variable(request, "alarm", &alarm_mode))) {
 		LOG_DBG("alarm mode %s\n", alarm_mode);
 		
 		

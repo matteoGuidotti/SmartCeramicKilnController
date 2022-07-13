@@ -89,12 +89,12 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 		
 		 if((len_mode = coap_get_post_variable(request, "mode", &mode))) {
         	if(strncmp(mode, "on", len_mode) == 0){
-            	printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
+            	printf("Switch ON oxygen emitter with cause: %s\n", (char*)cause);
 					oxygen_emitter = true;
 					oxygen_filter = false;
             
             	}else if (strncmp(mode, "off",len_mode)==0){
-					printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
+					printf("Switch OFF oxygen emitter with cause: %s\n", (char*)cause);
 					oxygen_emitter = false;
             
            		}else{

@@ -39,4 +39,12 @@ public class RegistrationServer extends CoapServer {
 			exchange.respond(ResponseCode.CREATED, "Registration Completed!".getBytes(StandardCharsets.UTF_8));
 		}
 	}
+
+	public void changeTargetOxygen(double target){
+		coapHandler.changeTargetOxygen(target);
+	}
+
+	public void changeAccOxygen(double range){
+		coapHandler.changeAccOxygen(range);
+	}
 }

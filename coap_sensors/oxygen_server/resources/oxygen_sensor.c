@@ -74,6 +74,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
   } else {
     success = 0;
   } */if((len_mode = coap_get_post_variable(request, "mode", &mode)) ) {
+	sprintf("Mode:%s\n", mode);
 
 		if(strncmp((char*)mode, "on", len_mode) == 0){
 
@@ -116,6 +117,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 
 	    }else if (strncmp(mode, "off",len_mode)==0){
 
+				sprintf("Mode:%s\n", mode);
 				if((len_type = coap_get_post_variable(request, "type", &type))) {
 
 					if(strncmp((char*)type, "filter", len_type) == 0){

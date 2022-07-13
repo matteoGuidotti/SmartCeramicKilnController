@@ -11,9 +11,9 @@ public class DbUtility {
 
         String databaseIP = "localhost";
         String databasePort = "3306";
-        String databaseUsername = "root";
-        String databasePassword = "root";
-        String databaseName = "kiln_controller";
+        String databaseUsername = "db_iot";
+        String databasePassword = "iotproject";
+        String databaseName = "db_ceramicKiln";
         
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");//checks if the Driver class exists (correctly available)

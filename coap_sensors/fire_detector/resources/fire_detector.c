@@ -99,7 +99,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			printf("ERROR: UNKNOWN COMMAND\n");
 			success = 0;
 		}
-  	} else { success = 0;}*/
+  	} else { success = 0;}
 	
 	if(!success) {
 		coap_set_status_code(response, BAD_REQUEST_4_00);

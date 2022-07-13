@@ -44,7 +44,7 @@ char json_response[512];
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=emitter&cause=ADMIN|CTRL -e mode=on|off
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL -e mode=on|off
 
-//Oxygen filter
+//Oxygen filters
 static void
 res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {

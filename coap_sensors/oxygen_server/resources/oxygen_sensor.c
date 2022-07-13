@@ -143,8 +143,8 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 		data[len] = '\0';	
 		LOG_INFO("Received the message: %s", data);
     //LOG_DBG("type %.*s\n", (int)len, type);
-	printf("%s\n",(char*)payload)
-	printf("%s\n",data)
+	printf("%s\n",(char*)payload);
+	printf("%s\n",data);
 
 	} else 
 			success = 0;

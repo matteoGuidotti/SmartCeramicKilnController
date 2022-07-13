@@ -83,33 +83,30 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
   if((len = coap_get_query_variable(request, "type", &type))) {
         printf("Type: %s", type);
-	
-	} else 
-			success = 0;
   
-	if(strncmp((char*)type, "CTRL", len) == 0){
-        emission_cause = CTRL;
-        printf("Sono nel caso CTRL");
-    }
-	else if (strncmp((char*)type, "ADMIN", len) == 0){
-		emission_cause = ADMIN;
-		printf("Sono nel caso ADMIN");
-	}
+        if(strncmp((char*)type, "CTRL", len) == 0){
+            emission_cause = CTRL;
+            printf("Sono nel caso CTRL");
+        }
+        else if (strncmp((char*)type, "ADMIN", len) == 0){
+            emission_cause = ADMIN;
+            printf("Sono nel caso ADMIN");
+        }
 		
 
-	if(strncmp(mode, "on", len) == 0){
-		printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
-            oxygen_emitter = true;
-            oxygen_filter = false;
-		
-	    }else if (strncmp(mode, "off",len)==0){
-            printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
-            oxygen_emitter = false;
-	       
-	    }else{
-            printf("ERROR: UNKNOWN COMMAND\n");
-            success = 0;
-	    }
+        if(strncmp(mode, "on", len) == 0){
+            printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
+                oxygen_emitter = true;
+                oxygen_filter = false;
+            
+            }else if (strncmp(mode, "off",len)==0){
+                printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
+                oxygen_emitter = false;
+            
+            }else{
+                printf("ERROR: UNKNOWN COMMAND\n");
+                success = 0;
+            }
   } else { 
          printf("ERROR: UNKNOWN COMMAND\n");
         success = 0;
@@ -138,12 +135,12 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 
   } else {
     success = 0;
-  } */if((len_mode = coap_get_post_variable(request, "mode", &mode)) ) {
+  } */if((len_mode = coap_get_query_variable(request, "mode", &mode)) ) {
 	printf("Mode : %s\n", (char*)mode);
 
 		if(strncmp((char*)mode, "on", len_mode) == 0){
 
-			if((len_type = coap_get_post_variable(request, "type", &type)) && (len_cause = coap_get_post_variable(request, "cause", &cause))) {
+			if((len_type = coap_get_query_variable(request, "type", &type)) && (len_cause = coap_get_query_variable(request, "cause", &cause))) {
 
 				if(strncmp((char*)type, "filter", len_type) == 0){
 					if(strncmp((char*)cause, "CTRL", len_cause) == 0)
@@ -183,7 +180,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 	    }else if (strncmp(mode, "off",len_mode)==0){
 
 				printf("Mode : %s\n", (char*)mode);
-				if((len_type = coap_get_post_variable(request, "type", &type))) {
+				if((len_type = coap_get_query_variable(request, "type", &type))) {
 
 					if(strncmp((char*)type, "filter", len_type) == 0){
 						printf("Switch OFF oxygen filtering\n");

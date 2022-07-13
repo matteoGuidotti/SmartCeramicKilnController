@@ -133,11 +133,12 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
   //const char *mode = NULL;
   const uint8_t* payload = NULL;
   int success = 1;
+  char data[20];
 
   //if((len = coap_get_query_variable(request, "type", &type))) {
 	if((len = coap_get_payload(request, &payload))) {
 
-		char data[20];
+		
 		strncpy(data, (char*)payload, len);	
 		data[len] = '\0';	
 		LOG_INFO("Received the message: %s", data);
@@ -147,7 +148,7 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 
 	} else 
 			success = 0;
-   if(success && strcmp(data, JSON_OX_FILTER_SLOW) == 0) {
+   if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW) == 0) {
 		//LOG_DBG("mode %s\n", mode);
 		/*if(strncmp((char*)type, "CTRL", len) == 0){
 			emission_cause = CTRL;
@@ -156,14 +157,14 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 			oxygen_emitter = false;
 			filtration_cause = CTRL;
 	}
-	else if(success && strcmp(data, JSON_OX_FILTER_FAST) == 0)
+	else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST) == 0)
 	{	
 			oxygen_filter = true;
 			oxygen_emitter = false;
 			filtration_cause = FIRE;
 
 	}
-	else if(success && strcmp(data, JSON_OX_OFF) == 0)
+	else if(success && strcmp((char*)payload, JSON_OX_OFF) == 0)
 	{	
 			oxygen_filter = false;
 

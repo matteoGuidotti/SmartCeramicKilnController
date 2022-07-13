@@ -75,48 +75,11 @@ static void
 res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
-  //const char *alarm_mode = NULL;
-  const uint8_t* payload = NULL;
+  const char *alarm_mode = NULL;
+  //const uint8_t* payload = NULL;
   int success = 1;
 
-  
-  //if((len = coap_get_query_variable(request, "type", &type))) {
-	if((len = coap_get_payload(request, &payload))) {
-
-		char data[20];
-		strncpy(data, (char*)payload, len);	
-		data[len] = '\0';	
-		LOG_INFO("Received the message: %s", data);
-    //LOG_DBG("type %.*s\n", (int)len, type);
-
-	} else 
-			success = 0;
-
-   if(success && strcmp((char*)payload, JSON_ALARM_ON) == 0) {
-		//LOG_DBG("mode %s\n", mode);
-		/*if(strncmp((char*)type, "CTRL", len) == 0){
-			emission_cause = CTRL;
-			printf("Sono nel caso CTRL");*/
-			printf("Switch ON fire alarm\n");
-			fire_detected = true;
-			counter_fire = 0;
-	}
-	else if(success && strcmp((char*)payload, JSON_ALARM_OFF) == 0) {
-		//LOG_DBG("mode %s\n", mode);
-		/*if(strncmp((char*)type, "CTRL", len) == 0){
-			emission_cause = CTRL;
-			printf("Sono nel caso CTRL");*/
-			printf("Switch OFF fire alarm\n");
-			fire_detected = false;
-			counter_fire = 0;
-	}
-	else{
-			printf("ERROR: UNKNOWN COMMAND\n");
-			success = 0;
-		}
-	
-
-  	/*if((len = coap_get_post_variable(request, "alarm", &alarm_mode))) {
+  	if((len = coap_get_post_variable(request, "alarm", &alarm_mode))) {
 		LOG_DBG("alarm mode %s\n", alarm_mode);
 		
 		//Forse non serve ma lo lascerei se uno volesse attivare l'allarme manualmente dal controller

@@ -103,11 +103,11 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 							oxygen_filter = false;
 
 							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
-								emitter_cause = CTRL;
+								emittion_cause = CTRL;
 								printf("Sono nel caso emitter CTRL\n");
 							}
 							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
-								emitter_cause = CTRL;
+								emittion_cause = CTRL;
 								printf("Sono nel caso emitter CTRL\n");
 							}
 							else{

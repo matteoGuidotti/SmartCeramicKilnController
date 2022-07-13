@@ -21,8 +21,8 @@ static void oxygen_event_handler(void);
 EVENT_RESOURCE(oxygen_sensor,
          "title=\"Oxygen sensor;obs",
          get_oxygen_handler,
-         res_post_put_handler,
-         res_post_put_handler,
+         res_put_post_handler,
+         res_put_post_handler,
          NULL,
          oxygen_event_handler);
 
@@ -73,11 +73,11 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 
   } else {
     success = 0;
-  } */if(len_mode = coap_get_post_variable(request, "mode", &mode) ) {
+  } */if((len_mode = coap_get_post_variable(request, "mode", &mode)) ) {
 
 		if(strncmp((char*)mode, "on", len_mode) == 0){
 
-			if(len_type = coap_get_post_variable(request, "type", &type) && len_cause = coap_get_post_variable(request, "cause", &cause)) {
+			if((len_type = coap_get_post_variable(request, "type", &type)) && (len_cause = coap_get_post_variable(request, "cause", &cause))) {
 
 				if(strncmp((char*)type, "filter", len_type) == 0){
 					if(strncmp((char*)cause, "CTRL", len_cause) == 0)
@@ -116,7 +116,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 
 	    }else if (strncmp(mode, "off",len_mode)==0){
 
-				if(len_type = coap_get_post_variable(request, "type", &type)) {
+				if((len_type = coap_get_post_variable(request, "type", &type))) {
 
 					if(strncmp((char*)type, "filter", len_type) == 0){
 						printf("Switch OFF oxygen filtering\n");

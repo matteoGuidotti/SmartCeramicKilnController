@@ -4,7 +4,7 @@
 
 /* Fire detector sensor constants */
 #define FIRE_ALARM	                            "{\"fire_detected\":true}"
-#define SECONDS_ALARM_PERIOD 	                
+#define SECONDS_ALARM_PERIOD 	                60
 #define JSON_ALARM_ON	                        "{\"mode\":\"on\"}"
 #define JSON_ALARM_OFF	                        "{\"mode\":\"off\"}"
 

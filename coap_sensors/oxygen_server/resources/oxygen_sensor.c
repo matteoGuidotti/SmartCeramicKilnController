@@ -84,11 +84,11 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 							oxygen_emitter = false;
 
 							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
-								filter_cause = CTRL;
+								filtration_cause = CTRL;
 								printf("Sono nel caso filter CTRL\n");
 							}
 							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
-								filter_cause = CTRL;
+								filtration_cause = CTRL;
 								printf("Sono nel caso filter CTRL\n");
 							}
 							else{

@@ -107,7 +107,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 								printf("Sono nel caso emitter CTRL\n");
 							}
 							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
-								emission_cause = CTRL;
+								emission_cause = ADMIN;
 								printf("Sono nel caso emitter CTRL\n");
 							}
 							else{
@@ -133,19 +133,25 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 		}
 
 		else if(strncmp(mode, "off", len_mode) == 0){
+			if((len_type = coap_get_query_variable(request, "type", &type))) {
 
-			if(strncmp(type, "filter", len_type) == 0){
-					oxygen_filter = false;
-				}
-				else if(strncmp(type, "emitter", len_type) == 0)
-				{
-					oxygen_emitter = false;
-				}
-				else{
-					success = 0;
-					printf("Parametro \"type\" sbagliato!\n");
+				if(strncmp(type, "filter", len_type) == 0){
+						oxygen_filter = false;
 					}
-
+					else if(strncmp(type, "emitter", len_type) == 0)
+					{
+						oxygen_emitter = false;
+					}
+					else{
+						success = 0;
+						printf("Parametro \"type\" sbagliato!\n");
+						}
+			}
+			else
+			{
+				success = 0;
+				printf("Parametro \"type\" mancante!\n");
+			}
 		}
 		else{
 			success = 0;

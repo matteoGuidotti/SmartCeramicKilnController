@@ -60,63 +60,110 @@ char json_response[512];
 static void
 res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-  //size_t len_type = 0;
+  size_t len_type = 0;
   size_t len_mode = 0;
   size_t len_cause = 0;
-  //const char *type = NULL;
+  const char *type = NULL;
   const char *mode = NULL;
   const char *cause = NULL;
   int success = 1;
   //char data[20];
 
-  if((len_cause = coap_get_query_variable(request, "cause", &cause))) {
-        printf("Cause: %s", cause);
-  
-        if(strncmp((char*)cause, "CTRL", len_cause) == 0){
-            emission_cause = CTRL;
-            printf("Sono nel caso CTRL");
-        }
-        else if (strncmp((char*)cause, "ADMIN", len_cause) == 0){
-            emission_cause = ADMIN;
-            printf("Sono nel caso ADMIN");
-        }
-		else
-		{
-			success = 0;
-			printf("Param \"cause\" sbagliato!\n");
+   if((len_mode = coap_get_post_variable(request, "mode", &mode))) {
+
+		if(strncmp(mode, "on", len_mode) == 0){
+
+            if((len_type = coap_get_query_variable(request, "type", &type))) {
+					
+					if((len_cause = coap_get_query_variable(request, "cause", &cause))) {
+						printf("Cause: %s", cause);
+
+						//Caso filtraggio
+						if(strncmp(type, "filter", len_type) == 0){
+							oxygen_filter = true;
+							oxygen_emitter = false;
+
+							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
+								filter_cause = CTRL;
+								printf("Sono nel caso filter CTRL\n");
+							}
+							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
+								filter_cause = CTRL;
+								printf("Sono nel caso filter CTRL\n");
+							}
+							else{
+								success = 0;
+								printf("Param \"cause\" sbagliato!\n");
+
+							}
+						}
+						//Caso emissione
+						else if(strncmp(type, "emitter", len_type) == 0){
+							oxygen_emitter = true;
+							oxygen_filter = false;
+
+							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
+								emitter_cause = CTRL;
+								printf("Sono nel caso emitter CTRL\n");
+							}
+							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
+								emitter_cause = CTRL;
+								printf("Sono nel caso emitter CTRL\n");
+							}
+							else{
+								success = 0;
+								printf("Param \"cause\" sbagliato!\n");
+
+							}
+						}
+						else{
+							success = 0;
+							printf("Param \"type\" sbagliato!\n");
+						}
+					}
+					else{
+						success = 0;
+						printf("Param \"cause\" mancante!\n");
+					}
+			}
+			else{
+				success = 0;
+				printf("Param \"type\" mancante!\n");
+			}
 		}
-			
-		
-		 if((len_mode = coap_get_post_variable(request, "mode", &mode))) {
-        	if(strncmp(mode, "on", len_mode) == 0){
-            	printf("Switch ON oxygen emitter with cause: %s\n", (char*)cause);
-					oxygen_emitter = true;
+
+		else if(strncmp(mode, "off", len_mode) == 0){
+
+			if(strncmp(type, "filter", len_type) == 0){
 					oxygen_filter = false;
-            
-            	}else if (strncmp(mode, "off",len_mode)==0){
-					printf("Switch OFF oxygen emitter with cause: %s\n", (char*)cause);
+				}
+				else if(strncmp(type, "emitter", len_type) == 0)
+				{
 					oxygen_emitter = false;
-            
-           		}else{
-					printf("ERROR: UNKNOWN COMMAND\n");
+				}
+				else{
 					success = 0;
-            	}
+					printf("Parametro \"type\" sbagliato!\n");
+					}
+
 		}
-  	 	else { 
-        	printf("ERROR: UNKNOWN COMMAND\n");
-        	success = 0;
-        }
-}
-	
-else{
-		printf("ERROR: UNKNOWN COMMAND\n");
+		else{
+			success = 0;
+			printf("Parametro \"mode\" sbagliato!\n");
+		}
+   	}
+	else{
 		success = 0;
+		printf("Parametro \"mode\" mancante!\n");
 	}
 			
+ 
+ 
  if(!success) {
     coap_set_status_code(response, BAD_REQUEST_4_00);
   }
 }
+
 
 
 

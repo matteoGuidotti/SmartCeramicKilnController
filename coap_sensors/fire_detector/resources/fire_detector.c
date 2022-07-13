@@ -32,7 +32,7 @@ char json_response[512];
 /*---------------------------------------------------------------------------*/
 //returns true if the fire is detected, false otherwise
 static bool simulate_fire_detection(){
-	//srand(time(NULL));
+	
 	//the fire raises with a probability of 1%
 	if(rand()%100 < 1){
 		printf("Fire detected!\n");
@@ -78,13 +78,13 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
 {
   size_t len = 0;
   const char *alarm_mode = NULL;
-  //const uint8_t* payload = NULL;
+  
   int success = 1;
 
   	if((len = coap_get_post_variable(request, "alarm", &alarm_mode))) {
 		LOG_DBG("alarm mode %s\n", alarm_mode);
 		
-		//Forse non serve ma lo lascerei se uno volesse attivare l'allarme manualmente dal controller
+		
 		if(strncmp(alarm_mode, "on", len) == 0){
 			printf("Switch ON fire alarm\n");
 			fire_detected = true;

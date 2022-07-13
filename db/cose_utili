@@ -1,0 +1,10 @@
+Grafana
+user: admin
+pass: iotproject
+
+Mysql
+user: db_iot
+pass: iotproject
+
+nome_db: db_ceramicKiln
+tabelle: oxygen,temperature,fire_alarm

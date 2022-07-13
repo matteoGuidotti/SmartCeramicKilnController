@@ -70,7 +70,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
   //char data[20];
 
   if((len_cause = coap_get_query_variable(request, "cause", &cause))) {
-        printf("Type: %s", type);
+        printf("Cause: %s", cause);
   
         if(strncmp((char*)cause, "CTRL", len_cause) == 0){
             emission_cause = CTRL;
@@ -93,7 +93,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 					oxygen_emitter = true;
 					oxygen_filter = false;
             
-            	}else if (strncmp(mode, "off",len)==0){
+            	}else if (strncmp(mode, "off",len_mode)==0){
 					printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
 					oxygen_emitter = false;
             
@@ -182,8 +182,8 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	int len;
 
 	
-	//sprintf(message, "%g", oxygen_level);
-	//data =	&message[0];
+	sprintf(message, "%g", oxygen_level);
+	data =	&message[0];
 	//printf("message: %s, length of the message: %d\n", message, strlen(message));
 	//printf("data: %s, length of the data: %d\n", data, strlen(data));
 	//printf("data: %f\n", oxygen_level);

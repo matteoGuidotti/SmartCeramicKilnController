@@ -63,30 +63,42 @@ public class Collector extends CoapServer {
 			}
 			else if(insertedCommand.equals("!changeTargetTemp")){
 				if(tokens.length < 2){
+					System.out.println("Wrong command format");
 					printCommandError();
 					continue;
 				}
 				mqttClient.changeTargetTemp(Integer.parseInt(tokens[1]));
+				System.out.println("Target temperature changed succesfully!");
 			}
 			else if(insertedCommand.equals("!changeAccTemp")){
 				if(tokens.length < 2){
+					System.out.println("Wrong command format");
 					printCommandError();
 					continue;
 				}
 				mqttClient.changeAccTemp(Integer.parseInt(tokens[1]));
+				System.out.println("Acceptable range for the temeprature changed succesfully");
 			}
 			else if(insertedCommand.equals("!changeTargetOxygen")){
 				if(tokens.length < 2){
+					System.out.println("Wrong command format");
 					printCommandError();
 					continue;
 				}
-				//TODO
+				rs.changeTargetOxygen(Double.parseDouble(tokens[1]));
+				System.out.println("Target oxygen value changed succesfully");
 			}
 			else if(insertedCommand.equals("!changeAccOxygen")){
-
+				if(tokens.length < 2){
+					System.out.println("Wrong command format");
+					printCommandError();
+					continue;
+				}
+				rs.changeAccOxygen(Double.parseDouble(tokens[1]));
+				System.out.println("Acceptable range for the oxygen value changed succesfully");
 			}
 			else if(insertedCommand.equals("!stopAlarm")){
-
+				
 			}
 			else{
 				printCommandError();

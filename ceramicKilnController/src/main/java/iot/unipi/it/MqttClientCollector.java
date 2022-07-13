@@ -25,8 +25,11 @@ public class MqttClientCollector implements MqttCallback{
 
 	//temperature to be reached
 	private int targetTemp;
-	//the kiln temeprature is acceptable if belongs to [targetTemp - acceptableRange; targetTemp + acceptableRange]
+	//the kiln temperature is acceptable if belongs to [targetTemp - acceptableRange; targetTemp + acceptableRange]
 	private int acceptableRange;
+
+	//it is different from 0 if a temperature value is already arrived 
+	private int firstTemperatureValue = 0;
 
 	public MqttClientCollector(int temp, int range){
 		targetTemp = temp;
@@ -72,27 +75,34 @@ public class MqttClientCollector implements MqttCallback{
 		String receivedPayload = new String(message.getPayload());
 		Map<String, Object> receivedJson = Utils.jsonParser(receivedPayload);
 		int receivedTemperature = (Integer)receivedJson.get("current_temperature");
-		String heater_state = (String)receivedJson.get("heater_state");
-		//TODO aggiungere dati al database
-		if(receivedTemperature > targetTemp + acceptableRange){
-			//need to decrease temperature
-			System.out.println("Temperature is too high, need to decrease it");
-			if(heater_state.equals("ON")){
-				Map<String, Object> jsonResponse = new HashMap<String,Object>();
-				jsonResponse.put("heater_on", false);
-				publish(pubTopic, Utils.jsonToString(jsonResponse));
-			}
-			//if the heater is already OFF, we have only to wait
+		if(firstTemperatureValue == 0){
+			firstTemperatureValue = receivedTemperature;
 		}
-		else if(receivedTemperature < targetTemp - acceptableRange){
-			//need to increase the temperature
-			System.out.println("Temperature is too low, need to encrease it");
-			if(heater_state.equals("OFF")){
-				Map<String, Object> jsonResponse = new HashMap<String,Object>();
-				jsonResponse.put("heater_on", true);
-				publish(pubTopic, Utils.jsonToString(jsonResponse));
+		else{
+			String heater_state = (String)receivedJson.get("heater_state");
+			int averageTemp = (firstTemperatureValue + receivedTemperature) / 2;
+			DbUtility.insertTemperature(averageTemp);
+			if(averageTemp > targetTemp + acceptableRange){
+				//need to decrease temperature
+				System.out.println("Temperature is too high, need to decrease it");
+				if(heater_state.equals("ON")){
+					Map<String, Object> jsonResponse = new HashMap<String,Object>();
+					jsonResponse.put("heater_on", false);
+					publish(pubTopic, Utils.jsonToString(jsonResponse));
+				}
+				//if the heater is already OFF, we have only to wait
 			}
-			//if the heater is already ON, we have only to wait
+			else if(averageTemp < targetTemp - acceptableRange){
+				//need to increase the temperature
+				System.out.println("Temperature is too low, need to encrease it");
+				if(heater_state.equals("OFF")){
+					Map<String, Object> jsonResponse = new HashMap<String,Object>();
+					jsonResponse.put("heater_on", true);
+					publish(pubTopic, Utils.jsonToString(jsonResponse));
+				}
+				//if the heater is already ON, we have only to wait
+			}
+			firstTemperatureValue = 0;
 		}
 	}
 

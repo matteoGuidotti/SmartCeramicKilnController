@@ -16,12 +16,14 @@
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
+
 EVENT_RESOURCE(oxygen_sensor,
          "title=\"Oxygen sensor;obs",
          get_oxygen_handler,
-         res_post_handler,
-         res_put_handler,
+         res_post_put_handler,
+         res_post_put_handler,
          NULL,
          oxygen_event_handler);
 
@@ -41,17 +43,17 @@ static enum Cause emission_cause  = CTRL;
 char json_response[512];
 
 
-//Oxygen filtering
+//Oxygen filtering (post)
 //"{\"mode\":\"on\", \"type\":\"CTRL\"}"
 //"{\"mode\":\"on\", \"type\":\"FIRE\"}"
 //"{\"mode\":\"off\"}"
 
-//Oxygen emitter
+//Oxygen emitter (put)
 //"{\"mode\":\"off\", \"type\":\"CTRL\"}"
 //"{\"mode\":\"off\", \"type\":\"ADMIN\"}"
 //"{\"mode\":\"off\"}"
 
-
+/
 //Oxygen emitter
 static void
 res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
@@ -133,18 +135,18 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
   //const char *mode = NULL;
   const uint8_t* payload = NULL;
   int success = 1;
-  char data[20];
+  //char data[20];
 
   //if((len = coap_get_query_variable(request, "type", &type))) {
 	if((len = coap_get_payload(request, &payload))) {
 
 		
-		strncpy(data, (char*)payload, len);	
-		data[len] = '\0';	
-		LOG_INFO("Received the message: %s", data);
+	//strncpy(data, (char*)payload, len);	
+	//data[len] = '\0';	
+	//LOG_INFO("Received the message: %s", data);
     //LOG_DBG("type %.*s\n", (int)len, type);
 	printf("%s\n",(char*)payload);
-	printf("%s\n",data);
+	//printf("%s\n",data);
 
 	} else 
 			success = 0;
@@ -198,47 +200,96 @@ res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buf
   }
 }
 
-/*
-//Oxygen filtering
+
+//Oxygen filtering and emitting
 static void
-res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-  size_t len = 0;
-  const char *type = NULL;
+  size_t len_mode = 0;
+  size_t len_type = 0;
+  size_t len_cause = 0;
   const char *mode = NULL;
+  const char *type = NULL;
+  const char *cause = NULL;
   int success = 1;
 
-  if((len = coap_get_query_variable(request, "type", &type))) {
+  /*if((len = coap_get_query_variable(request, "type", &cause))) {
     LOG_DBG("type %.*s\n", (int)len, type);
 
   } else {
     success = 0;
-  } if(success && (len = coap_get_post_variable(request, "mode", &mode))) {
-	LOG_DBG("mode %s\n", mode);
-	if(strncmp((char*)type, "CTRL", len) == 0){
-		filtration_cause = CTRL;
-		printf("Sono nel caso CONTROL");
-	}
-		
-	else if (strncmp((char*)type, "FIRE", len) == 0){
-		filtration_cause = FIRE;
-		printf("Sono nel caso FIRE");
-	}
+  } */if(len_mode = coap_get_post_variable(request, "mode", &mode) ) {
+
+		if(strncmp((char*)mode, "on", len_mode) == 0){
+
+			if(len_type = coap_get_post_variable(request, "type", &type) && len_cause = coap_get_post_variable(request, "cause", &cause)) {
+
+				if(strncmp((char*)type, "filter", len_type) == 0){
+					if(strncmp((char*)cause, "CTRL", len_cause) == 0)
+						filtration_cause = CTRL;
+					else if(strncmp((char*)cause, "FIRE", len_cause) == 0)
+						filtration_cause = FIRE;
+					else{
+						success = 0;
+						printf("Param \"type\" not valid!\n");
+					}
+					oxygen_filter = true;
+					oxygen_emitter = false;
+					
+				}
+				else if(strncmp((char*)type, "emitter", len_type) == 0)
+				{
+					if(strncmp((char*)cause, "CTRL", len_cause) == 0)
+						emission_cause = CTRL;
+					else if(strncmp((char*)cause, "ADMIN", len_cause) == 0)
+						emission_cause = ADMIN;
+					else{
+						success = 0;
+						printf("Param \"cause\" not valid!\n");
+					}
+					oxygen_emitter = true;
+					oxygen_filter = false;
+					
+				}
+				else{
+					success = 0;
+					printf("Param \"type\" not valid!\n");
+				}
+			}
+			else 
+				success = 0;
+
+	    }else if (strncmp(mode, "off",len_mode)==0){
+
+				if(len_type = coap_get_post_variable(request, "type", &type)) {
+
+					if(strncmp((char*)type, "filter", len_type) == 0){
+						printf("Switch OFF oxygen filtering\n");
+						oxygen_filter = false;
+					}
+					else if(strncmp((char*)type, "emitter", len_type) == 0){
+						printf("Switch OFF oxygen emitter\n");
+						oxygen_emitter = false;
+					}
+					else{
+						success = 0;
+						printf("Param \"type\" not valid!\n");
+					}
+						
+				}
+				else
+					success = 0;
+	       
+	    }
+		else{
+			printf("ERROR: UNKNOWN COMMAND\n");
+			success = 0;
+	    }
+
+	
 		
 
-	if(strncmp(mode, "on", len) == 0){
-		printf("Switch ON oxygen filtering with type: %s\n", (char*)type);
-		oxygen_filter = true;
-		oxygen_emitter = false;
-		
-	    }else if (strncmp(mode, "off",len)==0){
-		printf("Switch OFF oxygen filtering with type: %s\n", (char*)type);
-		oxygen_filter = false;
-	       
-	    }else{
-		printf("ERROR: UNKNOWN COMMAND\n");
-		success = 0;
-	    }
+	
   } else { success = 0;}
 	
  if(!success) {
@@ -246,14 +297,13 @@ res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buff
   }
 }
 
-*/
 
 /*---------------------------------------------------------------------------*/
 
 static enum Risk simulate_oxygen_change(){
 
 	int type = 0;
-	double variation = (double)(rand() % 10) / 10;
+	double variation = (double)(rand() % 5) / 10;
 	double variationFast = 0.5;
 	double variationCTRL = 0.1;
 	
@@ -317,7 +367,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	printf("data: %f\n", oxygen_level);
 
 	//sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
-	//sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %f}", ((unsigned long long)time(NULL))*1000, oxygen_level);
+	sprintf(json_response, "{\"oxygen_value\": %f}", oxygen_level);
 	printf(json_response);
 
 

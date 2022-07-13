@@ -107,7 +107,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 								printf("Sono nel caso emitter CTRL\n");
 							}
 							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
-								emit_cause = CTRL;
+								emission_cause = CTRL;
 								printf("Sono nel caso emitter CTRL\n");
 							}
 							else{

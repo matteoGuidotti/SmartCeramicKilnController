@@ -73,7 +73,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 
   } else {
     success = 0;
-  } */if((len_mode = coap_get_post_variable(request, "mode", &mode)) ) {
+  } */if((len_mode = coap_get_query_variable(request, "mode", &mode)) ) {
 	printf("Mode : %s\n", (char*)mode);
 
 		if(strncmp((char*)mode, "on", len_mode) == 0){

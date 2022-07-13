@@ -317,7 +317,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	printf("data: %f\n", oxygen_level);
 
 	//sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %s}", ((unsigned long long)time(NULL))*1000, data);
-	sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %f}", ((unsigned long long)time(NULL))*1000, oxygen_level);
+	//sprintf(json_response, "{\"timestamp\":%llu, \"oxygen_value\": %f}", ((unsigned long long)time(NULL))*1000, oxygen_level);
 	printf(json_response);
 
 

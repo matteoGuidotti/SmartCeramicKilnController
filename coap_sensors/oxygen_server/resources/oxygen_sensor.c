@@ -69,7 +69,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
   int success = 1;
   //char data[20];
 
-   if((len_mode = coap_get_query_variable(request, "mode", &mode))) {
+   if((len_mode = coap_get_post_variable(request, "mode", &mode))) {
 
 		if(strncmp(mode, "on", len_mode) == 0){
 
@@ -88,7 +88,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 								printf("Sono nel caso filter CTRL\n");
 							}
 							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
-								filtration_cause = CTRL;
+								filtration_cause = FIRE;
 								printf("Sono nel caso filter CTRL\n");
 							}
 							else{

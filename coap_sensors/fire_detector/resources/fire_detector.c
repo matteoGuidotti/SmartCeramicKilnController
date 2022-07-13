@@ -18,7 +18,7 @@ static int counter_fire = 0;
 
 
 EVENT_RESOURCE(fire_detector,
-         "title=\"Fire detector\", POST alarm_mode=on|off\";obs",
+         "title=\"Fire detector\", POST alarm=on|off\";obs",
          get_fire_detection_handler,
          res_post_handler,
          NULL,

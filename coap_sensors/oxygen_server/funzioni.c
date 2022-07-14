@@ -213,3 +213,121 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
     coap_set_status_code(response, BAD_REQUEST_4_00);
   }
 }
+
+
+
+//QUESTA FUNZIONA ED è SENZA JSON
+static void
+res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+{
+  size_t len_type = 0;
+  size_t len_mode = 0;
+  size_t len_cause = 0;
+  const char *type = NULL;
+  const char *mode = NULL;
+  const char *cause = NULL;
+  int success = 1;
+
+	printf("arrivata POST\n");
+   if((len_mode = coap_get_query_variable(request, "mode", &mode))) {
+
+		if(strncmp(mode, "on", len_mode) == 0){
+
+            if((len_type = coap_get_query_variable(request, "type", &type))) {
+					
+					if((len_cause = coap_get_query_variable(request, "cause", &cause))) {
+						
+						//Filtering case
+						if(strncmp(type, "filter", len_type) == 0){
+							oxygen_filter = true;
+							oxygen_emitter = false;
+
+							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
+								filtration_cause = CTRL;
+								LOG_INFO("Oxygen filter turn on in CTRL (slow) mode! %s \n", cause);
+								printf("Sono nel caso filter CTRL\n");
+							}
+							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
+								filtration_cause = FIRE;
+								LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode! %s \n", cause);
+								printf("Sono nel caso filter FIRE\n");
+							}
+							else{
+								success = 0;
+								printf("Wrong param \"cause\"!\n");
+
+							}
+						}
+						//Emission case
+						else if(strncmp(type, "emitter", len_type) == 0){
+							oxygen_emitter = true;
+							oxygen_filter = false;
+
+							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
+								emission_cause = CTRL;
+								LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+								
+							}
+							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
+								emission_cause = ADMIN;
+								LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode! %s \n", cause);
+								
+							}
+							else{
+								success = 0;
+								printf("Wrong param \"cause\"!\n");
+
+							}
+						}
+						else{
+							success = 0;
+							printf("Wrong param \"type\"!\n");
+						}
+					}
+					else{
+						success = 0;
+						printf("Missing param \"cause\"!\n");
+					}
+			}
+			else{
+				success = 0;
+				printf("Wrong param \"type\"!\n");
+			}
+		}
+
+		else if(strncmp(mode, "off", len_mode) == 0){
+			if((len_type = coap_get_query_variable(request, "type", &type))) {
+
+				if(strncmp(type, "filter", len_type) == 0){
+						oxygen_filter = false;
+					}
+					else if(strncmp(type, "emitter", len_type) == 0)
+					{
+						oxygen_emitter = false;
+					}
+					else{
+						success = 0;
+						printf("Wrong param \"type\"!\n");
+						}
+			}
+			else{
+				success = 0;
+				printf("Missing param \"type\"!\n");
+			}
+		}
+		else{
+			success = 0;
+			printf("Wrong param \"mode\"!\n");
+		}
+   	}
+	else{
+		success = 0;
+		printf("Missing param \"mode\"!\n");
+	}
+			
+ 
+ 
+ if(!success) {
+    coap_set_status_code(response, BAD_REQUEST_4_00);
+  }
+}

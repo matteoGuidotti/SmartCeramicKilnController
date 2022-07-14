@@ -79,8 +79,7 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector&alarm=on|off
 
-static void
-res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   const char *alarm_mode = NULL;

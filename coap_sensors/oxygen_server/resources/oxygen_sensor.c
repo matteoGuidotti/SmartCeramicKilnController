@@ -32,7 +32,7 @@ static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 static bool oxygen_filter = true;
 static bool oxygen_fast = false;
-static bool leds[2] = [true,false];
+static bool leds[2] = {true,false};
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;

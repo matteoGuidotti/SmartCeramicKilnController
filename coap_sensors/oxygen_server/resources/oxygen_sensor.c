@@ -9,17 +9,11 @@
 #include "sys/log.h"
 #define LOG_MODULE "App"
 #define LOG_LEVEL LOG_LEVEL_APP
-#define JSON_OX_EMITTER_SLOW "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
-#define JSON_OX_EMITTER_FAST "{\"type\":\"emitter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
-#define JSON_OX_FILTER_FAST "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
-#define JSON_OX_FILTER_SLOW "{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
-#define JSON_OX_EMITTER_OFF "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
-#define JSON_OX_FILTER_OFF "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
 
 
 /* A simple actuator example, depending on the type query parameter and post variable mode, the actuator is turn on or off */
 
-static void res_put_post_handler2(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 //static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
@@ -27,8 +21,8 @@ static void oxygen_event_handler(void);
 EVENT_RESOURCE(oxygen_sensor,
          "title=\"Oxygen sensor;obs",
          get_oxygen_handler,
-         res_put_post_handler2,
-         res_put_post_handler2,
+         res_put_post_handler,
+         res_put_post_handler,
          NULL,
          oxygen_event_handler);
 
@@ -52,7 +46,7 @@ char json_response[512];
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL&mode=on|off
 static char cause[10];
 
-static void res_put_post_handler2(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   const uint8_t* payload = NULL;
@@ -123,123 +117,7 @@ static void res_put_post_handler2(coap_message_t *request, coap_message_t *respo
 	}
 }
 
-/*
-//Oxygen filter and emitter
-static void
-res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
-{
-  size_t len_type = 0;
-  size_t len_mode = 0;
-  size_t len_cause = 0;
-  const char *type = NULL;
-  const char *mode = NULL;
-  const char *cause = NULL;
-  int success = 1;
 
-	printf("arrivata POST\n");
-   if((len_mode = coap_get_query_variable(request, "mode", &mode))) {
-
-		if(strncmp(mode, "on", len_mode) == 0){
-
-            if((len_type = coap_get_query_variable(request, "type", &type))) {
-					
-					if((len_cause = coap_get_query_variable(request, "cause", &cause))) {
-						
-						//Filtering case
-						if(strncmp(type, "filter", len_type) == 0){
-							oxygen_filter = true;
-							oxygen_emitter = false;
-
-							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
-								filtration_cause = CTRL;
-								LOG_INFO("Oxygen filter turn on in CTRL (slow) mode! %s \n", cause);
-								printf("Sono nel caso filter CTRL\n");
-							}
-							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
-								filtration_cause = FIRE;
-								LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode! %s \n", cause);
-								printf("Sono nel caso filter FIRE\n");
-							}
-							else{
-								success = 0;
-								printf("Wrong param \"cause\"!\n");
-
-							}
-						}
-						//Emission case
-						else if(strncmp(type, "emitter", len_type) == 0){
-							oxygen_emitter = true;
-							oxygen_filter = false;
-
-							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
-								emission_cause = CTRL;
-								LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
-								
-							}
-							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
-								emission_cause = ADMIN;
-								LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode! %s \n", cause);
-								
-							}
-							else{
-								success = 0;
-								printf("Wrong param \"cause\"!\n");
-
-							}
-						}
-						else{
-							success = 0;
-							printf("Wrong param \"type\"!\n");
-						}
-					}
-					else{
-						success = 0;
-						printf("Missing param \"cause\"!\n");
-					}
-			}
-			else{
-				success = 0;
-				printf("Wrong param \"type\"!\n");
-			}
-		}
-
-		else if(strncmp(mode, "off", len_mode) == 0){
-			if((len_type = coap_get_query_variable(request, "type", &type))) {
-
-				if(strncmp(type, "filter", len_type) == 0){
-						oxygen_filter = false;
-					}
-					else if(strncmp(type, "emitter", len_type) == 0)
-					{
-						oxygen_emitter = false;
-					}
-					else{
-						success = 0;
-						printf("Wrong param \"type\"!\n");
-						}
-			}
-			else{
-				success = 0;
-				printf("Missing param \"type\"!\n");
-			}
-		}
-		else{
-			success = 0;
-			printf("Wrong param \"mode\"!\n");
-		}
-   	}
-	else{
-		success = 0;
-		printf("Missing param \"mode\"!\n");
-	}
-			
- 
- 
- if(!success) {
-    coap_set_status_code(response, BAD_REQUEST_4_00);
-  }
-}
-*/
 
 
 
@@ -328,21 +206,27 @@ static void oxygen_event_handler(void)
 	switch (current_risk) {
 		case LOW:
 			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
+			leds_off(LEDS_NUM_TO_MASK(LEDS_RED));
 			leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
-			leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
-			leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) )
+			//leds_set(MASK(LED))
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
-			leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) )
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
+			leds_off(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			break;
 	}
   }

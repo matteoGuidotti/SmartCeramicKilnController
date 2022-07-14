@@ -47,7 +47,7 @@ static void check_connection(){
   }else{
 
     LOG_INFO("Now the Border Router is reachable\n");
-    leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
+    //leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
     connected = true;
   }
 }
@@ -66,7 +66,7 @@ void client_chunk_handler(coap_message_t *response)
 	printf("|%.*s", len, (char *)chunk);
 
 	if(strncmp((char*)chunk, "Registration Completed!", len) == 0){ 
-		leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+		//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 		registered = true;
 	}else
 		etimer_set(&wait_registration, CLOCK_SECOND* REGISTRATION_TRY_INTERVAL);
@@ -81,7 +81,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
 
 	PROCESS_BEGIN();
 
-	leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
+	//leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
   	etimer_set(&wait_connectivity, CLOCK_SECOND* CONNECTION_TRY_INTERVAL);
   
 	while(!connected){

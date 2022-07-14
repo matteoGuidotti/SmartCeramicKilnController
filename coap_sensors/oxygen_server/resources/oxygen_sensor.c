@@ -52,11 +52,11 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
   const uint8_t* payload = NULL;
   int success = 1;
   strcpy(cause, "");
-  printf("POST arrivata\n");
+  printf("POST arrived\n");
 
 	if((len = coap_get_payload(request, &payload))) 
 	{
-		printf("il payload: %s\n", payload);
+		printf("This is the payload: %s\n", payload);
 		if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
 		
 			oxygen_emitter = true;
@@ -142,11 +142,11 @@ static enum Risk simulate_oxygen_change(){
 		oxygen_level = oxygen_level - variationCTRL;
 	}
 	else if(oxygen_emitter && emission_cause == CTRL) {
-		printf("Increasing slow");
+		printf("Increasing slow\n");
 		oxygen_level = oxygen_level + variationCTRL;
 	}
 	else if(oxygen_emitter && emission_cause == ADMIN){
-		printf("Increasing fast");
+		printf("Increasing fast\n");
 		oxygen_level = oxygen_level + variationFast;
 	}
 	else{
@@ -187,7 +187,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	//data =	&message[0];
 
 	sprintf(json_response, "{\"oxygen_value\": %f}", oxygen_level);
-	printf("sto mandando %s", json_response);
+	printf("I'm sending %s\n", json_response);
 
 
 	coap_set_header_content_format(response, APPLICATION_JSON);

@@ -8,8 +8,6 @@
 #include "sys/log.h"
 #define LOG_MODULE "App"
 #define LOG_LEVEL LOG_LEVEL_APP
-#define JSON_STOP_ALARM "{\"alarm\":\"stop\"}"
-#define JSON_START_ALARM "{\"alarm\":\"start\"}"
 
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
@@ -79,25 +77,26 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
  	coap_set_payload(response, json_response, strlen(json_response));
 }
 
-//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector&alarm=on|off
+//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector -e {"alarm":"start"}|{"alarm":"stop"}
 
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
-  const char *alarm_mode = NULL;
-  
+  const uint8_t* payload = NULL;
   int success = 1;
+  strcpy(cause, "");
+  printf("POST arrived\n");
 
-  	if((len = coap_get_query_variable(request, "alarm", &alarm_mode))) {
-		LOG_DBG("alarm mode %s\n", alarm_mode);
+	if((len = coap_get_payload(request, &payload))) 
+	{
+		printf("This is the payload: %s\n", payload);
 		
-		
-		if(strncmp(alarm_mode, "on", len) == 0){
+		if((char*)payload, JSON_START_ALARM){
 			printf("Switch ON fire alarm\n");
 			fire_detected = true;
 			counter_fire = 0;
 			
-		}else if (strncmp(alarm_mode, "off",len)==0){
+		}else if((char*)payload, JSON_STOP_ALARM){
 			printf("Switch OFF fire alarm\n");
 			fire_detected = false;
 			counter_fire = 0;
@@ -126,7 +125,7 @@ static void fire_detector_event_handler(void)
 		if(fire_detected){
 			if(counter_fire == 0){
 				coap_notify_observers(&fire_detector);
-				printf("Notificato agli observers!\n");
+				printf("Notify to the observers!\n");
 				counter_fire++;
 			}
 			else if(counter_fire ==  SECONDS_ALARM_PERIOD -1 ){

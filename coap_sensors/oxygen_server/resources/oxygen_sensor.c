@@ -43,14 +43,14 @@ static enum Cause emission_cause  = CTRL;
 char json_response[512];
 
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor -e "{\"type\":\"emitter\", \"mode\":\"on|off\"}"
-static char cause[10];
+
 
 static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   const uint8_t* payload = NULL;
   int success = 1;
-  strcpy(cause, "");
+ 
   printf("POST arrived\n");
 
 	if((len = coap_get_payload(request, &payload))) 
@@ -61,14 +61,14 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
 			oxygen_emitter = true;
 			oxygen_filter = false;
 			emission_cause = CTRL;
-			LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+			LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! \n");
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST) == 0)
 		{	
 				oxygen_emitter = true;
 				oxygen_filter = false;
 				emission_cause = ADMIN;
-				LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode! %s \n", cause);
+				LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST) == 0)
@@ -76,7 +76,7 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
 				oxygen_filter = true;
 				oxygen_fast = false;
 				filtration_cause = FIRE;
-				LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode! %s \n", cause);
+				LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW) == 0)
@@ -84,19 +84,19 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
 				oxygen_filter = true;
 				oxygen_fast = false;
 				filtration_cause = CTRL;
-				LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+				LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_OFF) == 0)
 		{	
 				oxygen_emitter = false;
-				LOG_INFO("Oxygen emitter turn off! %s \n", cause);
+				LOG_INFO("Oxygen emitter turn off!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_FILTER_OFF) == 0)
 		{	
 				oxygen_filter = false;
-				LOG_INFO("Oxygen filter turn off! %s \n", cause);
+				LOG_INFO("Oxygen filter turn off!\n");
 
 		}
 		

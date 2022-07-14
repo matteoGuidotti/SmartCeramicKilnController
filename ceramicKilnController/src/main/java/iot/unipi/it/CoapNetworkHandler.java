@@ -70,7 +70,6 @@ public class CoapNetworkHandler{
 			CoapResponse postResponse;
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 			if((Boolean)jsonResponse.get("fire_detected")){
-				//TODO: invia a sensore ossigeno di abbassare velocemente
 				DbUtility.insertFireAlarm(true);
 				CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=filter&cause=FIRE&mode=on");
 				postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
@@ -115,11 +114,14 @@ public class CoapNetworkHandler{
 				postClient.shutdown();
 				//sending to the fire_detector sensors the stop alarm messages
 				for(int i = 0; i < 2; i++){
+					if(fireDetectorAddress[i] == null)
+						continue;
 					postClient = new CoapClient("coap://[" + fireDetectorAddress[i] + "]/fire_detector?alarm=off");
 					postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
 					System.out.println("Request to switch off the alarm sent");
 					postClient.shutdown();
 				}
+				DbUtility.insertFireAlarm(false);
 				controllerMode = Controller_mode.OFF;
 			}
 		}
@@ -160,5 +162,52 @@ public class CoapNetworkHandler{
 
 	public void changeAccOxygen(double range){
 		acceptableRange = range;
+	}
+
+	public void stopFireAlarm(){
+		CoapClient postClient;
+		if(controllerMode == Controller_mode.DOWN_FAST){
+			postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=filter&cause=FIRE&mode=off");
+			postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
+			System.out.println("Request to switch off the oxygen filter sent");
+			postClient.shutdown();
+			controllerMode = Controller_mode.OFF;
+		}
+		//sending to the fire_detector sensors the stop alarm messages
+		for(int i = 0; i < 2; i++){
+			if(fireDetectorAddress[i] == null)
+				continue;
+			postClient = new CoapClient("coap://[" + fireDetectorAddress[i] + "]/fire_detector?alarm=off");
+			postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
+			System.out.println("Request to switch off the alarm sent");
+			postClient.shutdown();
+		}
+		DbUtility.insertFireAlarm(false);
+	}
+
+	public void startFireAlarm(){
+		DbUtility.insertFireAlarm(true);
+		CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=filter&cause=FIRE&mode=on");
+		postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
+		System.out.println("Requests to switch on the oxygen filter [mode FAST] sent");
+		postClient.shutdown();
+		controllerMode = Controller_mode.DOWN_FAST;
+
+		for(int i = 0; i < 2; i++){
+			if(fireDetectorAddress[i] == null)
+				continue;
+			postClient = new CoapClient("coap://[" + fireDetectorAddress[i] + "]/fire_detector?alarm=on");
+			postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
+			System.out.println("Request to switch off the alarm sent");
+			postClient.shutdown();
+		}
+	}
+
+	public void oxygenFill(){
+		CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=emitter&cause=ADMIN&mode=on");
+		postClient.post("", MediaTypeRegistry.TEXT_PLAIN);
+		System.out.println("Request to switch on the oxygen emitter [mode FAST] sent");
+		postClient.shutdown();
+		controllerMode = Controller_mode.UP_FAST;
 	}
 }

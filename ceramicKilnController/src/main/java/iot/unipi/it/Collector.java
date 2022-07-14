@@ -98,7 +98,13 @@ public class Collector extends CoapServer {
 				System.out.println("Acceptable range for the oxygen value changed succesfully");
 			}
 			else if(insertedCommand.equals("!stopAlarm")){
-				
+				rs.stopFireAlarm();
+			}
+			else if(insertedCommand.equals("!startAlarm")){
+				rs.startFireAlarm();
+			}
+			else if(insertedCommand.equals("!oxygenFill")){
+				rs.oxygenFill();
 			}
 			else{
 				printCommandError();
@@ -115,6 +121,8 @@ public class Collector extends CoapServer {
 		System.out.println("!changeTargetOxygen [new_value]: set new target oxygen value");
 		System.out.println("!changeAccOxygen [new_value]: set new acceptable range for the oxygen");
 		System.out.println("!stopAlarm: stop the fire alarm");
+		System.out.println("!startAlarm: start a fire alarm");
+		System.out.println("!oxygenFill: fill the kiln with the oxygen so that a person ca enter in");
 		System.out.println("\n");
 	}
 

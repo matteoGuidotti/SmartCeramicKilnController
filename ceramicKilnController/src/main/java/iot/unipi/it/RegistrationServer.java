@@ -47,4 +47,16 @@ public class RegistrationServer extends CoapServer {
 	public void changeAccOxygen(double range){
 		coapHandler.changeAccOxygen(range);
 	}
+
+	public void stopFireAlarm(){
+		coapHandler.stopFireAlarm();
+	}
+
+	public void startFireAlarm(){
+		coapHandler.startFireAlarm();
+	}
+
+	public void oxygenFill(){
+		coapHandler.oxygenFill();
+	}
 }

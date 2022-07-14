@@ -56,7 +56,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
   const char *cause = NULL;
   int success = 1;
 
-
+	printf("arrivata POST\n");
    if((len_mode = coap_get_query_variable(request, "mode", &mode))) {
 
 		if(strncmp(mode, "on", len_mode) == 0){
@@ -219,20 +219,20 @@ static enum Risk simulate_oxygen_change(){
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
 	char message[30];
-	char *data = NULL;
+	//char *data = NULL;
 	int len;
 
 	
 	sprintf(message, "%g", oxygen_level);
-	data =	&message[0];
+	//data =	&message[0];
 
 	sprintf(json_response, "{\"oxygen_value\": %f}", oxygen_level);
-	//printf(json_response);
+	printf("sto mandando %s", json_response);
 
 
 	coap_set_header_content_format(response, APPLICATION_JSON);
 	coap_set_header_etag(response, (uint8_t *)&len, 1);
-	coap_set_payload(response, data, strlen(json_response));
+	coap_set_payload(response, json_response, strlen(json_response));
 
 }
 

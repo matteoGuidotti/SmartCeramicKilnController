@@ -77,8 +77,8 @@ void client_chunk_handler(coap_message_t *response)
 PROCESS_THREAD(fire_detector_server, ev, data)
 {
 
-	//static coap_endpoint_t server_ep;
-	//static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
+	static coap_endpoint_t server_ep;
+	static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
 
 	PROCESS_BEGIN();
 
@@ -92,9 +92,9 @@ PROCESS_THREAD(fire_detector_server, ev, data)
 	
 	LOG_INFO("I'm connected!\n");
 	
-	/*while(!registered){
+	while(!registered){
 		
-		LOG_INFO("[ETHYLENE] sending registration message\n");	
+		LOG_INFO("[FIRE DETECTOR] sending registration message\n");	
 
 		coap_endpoint_parse(SERVER_EP, strlen(SERVER_EP), &server_ep);	
 		// Prepare the message
@@ -107,7 +107,7 @@ PROCESS_THREAD(fire_detector_server, ev, data)
     PROCESS_WAIT_UNTIL(etimer_expired(&wait_registration));
   }
 	
-	LOG_INFO("I'm registered!\n");*/
+	LOG_INFO("I'm registered!\n");
 		
   	LOG_INFO("Starting fire detector Server\n");
 

@@ -242,7 +242,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 				else
 					strcpy(heater_state, "OFF");
 				simulate_temperature_change();
-				sprintf(app_buffer, "{\"current_temperature\": %d, \"heater_state\": \"%s\"}", current_temperature, heater_state);
+				sprintf(app_buffer, "{\"current_temperature\": %i, \"heater_state\": \"%s\"}", current_temperature, heater_state);
 				status = mqtt_publish(&conn, NULL, PUB_TOPIC, (uint8_t*) app_buffer, strlen(app_buffer), MQTT_QOS_LEVEL_0, MQTT_RETAIN_OFF);
 				if(status != MQTT_STATUS_OK){
 					LOG_ERR("Error during publishing a message\n");

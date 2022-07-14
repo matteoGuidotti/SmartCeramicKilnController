@@ -21,7 +21,7 @@ public class RegistrationServer extends CoapServer {
 
 	class RegistrationResource extends CoapResource{
 		public RegistrationResource(){
-			super("Registration resource");
+			super("registration");
 		}
 
 		@Override
@@ -29,6 +29,7 @@ public class RegistrationServer extends CoapServer {
 			String requestText = exchange.getRequestText();
 			Map<String, Object> jsonObject = Utils.jsonParser(requestText);
 			String deviceType = (String) jsonObject.get("deviceType");
+			System.out.println("Incoming device type " + deviceType);
 			String ipAddress = exchange.getSourceAddress().getHostAddress();
 
 			if(deviceType.equals("fire_detector"))

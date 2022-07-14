@@ -208,17 +208,14 @@ static void oxygen_event_handler(void)
 			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
 			if(!leds[0])
 			{
-				leds_toggle(LEDS_RED);
+				leds_toggle(LEDS_GREEN);
 				leds[0] = true;
 			}
 			if(leds[1]){
-				leds_toggle(LEDS_GREEN);
+				leds_toggle(LEDS_RED);
 				leds[1] = false;
 			}
-			//leds_toggle(LEDS_RED);
-			//leds_off(LEDS_NUM_TO_MASK(LEDS_RED));
-			//leds_toggle(LEDS_RED);
-			//leds_single_toggle(LEDS_GREEN);
+			
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
@@ -242,13 +239,6 @@ static void oxygen_event_handler(void)
 				leds[0] = true;
 			}
 		
-			//leds_on(MASK(LEDS_GREEN));
-			//leds_toggle(LEDS_RED);
-			//leds_toggle(LEDS_GREEN);
-			//leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) );
-			//leds_on(LEDS_NUM_TO_MASK(LEDS_RED) );
-			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
-			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
@@ -261,18 +251,11 @@ static void oxygen_event_handler(void)
 				leds_toggle(LEDS_RED);
 				leds[0] = false;
 			}
-				
-			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED) );
-			//leds_off(LEDS_NUM_TO_MASK(LEDS_GREEN));
-			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
-			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			break;
 	}
   }
   
-   /*printf("Old Oxygen level: %f \n", old_oxygen_level);
-	printf("Oxygen level: %f \n", oxygen_level);*/
- 	
+ 
 	if(old_oxygen_level != oxygen_level)
   		coap_notify_observers(&oxygen_sensor);
   

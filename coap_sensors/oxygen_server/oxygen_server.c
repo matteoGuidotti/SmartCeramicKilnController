@@ -47,7 +47,7 @@ static void check_connection(){
   }else{
 
     LOG_INFO("Now the Border Router is reachable\n");
-    leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+    //leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
     connected = true;
   }
 }

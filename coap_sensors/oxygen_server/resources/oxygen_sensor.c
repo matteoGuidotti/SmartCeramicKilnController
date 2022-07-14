@@ -199,6 +199,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 static void oxygen_event_handler(void)
 {
   enum Risk sensed_risk = simulate_oxygen_change();
+  printf("NEW Oxygen level: %f\n, ", oxygen_level);
   
   if (current_risk != sensed_risk){
 	current_risk = sensed_risk;

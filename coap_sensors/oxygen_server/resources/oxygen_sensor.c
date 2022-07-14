@@ -220,22 +220,22 @@ static void oxygen_event_handler(void)
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
 			if(!leds[1]){
-				leds_toggle(LEDS_GREEN);
+				leds_toggle(LEDS_RED);
 				leds[1] = true;
 			}
 			if(!leds[0]){
-				leds_toggle(LEDS_RED);
+				leds_toggle(LEDS_GREEN);
 				leds[0] = true;
 			}
 		
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
 			if(!leds[1]){
-				leds_toggle(LEDS_GREEN);
+				leds_toggle(LEDS_RED);
 				leds[1] = true;
 			}
 			if(!leds[0]){
-				leds_toggle(LEDS_RED);
+				leds_toggle(LEDS_GREEN);
 				leds[0] = true;
 			}
 		

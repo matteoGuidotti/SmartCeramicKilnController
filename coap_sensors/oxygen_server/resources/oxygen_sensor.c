@@ -206,7 +206,10 @@ static void oxygen_event_handler(void)
 	switch (current_risk) {
 		case LOW:
 			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
-			if(!leds[0])
+			leds_single_off(LEDS_GREEN);
+			leds_single_off(LEDS_RED);
+			leds_on(LEDS_GREEN);
+			/*if(!leds[0])
 			{
 				leds_toggle(LEDS_GREEN);
 				leds[0] = true;
@@ -214,35 +217,46 @@ static void oxygen_event_handler(void)
 			if(leds[1]){
 				leds_toggle(LEDS_RED);
 				leds[1] = false;
-			}
+			}*/
 			
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
-			if(!leds[1]){
+			leds_single_off(LEDS_GREEN);
+			leds_single_off(LEDS_RED);
+			leds_on(LEDS_GREEN);
+			leds_on(LEDS_RED);
+			/*if(!leds[1]){
 				leds_toggle(LEDS_RED);
 				leds[1] = true;
 			}
 			if(!leds[0]){
 				leds_toggle(LEDS_GREEN);
 				leds[0] = true;
-			}
+			}*/
 		
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			if(!leds[1]){
+			/*if(!leds[1]){
 				leds_toggle(LEDS_RED);
 				leds[1] = true;
 			}
 			if(!leds[0]){
 				leds_toggle(LEDS_GREEN);
 				leds[0] = true;
-			}
+			}*/
+			leds_single_off(LEDS_GREEN);
+			leds_single_off(LEDS_RED);
+			leds_on(LEDS_GREEN);
+			leds_on(LEDS_RED);
 		
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
-			if(!leds[1])
+			leds_single_off(LEDS_GREEN);
+			leds_single_off(LEDS_RED);
+			leds_on(LEDS_RED);
+			/*if(!leds[1])
 			{
 				leds_toggle(LEDS_GREEN);
 				leds[1] = true;
@@ -250,7 +264,7 @@ static void oxygen_event_handler(void)
 			if(leds[0]){
 				leds_toggle(LEDS_RED);
 				leds[0] = false;
-			}
+			}*/
 			break;
 	}
   }

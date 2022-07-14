@@ -25,12 +25,12 @@ public class CoapNetworkHandler{
 
 	private final String JSON_OX_EMITTER_SLOW = "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}";
 	private final String JSON_OX_EMITTER_FAST = "{\"type\":\"emitter\", \"cause\": \"CTRL\", \"mode\":\"on\"}";
-	private final String JSON_OX_FILTER_FAST = "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}";
-	private final String JSON_OX_FILTER_SLOW = "{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}";
-	private final String JSON_OX_EMITTER_OFF = "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}";
-	private final String JSON_OX_FILTER_OFF = "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}";
-	private final String JSON_STOP_ALARM = "{\"alarm\":\"stop\"}";
-	private final String JSON_START_ALARM = "{\"alarm\":\"start\"}";
+	private final String JSON_OX_FILTER_FAST = 	"{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}";
+	private final String JSON_OX_FILTER_SLOW = 	"{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}";
+	private final String JSON_OX_EMITTER_OFF = 	"{\"type\":\"emitter\", \"mode\":\"off\"}"
+	private final String JSON_OX_FILTER_OFF = 	"{\"type\":\"filter\", \"mode\":\"off\"}"
+	private final String JSON_STOP_ALARM = 		"{\"alarm\":\"stop\"}";
+	private final String JSON_START_ALARM = 	"{\"alarm\":\"start\"}";
 
 	private CoapClient[] client_FireDetectorSensor = new CoapClient[2];
 	private CoapClient client_OxygenControllerSensor;

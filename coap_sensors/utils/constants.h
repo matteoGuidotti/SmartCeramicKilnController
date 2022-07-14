@@ -24,8 +24,8 @@
 #define JSON_OX_EMITTER_FAST                    "{\"type\":\"emitter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
 #define JSON_OX_FILTER_FAST                     "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
 #define JSON_OX_FILTER_SLOW                     "{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
-#define JSON_OX_EMITTER_OFF                     "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
-#define JSON_OX_FILTER_OFF                      "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
+#define JSON_OX_EMITTER_OFF                     "{\"type\":\"emitter\", \"mode\":\"off\"}"
+#define JSON_OX_FILTER_OFF                      "{\"type\":\"filter\", \"mode\":\"off\"}"
 
 
 

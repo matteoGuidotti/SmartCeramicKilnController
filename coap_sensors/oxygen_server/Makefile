@@ -1,4 +1,4 @@
-CONTIKI_PROJECT = ethylene
+CONTIKI_PROJECT = oxygen
 all: $(CONTIKI_PROJECT)
 
 # Do not try to build on Sky because of code size limitation

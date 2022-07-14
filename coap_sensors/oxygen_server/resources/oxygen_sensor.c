@@ -44,7 +44,7 @@ char json_response[512];
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=emitter&cause=ADMIN|CTRL&mode=on|off
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL&mode=on|off
 
-
+/*
 static void res_put_post_handler2(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
@@ -111,9 +111,9 @@ static void res_put_post_handler2(coap_message_t *request, coap_message_t *respo
 	if(!success) {
 		coap_set_status_code(response, BAD_REQUEST_4_00);
 	}
-}
+}*/
 
-//Oxygen filters
+//Oxygen filter and emitter
 static void
 res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {

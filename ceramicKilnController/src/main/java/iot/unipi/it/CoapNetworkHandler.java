@@ -147,10 +147,11 @@ public class CoapNetworkHandler{
 				System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 				postClient.shutdown();*/
 				Map<String, Object> jsonPayload = new HashMap<String, Object>();
-				jsonPayload.put("mode", "on");
-				jsonPayload.put("cause", "CTRL");
 				jsonPayload.put("type", "filter");
+				jsonPayload.put("cause", "CTRL");
+				jsonPayload.put("mode", "on");
 				String payload = Utils.jsonToString(jsonPayload);
+				System.out.println(payload);
 				System.out.println("il client " + client_OxygenControllerSensor.getURI());
 				System.out.println("lo stesso client " + oxygenControllerAddress);
 				CoapClient client = new CoapClient("coap://[fd00::202:2:2:2]/oxygen_sensor"); 

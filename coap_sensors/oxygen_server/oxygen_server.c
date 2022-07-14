@@ -47,7 +47,7 @@ static void check_connection(){
   }else{
 
     LOG_INFO("Now the Border Router is reachable\n");
-    leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
+    //leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
     connected = true;
   }
 }
@@ -66,7 +66,7 @@ void client_chunk_handler(coap_message_t *response)
 	printf("|%.*s", len, (char *)chunk);
 
 	if(strncmp((char*)chunk, "Registration Completed!", len) == 0){ 
-		leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+		//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 		registered = true;
 	}else
 		etimer_set(&wait_registration, CLOCK_SECOND* REGISTRATION_TRY_INTERVAL);
@@ -76,12 +76,12 @@ void client_chunk_handler(coap_message_t *response)
 PROCESS_THREAD(oxygen_server, ev, data)
 {
 
-	//static coap_endpoint_t server_ep;
-	//static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
+	static coap_endpoint_t server_ep;
+	static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
 
 	PROCESS_BEGIN();
 
-	leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
+	//leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
   	etimer_set(&wait_connectivity, CLOCK_SECOND* CONNECTION_TRY_INTERVAL);
   
 	while(!connected){
@@ -91,7 +91,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
 	
 	LOG_INFO("I'm connected!\n");
 	
-	/*while(!registered){
+	while(!registered){
 		
 		LOG_INFO("[OXYGEN] sending registration message\n");	
 
@@ -107,7 +107,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
     	PROCESS_WAIT_UNTIL(etimer_expired(&wait_registration));
   }
 	
-	LOG_INFO("I'm registered!\n");*/
+	LOG_INFO("I'm registered!\n");
 		
   LOG_INFO("Starting oxygen Server\n");
 

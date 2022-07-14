@@ -43,12 +43,12 @@ public class DbUtility {
 	
 	 
 	 
-	public static void insertTemperature(final int temperature) {
+	public static void insertTemperature(final double temperature) {
     	String insertQueryStatement = "INSERT INTO temperature (timestamp, temperature) VALUES (CURRENT_TIMESTAMP, ?)";
     	try (Connection smartPoolConnection = makeJDBCConnection();
         		PreparedStatement smartPoolPrepareStat = smartPoolConnection.prepareStatement(insertQueryStatement);
            ) {
-    		smartPoolPrepareStat.setInt(1, temperature);        	                
+    		smartPoolPrepareStat.setDouble(1, temperature);        	                
         	smartPoolPrepareStat.executeUpdate();
  
     	 } catch (SQLException sqlex) {

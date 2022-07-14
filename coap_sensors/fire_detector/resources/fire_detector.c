@@ -49,15 +49,15 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 {
 
 	char message[30];
-	char *data = NULL;
+	//char *data = NULL;
 	int len;
 
 	if(fire_detected)
 	{
 		sprintf(message, "%s", FIRE_ALARM);
-		data =	&message[0];
+		//data =	&message[0];
 		printf("message: %s, length of the message: %d\n", message, strlen(message));
-		printf("data: %s, length of the data: %d\n", data, strlen(data));
+		//printf("data: %s, length of the data: %d\n", data, strlen(data));
 
 		sprintf(json_response, FIRE_ALARM);
 		printf(json_response);
@@ -65,10 +65,16 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 
 		coap_set_header_content_format(response, APPLICATION_JSON);
 		coap_set_header_etag(response, (uint8_t *)&len, 1);
-		coap_set_payload(response, data, strlen(json_response));
+		coap_set_payload(response, json_response, strlen(json_response));
 	}
 	
-
+	sprintf(json_response, "{\"fire_detected\": false}");
+        printf("la json_respnse che invio è %s\n", json_response);
+  
+  
+        coap_set_header_content_format(response, APPLICATION_JSON);
+        coap_set_header_etag(response, (uint8_t *)&len, 1);
+ 	coap_set_payload(response, json_response, strlen(json_response));
 }
 
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector&alarm=on|off

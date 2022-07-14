@@ -13,7 +13,7 @@ import iot.unipi.it.Utils;
 
 public class MqttClientCollector implements MqttCallback{
 
-	private final String brokerAddr = "tcp://127.0.0.1:1884";
+	private final String brokerAddr = "tcp://127.0.0.1:1883";
 	private final String clientId = "Java_MqttClient";
 
 	//topic to be subscribed to
@@ -29,7 +29,7 @@ public class MqttClientCollector implements MqttCallback{
 	private int acceptableRange;
 
 	//it is different from 0 if a temperature value is already arrived 
-	private int firstTemperatureValue = 0;
+	private double firstTemperatureValue = 0;
 
 	public MqttClientCollector(int temp, int range){
 		targetTemp = temp;
@@ -71,17 +71,17 @@ public class MqttClientCollector implements MqttCallback{
 	}
 
 	public void messageArrived(String topic, MqttMessage message) throws Exception {
-		System.out.println("A new message has been received");
+		System.out.println("A new message at the topic " + topic + " has been received");
 		String receivedPayload = new String(message.getPayload());
 		Map<String, Object> receivedJson = Utils.jsonParser(receivedPayload);
-		int receivedTemperature = (Integer)receivedJson.get("current_temperature");
+		double receivedTemperature = (Double)receivedJson.get("current_temperature");
 		if(firstTemperatureValue == 0){
 			firstTemperatureValue = receivedTemperature;
 		}
 		else{
 			String heater_state = (String)receivedJson.get("heater_state");
-			int averageTemp = (firstTemperatureValue + receivedTemperature) / 2;
-			DbUtility.insertTemperature(averageTemp);
+			double averageTemp = (firstTemperatureValue + receivedTemperature) / 2;
+			//DbUtility.insertTemperature(averageTemp);
 			if(averageTemp > targetTemp + acceptableRange){
 				//need to decrease temperature
 				System.out.println("Temperature is too high, need to decrease it");

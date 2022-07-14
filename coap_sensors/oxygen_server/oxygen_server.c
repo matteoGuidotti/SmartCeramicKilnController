@@ -76,8 +76,8 @@ void client_chunk_handler(coap_message_t *response)
 PROCESS_THREAD(oxygen_server, ev, data)
 {
 
-	//static coap_endpoint_t server_ep;
-	//static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
+	static coap_endpoint_t server_ep;
+	static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
 
 	PROCESS_BEGIN();
 
@@ -90,7 +90,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
 	}
 	
 	LOG_INFO("I'm connected!\n");
-	/*
+	
 	while(!registered){
 		
 		LOG_INFO("[OXYGEN] sending registration message\n");	
@@ -107,7 +107,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
     	PROCESS_WAIT_UNTIL(etimer_expired(&wait_registration));
   }
 	
-	LOG_INFO("I'm registered!\n");*/
+	LOG_INFO("I'm registered!\n");
 		
   LOG_INFO("Starting oxygen Server\n");
 
@@ -121,6 +121,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
     PROCESS_WAIT_EVENT();
       
 		if(ev == PROCESS_EVENT_TIMER && data == &simulation){	
+			printf("mi sveglio, faccio trigger\n");
 			//oxygen_event_handler	  
 			oxygen_sensor.trigger();
 			etimer_set(&simulation, CLOCK_SECOND * SIMULATION_INTERVAL);

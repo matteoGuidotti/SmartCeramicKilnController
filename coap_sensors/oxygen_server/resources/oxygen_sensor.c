@@ -32,7 +32,7 @@ static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 static bool oxygen_filter = true;
 static bool oxygen_fast = false;
-static bool leds[] = [true,false];
+static bool leds[2] = [true,false];
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
@@ -211,7 +211,7 @@ static void oxygen_event_handler(void)
 				leds_toggle(LEDS_RED);
 				leds[0] = true;
 			}
-			if(led[1]){
+			if(leds[1]){
 				leds_toggle(LEDS_GREEN);
 				leds[1] = false;
 			}
@@ -222,22 +222,22 @@ static void oxygen_event_handler(void)
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
-			if(!led[1]){
+			if(!leds[1]){
 				leds_toggle(LEDS_GREEN);
 				leds[1] = true;
 			}
-			if(!led[0]){
+			if(!leds[0]){
 				leds_toggle(LEDS_RED);
 				leds[0] = true;
 			}
 		
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			if(!led[1]){
+			if(!leds[1]){
 				leds_toggle(LEDS_GREEN);
 				leds[1] = true;
 			}
-			if(!led[0]){
+			if(!leds[0]){
 				leds_toggle(LEDS_RED);
 				leds[0] = true;
 			}
@@ -257,7 +257,7 @@ static void oxygen_event_handler(void)
 				leds_toggle(LEDS_GREEN);
 				leds[1] = true;
 			}
-			if(led[0]){
+			if(leds[0]){
 				leds_toggle(LEDS_RED);
 				leds[0] = false;
 			}

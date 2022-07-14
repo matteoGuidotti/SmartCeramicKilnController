@@ -32,6 +32,7 @@ static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 static bool oxygen_filter = true;
 static bool oxygen_fast = false;
+static bool leds[] = [true,false];
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
@@ -205,8 +206,15 @@ static void oxygen_event_handler(void)
 	switch (current_risk) {
 		case LOW:
 			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
-			if(leds_get() && (LEDS_NUM_TO_MASK(LEDS_RED)) <= 0)
+			if(!leds[0])
+			{
 				leds_toggle(LEDS_RED);
+				leds[0] = true;
+			}
+			if(led[1]){
+				leds_toggle(LEDS_GREEN);
+				leds[1] = false;
+			}
 			//leds_toggle(LEDS_RED);
 			//leds_off(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_toggle(LEDS_RED);
@@ -214,18 +222,26 @@ static void oxygen_event_handler(void)
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
-			if(leds_get() && (LEDS_NUM_TO_MASK(LEDS_RED)) <= 0)
-				leds_toggle(LEDS_RED);
-			if(leds_get() && (LEDS_NUM_TO_MASK(LEDS_GREEN)) <= 0)
+			if(!led[1]){
 				leds_toggle(LEDS_GREEN);
-			break;
+				leds[1] = true;
+			}
+			if(!led[0]){
+				leds_toggle(LEDS_RED);
+				leds[0] = true;
+			}
+		
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			if(leds_get() && (LEDS_NUM_TO_MASK(LEDS_RED)) <= 0)
-				leds_toggle(LEDS_RED);
-			if(leds_get() && (LEDS_NUM_TO_MASK(LEDS_GREEN)) <= 0)
+			if(!led[1]){
 				leds_toggle(LEDS_GREEN);
-			//leds_on(MASK(LEDS_RED));
+				leds[1] = true;
+			}
+			if(!led[0]){
+				leds_toggle(LEDS_RED);
+				leds[0] = true;
+			}
+		
 			//leds_on(MASK(LEDS_GREEN));
 			//leds_toggle(LEDS_RED);
 			//leds_toggle(LEDS_GREEN);
@@ -236,8 +252,16 @@ static void oxygen_event_handler(void)
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
-			if(leds_get() && (LEDS_NUM_TO_MASK(LEDS_RED)) <= 0)
+			if(!leds[1])
+			{
+				leds_toggle(LEDS_GREEN);
+				leds[1] = true;
+			}
+			if(led[0]){
 				leds_toggle(LEDS_RED);
+				leds[0] = false;
+			}
+				
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_off(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));

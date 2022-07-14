@@ -205,8 +205,9 @@ static void oxygen_event_handler(void)
 	switch (current_risk) {
 		case LOW:
 			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
-			leds_off(LEDS_NUM_TO_MASK(LEDS_RED));
-			leds_single_toggle(LEDS_GREEN);
+			//leds_off(LEDS_NUM_TO_MASK(LEDS_RED));
+			leds_toggle(LEDS_RED);
+			//leds_single_toggle(LEDS_GREEN);
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
@@ -220,15 +221,16 @@ static void oxygen_event_handler(void)
 			break;
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			//leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) );
-			leds_on(LEDS_NUM_TO_MASK(LEDS_RED) );
+			leds_toggle(LEDS_RED);
+			leds_toggle(LEDS_GREEN);
 			//leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
-			leds_set(LEDS_NUM_TO_MASK(LEDS_RED) );
+			leds_toggle(LEDS_GREEN);
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_off(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));

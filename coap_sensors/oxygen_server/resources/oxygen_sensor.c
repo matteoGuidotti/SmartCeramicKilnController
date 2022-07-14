@@ -11,24 +11,24 @@
 #define LOG_LEVEL LOG_LEVEL_APP
 #define JSON_OX_EMITTER_SLOW "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
 #define JSON_OX_EMITTER_FAST "{\"type\":\"emitter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
-#define JSON_OX_FILTER_FAST "{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
-#define JSON_OX_FILTER_SLOW "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
+#define JSON_OX_FILTER_FAST "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
+#define JSON_OX_FILTER_SLOW "{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
 #define JSON_OX_EMITTER_OFF "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
 #define JSON_OX_FILTER_OFF "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
 
 
 /* A simple actuator example, depending on the type query parameter and post variable mode, the actuator is turn on or off */
 
-
+static void res_put_post_handler2(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
-static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+//static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
 
 EVENT_RESOURCE(oxygen_sensor,
          "title=\"Oxygen sensor;obs",
          get_oxygen_handler,
-         res_put_post_handler,
-         res_put_post_handler,
+         res_put_post_handler2,
+         res_put_post_handler2,
          NULL,
          oxygen_event_handler);
 
@@ -37,6 +37,7 @@ static double oxygen_level = 21.0;
 static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 static bool oxygen_filter = false;
+static bool oxygen_fast = false;
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
@@ -49,16 +50,19 @@ char json_response[512];
 
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=emitter&cause=ADMIN|CTRL&mode=on|off
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL&mode=on|off
+static char cause[10];
 
-/*
 static void res_put_post_handler2(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   const uint8_t* payload = NULL;
   int success = 1;
+  strcpy(cause, "");
+  printf("POST arrivata\n");
 
 	if((len = coap_get_payload(request, &payload))) 
 	{
+		printf("il payload: %s\n", payload);
 		if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
 		
 			oxygen_emitter = true;
@@ -117,8 +121,9 @@ static void res_put_post_handler2(coap_message_t *request, coap_message_t *respo
 	if(!success) {
 		coap_set_status_code(response, BAD_REQUEST_4_00);
 	}
-}*/
+}
 
+/*
 //Oxygen filter and emitter
 static void
 res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
@@ -234,7 +239,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
     coap_set_status_code(response, BAD_REQUEST_4_00);
   }
 }
-
+*/
 
 
 

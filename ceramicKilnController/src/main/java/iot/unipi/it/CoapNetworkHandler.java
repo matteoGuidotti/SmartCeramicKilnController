@@ -1,5 +1,6 @@
 package iot.unipi.it;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.californium.core.CoapClient;
@@ -145,27 +146,42 @@ public class CoapNetworkHandler{
 				postClient.post("", MediaTypeRegistry.APPLICATION_JSON);
 				System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 				postClient.shutdown();*/
-				Request req = new Request(Code.POST);
-				req.getOptions().addUriQuery("type=filter&cause=CTRL&mode=on");
-				response = client_OxygenControllerSensor.advanced(req);
-				if(response == null)
-					System.out.println("Error trying to switch on the oxygen filter [mode SLOW] sent");
-				else
-					System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
+				Map<String, Object> jsonPayload = new HashMap<String, Object>();
+				jsonPayload.put("mode", "on");
+				jsonPayload.put("cause", "CTRL");
+				jsonPayload.put("type", "filter");
+				String payload = Utils.jsonToString(jsonPayload);
+				System.out.println("il client " + client_OxygenControllerSensor.getURI());
+				System.out.println("lo stesso client " + oxygenControllerAddress);
+				CoapClient client = new CoapClient("coap://[fd00::202:2:2:2]/oxygen_sensor"); 
+				client_OxygenControllerSensor.post(new CoapHandler() {
+				public void onLoad(CoapResponse response) {
+						if(response != null){
+							if(!response.isSuccess()){
+								System.out.println("non success");
+							}
+						}
+					}
+
+					public void onError() {
+						System.err.println("OBSERVING FAILED");
+					}	
+				}, payload, MediaTypeRegistry.APPLICATION_JSON);
+				//if(resp == null)
+				//	System.out.println("resp è null");
 			}
 			else if(new_oxygenLevel < oxygen_target - acceptableRange && controllerMode != Controller_mode.UP_SLOW){
 				controllerMode = Controller_mode.UP_SLOW;
 				/*CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=emitter&cause=CTRL&mode=on");
 				postClient.post("", MediaTypeRegistry.APPLICATION_JSON);
-				System.out.println("Request to switch on the oxygen emitter [mode FAST] sent");
+				System.out.println("Request to switch on the oxygen emitter [mode SLOW] sent");
 				postClient.shutdown();*/
-				Request req = new Request(Code.POST);
-				req.getOptions().addUriQuery("type=emitter&cause=CTRL&mode=on");
-				response = client_OxygenControllerSensor.advanced(req);
-				if(response == null)
-					System.out.println("Error trying to switch on the oxygen filter [mode SLOW] sent");
-				else
-					System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
+				Map<String, Object> jsonPayload = new HashMap<String, Object>();
+                                jsonPayload.put("type", "emitter");
+                                jsonPayload.put("cause", "CTRL");
+                                jsonPayload.put("mode", "on");
+                                String payload = Utils.jsonToString(jsonPayload);
+                                CoapResponse resp = client_OxygenControllerSensor.put(payload, MediaTypeRegistry.APPLICATION_JSON);
 			}
 		}
 	}

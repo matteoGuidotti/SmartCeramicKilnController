@@ -30,13 +30,13 @@ EVENT_RESOURCE(oxygen_sensor,
 static double oxygen_level = 21.0;
 static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
-static bool oxygen_filter = false;
+static bool oxygen_filter = true;
 static bool oxygen_fast = false;
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
 enum Cause{CTRL, FIRE, ADMIN};
-static enum Cause filtration_cause  = CTRL;
+static enum Cause filtration_cause  = FIRE;
 static enum Cause emission_cause  = CTRL;
 
 char json_response[512];
@@ -206,25 +206,29 @@ static void oxygen_event_handler(void)
 		case LOW:
 			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
 			leds_off(LEDS_NUM_TO_MASK(LEDS_RED));
-			leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
-			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) );
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) );
+			leds_on(LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_set(MASK(LED))
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) );
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) );
+			leds_on(LEDS_NUM_TO_MASK(LEDS_RED) );
+			//leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
+			leds_on(LEDS_NUM_TO_MASK(LEDS_RED) );
 			leds_off(LEDS_NUM_TO_MASK(LEDS_GREEN));
-			leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
+			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			break;
 	}

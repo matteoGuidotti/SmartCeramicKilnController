@@ -47,7 +47,7 @@ static void check_connection(){
   }else{
 
     LOG_INFO("Now the Border Router is reachable\n");
-    //leds_set(LEDS_NUM_TO_MASK(LEDS_YELLOW));
+    leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
     connected = true;
   }
 }
@@ -81,8 +81,8 @@ PROCESS_THREAD(oxygen_server, ev, data)
 
 	PROCESS_BEGIN();
 
-	//leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
-	leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
+	leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
+	//leds_toggle(LEDS_NUM_TO_MASK(LEDS_GREEN));
 
   	etimer_set(&wait_connectivity, CLOCK_SECOND* CONNECTION_TRY_INTERVAL);
   

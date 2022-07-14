@@ -209,15 +209,6 @@ static void oxygen_event_handler(void)
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
-			/*if(!leds[0])
-			{
-				leds_toggle(LEDS_GREEN);
-				leds[0] = true;
-			}
-			if(leds[1]){
-				leds_toggle(LEDS_RED);
-				leds[1] = false;
-			}*/
 			
 			break;
 		case MEDIUM_LOW:
@@ -226,25 +217,9 @@ static void oxygen_event_handler(void)
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
 			leds_on(LEDS_RED);
-			/*if(!leds[1]){
-				leds_toggle(LEDS_RED);
-				leds[1] = true;
-			}
-			if(!leds[0]){
-				leds_toggle(LEDS_GREEN);
-				leds[0] = true;
-			}*/
 		
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			/*if(!leds[1]){
-				leds_toggle(LEDS_RED);
-				leds[1] = true;
-			}
-			if(!leds[0]){
-				leds_toggle(LEDS_GREEN);
-				leds[0] = true;
-			}*/
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
@@ -256,15 +231,6 @@ static void oxygen_event_handler(void)
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_RED);
-			/*if(!leds[1])
-			{
-				leds_toggle(LEDS_GREEN);
-				leds[1] = true;
-			}
-			if(leds[0]){
-				leds_toggle(LEDS_RED);
-				leds[0] = false;
-			}*/
 			break;
 	}
   }

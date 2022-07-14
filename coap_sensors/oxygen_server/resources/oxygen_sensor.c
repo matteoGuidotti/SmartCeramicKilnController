@@ -210,14 +210,14 @@ static void oxygen_event_handler(void)
 			break;
 		case MEDIUM_LOW:
 			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
-			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) )
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_set(MASK(LED))
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;
 		case MEDIUM:
 			printf("Oxygen level: %f, medium risk\n", oxygen_level);
-			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) )
+			leds_on(LEDS_NUM_TO_MASK(LEDS_GREEN) | LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			break;

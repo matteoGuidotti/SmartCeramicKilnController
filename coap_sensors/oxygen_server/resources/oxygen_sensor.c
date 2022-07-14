@@ -234,7 +234,7 @@ static void oxygen_event_handler(void)
 			break;
 		case HIGH:
 			printf("Oxygen level: %f, high risk\n", oxygen_level);
-			leds_on(MASK(LEDS_GREEN));
+			leds_set(MASK(LEDS_GREEN));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED) );
 			//leds_off(LEDS_NUM_TO_MASK(LEDS_GREEN));
 			//leds_set(LEDS_NUM_TO_MASK(LEDS_RED));

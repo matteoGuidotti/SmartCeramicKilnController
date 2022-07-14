@@ -9,6 +9,12 @@
 #include "sys/log.h"
 #define LOG_MODULE "App"
 #define LOG_LEVEL LOG_LEVEL_APP
+#define JSON_OX_EMITTER_SLOW "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
+#define JSON_OX_EMITTER_FAST "{\"type\":\"emitter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
+#define JSON_OX_FILTER_FAST "{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}"
+#define JSON_OX_FILTER_SLOW "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}"
+#define JSON_OX_EMITTER_OFF "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
+#define JSON_OX_FILTER_OFF "{\"type\":\"filter\", \"cause\": \"ADMIN\", \"mode\":\"off\"}"
 
 
 /* A simple actuator example, depending on the type query parameter and post variable mode, the actuator is turn on or off */

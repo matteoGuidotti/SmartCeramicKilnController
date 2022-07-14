@@ -77,7 +77,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 							}
 							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
 								filtration_cause = FIRE;
-								printf("Sono nel caso filter CTRL\n");
+								printf("Sono nel caso filter FIRE\n");
 							}
 							else{
 								success = 0;
@@ -96,7 +96,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 							}
 							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
 								emission_cause = ADMIN;
-								printf("Sono nel caso emitter CTRL\n");
+								printf("Sono nel caso emitter ADMIN\n");
 							}
 							else{
 								success = 0;
@@ -135,8 +135,7 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 						printf("Parametro \"type\" sbagliato!\n");
 						}
 			}
-			else
-			{
+			else{
 				success = 0;
 				printf("Parametro \"type\" mancante!\n");
 			}

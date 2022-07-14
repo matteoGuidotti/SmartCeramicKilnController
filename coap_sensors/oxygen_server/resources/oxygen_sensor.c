@@ -35,7 +35,6 @@ static bool oxygen_fast = false;
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
-
 enum Cause{CTRL, FIRE, ADMIN};
 static enum Cause filtration_cause  = CTRL;
 static enum Cause emission_cause  = CTRL;

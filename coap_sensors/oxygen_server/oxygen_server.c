@@ -81,7 +81,7 @@ PROCESS_THREAD(oxygen_server, ev, data)
 
 	PROCESS_BEGIN();
 
-	leds_on(LEDS_NUM_TO_MASK(LEDS_RED));
+	leds_on(LEDS_RED);
 	//leds_toggle(LEDS_NUM_TO_MASK(LEDS_GREEN));
 
   	etimer_set(&wait_connectivity, CLOCK_SECOND* CONNECTION_TRY_INTERVAL);

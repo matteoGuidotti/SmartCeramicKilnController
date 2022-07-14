@@ -44,6 +44,75 @@ char json_response[512];
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=emitter&cause=ADMIN|CTRL&mode=on|off
 //coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor?type=filter&cause=ADMIN|CTRL&mode=on|off
 
+
+static void res_put_post_handler2(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+{
+  size_t len = 0;
+  const uint8_t* payload = NULL;
+  int success = 1;
+
+	if((len = coap_get_payload(request, &payload))) 
+	{
+		if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
+		
+			oxygen_emitter = true;
+			oxygen_filter = false;
+			emission_cause = CTRL;
+			LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST) == 0)
+		{	
+				oxygen_emitter = true;
+				oxygen_filter = false;
+				emission_cause = ADMIN;
+				LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode! %s \n", cause);
+
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST) == 0)
+		{	
+				oxygen_filter = true;
+				oxygen_fast = false;
+				filtration_cause = FIRE;
+				LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode! %s \n", cause);
+
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW) == 0)
+		{	
+				oxygen_filter = true;
+				oxygen_fast = false;
+				filtration_cause = CTRL;
+				LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_OFF) == 0)
+		{	
+				oxygen_emitter = false;
+				LOG_INFO("Oxygen emitter turn off! %s \n", cause);
+
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_FILTER_OFF) == 0)
+		{	
+				oxygen_filter = false;
+				LOG_INFO("Oxygen filter turn off! %s \n", cause);
+
+		}
+		
+		else{
+			printf("ERROR: UNKNOWN COMMAND\n");
+			success = 0;
+		}
+
+	}
+	else{
+		printf("ERROR: UNKNOWN COMMAND\n");
+		success = 0;
+	}
+		
+	if(!success) {
+		coap_set_status_code(response, BAD_REQUEST_4_00);
+	}
+}
+
 //Oxygen filters
 static void
 res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
@@ -64,59 +133,62 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
             if((len_type = coap_get_query_variable(request, "type", &type))) {
 					
 					if((len_cause = coap_get_query_variable(request, "cause", &cause))) {
-						printf("Cause: %s", cause);
-
-						//Caso filtraggio
+						
+						//Filtering case
 						if(strncmp(type, "filter", len_type) == 0){
 							oxygen_filter = true;
 							oxygen_emitter = false;
 
 							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
 								filtration_cause = CTRL;
+								LOG_INFO("Oxygen filter turn on in CTRL (slow) mode! %s \n", cause);
 								printf("Sono nel caso filter CTRL\n");
 							}
 							else if(strncmp((char*)cause, "FIRE", len_cause) == 0){
 								filtration_cause = FIRE;
+								LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode! %s \n", cause);
 								printf("Sono nel caso filter FIRE\n");
 							}
 							else{
 								success = 0;
-								printf("Param \"cause\" sbagliato!\n");
+								printf("Wrong param \"cause\"!\n");
 
 							}
 						}
-						//Caso emissione
+						//Emission case
 						else if(strncmp(type, "emitter", len_type) == 0){
 							oxygen_emitter = true;
 							oxygen_filter = false;
 
 							if(strncmp((char*)cause, "CTRL", len_cause) == 0){
 								emission_cause = CTRL;
-								printf("Sono nel caso emitter CTRL\n");
+								LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+								
 							}
 							else if(strncmp((char*)cause, "ADMIN", len_cause) == 0){
 								emission_cause = ADMIN;
-								printf("Sono nel caso emitter ADMIN\n");
+								LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode! %s \n", cause);
+								
 							}
 							else{
 								success = 0;
-								printf("Param \"cause\" sbagliato!\n");
+								printf("Wrong param \"cause\"!\n");
 
 							}
 						}
 						else{
 							success = 0;
-							printf("Param \"type\" sbagliato!\n");
+							printf("Wrong param \"type\"!\n");
 						}
 					}
 					else{
 						success = 0;
-						printf("Param \"cause\" mancante!\n");
+						printf("Missing param \"cause\"!\n");
 					}
 			}
 			else{
 				success = 0;
-				printf("Param \"type\" mancante!\n");
+				printf("Wrong param \"type\"!\n");
 			}
 		}
 
@@ -132,22 +204,22 @@ res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t 
 					}
 					else{
 						success = 0;
-						printf("Parametro \"type\" sbagliato!\n");
+						printf("Wrong param \"type\"!\n");
 						}
 			}
 			else{
 				success = 0;
-				printf("Parametro \"type\" mancante!\n");
+				printf("Missing param \"type\"!\n");
 			}
 		}
 		else{
 			success = 0;
-			printf("Parametro \"mode\" sbagliato!\n");
+			printf("Wrong param \"mode\"!\n");
 		}
    	}
 	else{
 		success = 0;
-		printf("Parametro \"mode\" mancante!\n");
+		printf("Missing param \"mode\"!\n");
 	}
 			
  
@@ -173,19 +245,19 @@ static enum Risk simulate_oxygen_change(){
 	
 
 	if(oxygen_filter && filtration_cause == FIRE){
-		printf("Sto decrementando velocemente");
+		printf("Decreasing fast\n");
 		oxygen_level = oxygen_level - variationFast;
 		
 	} else if(oxygen_filter && filtration_cause == CTRL){
-		printf("Sto decrementando lentamente");
+		printf("Decreasing slow\n");
 		oxygen_level = oxygen_level - variationCTRL;
 	}
 	else if(oxygen_emitter && emission_cause == CTRL) {
-		printf("Sto incrementando lentamente");
+		printf("Increasing slow");
 		oxygen_level = oxygen_level + variationCTRL;
 	}
 	else if(oxygen_emitter && emission_cause == ADMIN){
-		printf("Sto incrementando velocemente");
+		printf("Increasing fast");
 		oxygen_level = oxygen_level + variationFast;
 	}
 	else{
@@ -193,7 +265,7 @@ static enum Risk simulate_oxygen_change(){
 			//We emulate the increase or decrease in oxygen assuming that there is a change in 10% of the cases
 			if((rand()%100) < 10)
 			{
-				//With a high probability, oxygen is decreasing due to internal combustion in the furnace
+				//With an high probability, oxygen is decreasing due to internal combustion in the furnace
 				if(type >= 2)
 					oxygen_level = oxygen_level - variation;
 				//With a low probability (2%) the oxygen level inside the furnace increases due to a failure

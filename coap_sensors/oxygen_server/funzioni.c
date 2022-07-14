@@ -1,72 +1,70 @@
-//Oxygen emitter
-static void
-res_put_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
+
+static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
-  //const char *type = NULL;
-  //const char *mode = NULL;
   const uint8_t* payload = NULL;
   int success = 1;
 
-  //if((len = coap_get_query_variable(request, "type", &type))) {
-	if((len = coap_get_payload(request, &payload))) {
+	if((len = coap_get_payload(request, &payload))) 
+	{
+		if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
+		
+			oxygen_emitter = true;
+			oxygen_filter = false;
+			emission_cause = CTRL;
+			LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST) == 0)
+		{	
+				oxygen_emitter = true;
+				oxygen_filter = false;
+				emission_cause = ADMIN;
+				LOG_INFO("Oxygen emitter turn on in ADMIN (fast) mode! %s \n", cause);
 
-		char data[20];
-		strncpy(data, (char*)payload, len);	
-		data[len] = '\0';	
-		LOG_INFO("Received the message: %s", data);
-    //LOG_DBG("type %.*s\n", (int)len, type);
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_FILTER_FAST) == 0)
+		{	
+				oxygen_filter = true;
+				oxygen_fast = false;
+				filtration_cause = FIRE;
+				LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode! %s \n", cause);
 
-	} else 
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW) == 0)
+		{	
+				oxygen_filter = true;
+				oxygen_fast = false;
+				filtration_cause = CTRL;
+				LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode! %s \n", cause);
+
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_OFF) == 0)
+		{	
+				oxygen_emitter = false;
+				LOG_INFO("Oxygen emitter turn off! %s \n", cause);
+
+		}
+		else if(success && strcmp((char*)payload, JSON_OX_FILTER_OFF) == 0)
+		{	
+				oxygen_filter = false;
+				LOG_INFO("Oxygen filter turn off! %s \n", cause);
+
+		}
+		
+		else{
+			printf("ERROR: UNKNOWN COMMAND\n");
 			success = 0;
-   if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
-		//LOG_DBG("mode %s\n", mode);
-		/*if(strncmp((char*)type, "CTRL", len) == 0){
-			emission_cause = CTRL;
-			printf("Sono nel caso CTRL");*/
-			oxygen_emitter = true;
-			oxygen_filter = false;
-			emission_cause = CTRL;
-	}
-	else if(success && strcmp((char*)payload, JSON_OX_EMITTER_FAST) == 0)
-	{	
-			oxygen_emitter = true;
-			oxygen_filter = false;
-			emission_cause = ADMIN;
+		}
 
 	}
-	else if(success && strcmp((char*)payload, JSON_OX_OFF) == 0)
-	{	
-			oxygen_emitter = false;
-
-	}
-	else
-		success = 0;
-		
-	/*else if (strncmp((char*)type, "ADMIN", len) == 0){
-		emission_cause = ADMIN;
-		printf("Sono nel caso ADMIN");
-	}
-		
-
-	if(strncmp(mode, "on", len) == 0){
-		printf("Switch ON oxygen emitter with type: %s\n", (char*)type);
-		oxygen_emitter = true;
-		oxygen_filter = false;
-		
-	    }else if (strncmp(mode, "off",len)==0){
-		printf("Switch OFF oxygen emitter with type: %s\n", (char*)type);
-		oxygen_emitter = false;
-	       
-	    }else{
+	else{
 		printf("ERROR: UNKNOWN COMMAND\n");
 		success = 0;
-	    }*/
-  //} else { success = 0;}
-	
- if(!success) {
-    coap_set_status_code(response, BAD_REQUEST_4_00);
-  }
+	}
+		
+	if(!success) {
+		coap_set_status_code(response, BAD_REQUEST_4_00);
+	}
 }
 
 

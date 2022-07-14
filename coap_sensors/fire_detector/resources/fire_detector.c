@@ -91,12 +91,12 @@ static void res_post_handler(coap_message_t *request, coap_message_t *response, 
 	{
 		printf("This is the payload: %s\n", payload);
 		
-		if((char*)payload, JSON_START_ALARM){
+		if(strcmp((char*)payload, JSON_START_ALARM) == 0){
 			printf("Switch ON fire alarm\n");
 			fire_detected = true;
 			counter_fire = 0;
 			
-		}else if((char*)payload, JSON_STOP_ALARM){
+		}else if(strcmp((char*)payload, JSON_STOP_ALARM) == 0){
 			printf("Switch OFF fire alarm\n");
 			fire_detected = false;
 			counter_fire = 0;

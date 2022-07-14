@@ -141,17 +141,31 @@ public class CoapNetworkHandler{
 			//we are in a normal situation, in which the oxygen level has to be as near as possible to the target
 			if(new_oxygenLevel > oxygen_target + acceptableRange && controllerMode != Controller_mode.DOWN_SLOW){
 				controllerMode = Controller_mode.DOWN_SLOW;
-				CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=filter&cause=CTRL&mode=on");
+				/*CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=filter&cause=CTRL&mode=on");
 				postClient.post("", MediaTypeRegistry.APPLICATION_JSON);
 				System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
-				postClient.shutdown();
+				postClient.shutdown();*/
+				Request req = new Request(Code.POST);
+				req.getOptions().addUriQuery("type=filter&cause=CTRL&mode=on");
+				response = client_OxygenControllerSensor.advanced(req);
+				if(response == null)
+					System.out.println("Error trying to switch on the oxygen filter [mode SLOW] sent");
+				else
+					System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 			}
 			else if(new_oxygenLevel < oxygen_target - acceptableRange && controllerMode != Controller_mode.UP_SLOW){
 				controllerMode = Controller_mode.UP_SLOW;
-				CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=emitter&cause=CTRL&mode=on");
+				/*CoapClient postClient = new CoapClient("coap://[" + oxygenControllerAddress + "]/oxygen_sensor?type=emitter&cause=CTRL&mode=on");
 				postClient.post("", MediaTypeRegistry.APPLICATION_JSON);
 				System.out.println("Request to switch on the oxygen emitter [mode FAST] sent");
-				postClient.shutdown();
+				postClient.shutdown();*/
+				Request req = new Request(Code.POST);
+				req.getOptions().addUriQuery("type=emitter&cause=CTRL&mode=on");
+				response = client_OxygenControllerSensor.advanced(req);
+				if(response == null)
+					System.out.println("Error trying to switch on the oxygen filter [mode SLOW] sent");
+				else
+					System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 			}
 		}
 	}

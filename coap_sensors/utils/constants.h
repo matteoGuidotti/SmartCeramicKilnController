@@ -5,8 +5,8 @@
 /* Fire detector sensor constants */
 #define FIRE_ALARM	                            "{\"fire_detected\":true}"
 #define SECONDS_ALARM_PERIOD 	                60
-#define JSON_START_ALARM                        "{\"alarm\":\"start\"}";
-#define JSON_STOP_ALARM                         "{\"alarm\":\"stop\"}";
+#define JSON_START_ALARM                        "{\"alarm\":\"start\"}"
+#define JSON_STOP_ALARM                         "{\"alarm\":\"stop\"}"
 
 /* Servers constants */
 #define SERVER_EP                               "coap://[fd00::1]:5683"

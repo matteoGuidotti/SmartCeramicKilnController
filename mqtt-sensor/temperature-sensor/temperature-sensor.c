@@ -224,6 +224,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 				state = STATE_CONNECTING;
 			}
 
+
 			if(state == STATE_CONNECTED){
 				//Subscribe to a topic
 				status = mqtt_subscribe(&conn, NULL, SUB_TOPIC, MQTT_QOS_LEVEL_0);
@@ -276,7 +277,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 			}
 
 			etimer_set(&periodic_timer, MEASUREMENT_PERIOD);
-		}/*
+		}
 		else if(ev == button_hal_press_event){
 			button_hal_button_t* btn = (button_hal_button_t*) data;
 			//if the left button is pressed, the heater is turned on
@@ -285,7 +286,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 			//if the right button is pressed, the heater is turned off
 			else if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_RIGHT)
 				heater_on = false;
-		}*/
+		}
 	}
 
 	PROCESS_END();

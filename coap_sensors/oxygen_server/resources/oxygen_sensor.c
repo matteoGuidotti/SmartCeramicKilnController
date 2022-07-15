@@ -27,8 +27,8 @@ EVENT_RESOURCE(oxygen_sensor,
          oxygen_event_handler);
 
 
-static float oxygen_level = 21.0;
-static float old_oxygen_level = 21.0;
+static double oxygen_level = 21.0;
+static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 static bool oxygen_filter = false;
 static bool oxygen_fast = false;
@@ -126,6 +126,7 @@ static enum Risk simulate_oxygen_change(){
 
 	int type = 0;
 	double variation = (double)(rand() % 5) / 10;
+	printf("la variation è %f\n", variation);
 	double variationFast = 0.5;
 	double variationCTRL = 0.1;
 	
@@ -184,9 +185,14 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	
 	sprintf(message, "%g", oxygen_level);
 	//data =	&message[0];
-	printf("{%s\n}", message);
-	printf("{%lf}\n", oxygen_level);
-	sprintf(json_response, "{\"oxygen_value\": %lf}", oxygen_level);
+	//printf("{%s\n}", message);
+	//printf("{%lf}\n", oxygen_level);
+	//sprintf(json_response, "{\"oxygen_value\": %lf}", oxygen_level);
+	printf("l'ossigeno normale è %f\n", oxygen_level);
+	int parteIntera = (int) oxygen_level;
+	int parteDecimale = (int)((oxygen_level - parteIntera) * 10);
+	sprintf(json_response, "{\"oxygen_value\": %d.%d}", parteIntera, parteDecimale);
+
 	printf("I'm sending %s\n", json_response);
 
 
@@ -200,7 +206,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 static void oxygen_event_handler(void)
 {
   enum Risk sensed_risk = simulate_oxygen_change();
-  printf("NEW Oxygen level: %lf\n, ", oxygen_level);
+  printf("NEW Oxygen level: %f\n, ", oxygen_level);
   
   if (current_risk != sensed_risk){
 	current_risk = sensed_risk;
@@ -241,5 +247,3 @@ static void oxygen_event_handler(void)
   		coap_notify_observers(&oxygen_sensor);
   
 }
-
-

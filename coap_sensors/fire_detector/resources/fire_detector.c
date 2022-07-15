@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "coap-engine.h"
 #include <time.h>
+#include "dev/leds.h"
 #include <../utils/constants.h>
 
 /* Log configuration */

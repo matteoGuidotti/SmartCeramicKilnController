@@ -85,7 +85,6 @@ static void res_post_handler(coap_message_t *request, coap_message_t *response, 
   size_t len = 0;
   const uint8_t* payload = NULL;
   int success = 1;
-  strcpy(cause, "");
   printf("POST arrived\n");
 
 	if((len = coap_get_payload(request, &payload))) 

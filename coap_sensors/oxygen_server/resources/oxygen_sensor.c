@@ -76,7 +76,7 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
 				oxygen_filter = true;
 				oxygen_fast = false;
 				filtration_cause = FIRE;
-				LOG_INFO("Oxygen emitter turn on in FIRE (fast) mode!\n");
+				LOG_INFO("Oxygen filter turn on in FIRE (fast) mode!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_FILTER_SLOW) == 0)
@@ -84,7 +84,7 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
 				oxygen_filter = true;
 				oxygen_fast = false;
 				filtration_cause = CTRL;
-				LOG_INFO("Oxygen emitter turn on in CTRL (slow) mode!\n");
+				LOG_INFO("Oxygen filter turn on in CTRL (slow) mode!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_OFF) == 0)

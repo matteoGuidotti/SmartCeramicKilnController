@@ -71,14 +71,15 @@ public class DbUtility {
 	}
 	
 	//start is true if the record to be inserted indicates the detection of a fire, false if it indicates the end of the fire 
-    public static void insertFireAlarm(boolean start) {
+    public static void insertFireAlarm(boolean start, int fire_index) {
     	
-    	String insertQueryStatement = "INSERT INTO fire_alarm (timestamp, alarm) VALUES (CURRENT_TIMESTAMP, ?)";
-        try (Connection smartFridgeConnection = makeJDBCConnection();
-        		PreparedStatement smartFridgePrepareStat = smartFridgeConnection.prepareStatement(insertQueryStatement);
+    	String insertQueryStatement = "INSERT INTO fire_alarm (timestamp, alarm, fire_index) VALUES (CURRENT_TIMESTAMP, ?, ?)";
+        try (Connection smartPoolConnection = makeJDBCConnection();
+        		PreparedStatement smartPoolPrepareStat = smartPoolConnection.prepareStatement(insertQueryStatement);
            ) {
-            smartFridgePrepareStat.setBoolean(1, start);
-        	smartFridgePrepareStat.executeUpdate();
+            smartPoolPrepareStat.setBoolean(1, start);
+	    smartPoolPrepareStat.setInt(2, fire_index);
+      	    smartPoolPrepareStat.executeUpdate();
             
         } catch (SQLException sqlex) {
             sqlex.printStackTrace();

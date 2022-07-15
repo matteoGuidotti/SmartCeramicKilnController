@@ -30,14 +30,14 @@ EVENT_RESOURCE(oxygen_sensor,
 static double oxygen_level = 21.0;
 static double old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
-static bool oxygen_filter = true;
+static bool oxygen_filter = false;
 static bool oxygen_fast = false;
-//static bool leds[2] = {true,false};
+
 
 enum Risk{LOW, MEDIUM_LOW, MEDIUM, HIGH};
 static enum Risk current_risk = LOW;
 enum Cause{CTRL, FIRE, ADMIN};
-static enum Cause filtration_cause  = FIRE;
+static enum Cause filtration_cause  = CTRL;
 static enum Cause emission_cause  = CTRL;
 
 char json_response[512];

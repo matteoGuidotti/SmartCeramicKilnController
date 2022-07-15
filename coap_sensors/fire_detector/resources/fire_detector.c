@@ -93,11 +93,14 @@ static void res_post_handler(coap_message_t *request, coap_message_t *response, 
 		
 		if(strcmp((char*)payload, JSON_START_ALARM) == 0){
 			printf("Switch ON fire alarm\n");
+			leds_single_off(LEDS_RED);
+			leds_on(LEDS_RED);
 			fire_detected = true;
 			counter_fire = 0;
 			
 		}else if(strcmp((char*)payload, JSON_STOP_ALARM) == 0){
 			printf("Switch OFF fire alarm\n");
+			leds_single_off(LEDS_RED);
 			fire_detected = false;
 			counter_fire = 0;
 			
@@ -123,6 +126,8 @@ static void fire_detector_event_handler(void)
 			
 		
 		if(fire_detected){
+			leds_single_off(LEDS_RED);
+			leds_on(LEDS_RED);
 			if(counter_fire == 0){
 				coap_notify_observers(&fire_detector);
 				printf("Notify to the observers!\n");

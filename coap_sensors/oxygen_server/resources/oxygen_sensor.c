@@ -27,8 +27,8 @@ EVENT_RESOURCE(oxygen_sensor,
          oxygen_event_handler);
 
 
-static long double oxygen_level = 21.0;
-static long double old_oxygen_level = 21.0;
+static float oxygen_level = 21.0;
+static float old_oxygen_level = 21.0;
 static bool oxygen_emitter = false;
 static bool oxygen_filter = false;
 static bool oxygen_fast = false;

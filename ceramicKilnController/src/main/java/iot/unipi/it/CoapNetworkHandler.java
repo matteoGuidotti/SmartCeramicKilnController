@@ -83,7 +83,7 @@ public class CoapNetworkHandler{
 				System.out.println("chiave json: " + key);
 			}
 			if((Boolean)jsonResponse.get("fire_detected")){
-				//DbUtility.insertFireAlarm(true);
+				DbUtility.insertFireAlarm(true);
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
@@ -122,7 +122,7 @@ public class CoapNetworkHandler{
 		String responseText = response.getResponseText();
 		Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 		double new_oxygenLevel = (Double)jsonResponse.get("oxygen_value");
-		//DbUtility.insertOxygen(new_oxygenLevel);
+		DbUtility.insertOxygen(new_oxygenLevel);
 		if(controllerMode == Controller_mode.DOWN_FAST){
 			//we are trying to reduce a fire
 			if(new_oxygenLevel <= 10){
@@ -142,7 +142,7 @@ public class CoapNetworkHandler{
 					}	
 				}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
 				System.out.println("Request to switch off the oxygen filter sent");
-				//DbUtility.insertFireAlarm(false);
+				DbUtility.insertFireAlarm(false);
 				controllerMode = Controller_mode.OFF;
 			}
 		}
@@ -251,11 +251,11 @@ public class CoapNetworkHandler{
 			}, JSON_STOP_ALARM, MediaTypeRegistry.APPLICATION_JSON);
 			System.out.println("Request to switch off the alarm sent");
 		}
-		//DbUtility.insertFireAlarm(false);
+		DbUtility.insertFireAlarm(false);
 	}
 
 	public void startFireAlarm(){
-		//DbUtility.insertFireAlarm(true);
+		DbUtility.insertFireAlarm(true);
 		client_OxygenControllerSensor.post(new CoapHandler() {
 			public void onLoad(CoapResponse response) {
 				if(response != null){

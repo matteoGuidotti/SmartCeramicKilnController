@@ -84,7 +84,7 @@ public class MqttClientCollector implements MqttCallback{
 		else{
 			String heater_state = (String)receivedJson.get("heater_state");
 			double averageTemp = (firstTemperatureValue + receivedTemperature) / 2;
-			//DbUtility.insertTemperature(averageTemp);
+			DbUtility.insertTemperature(averageTemp);
 			if(averageTemp > targetTemp + acceptableRange){
 				//need to decrease temperature
 				System.out.println("Temperature is too high, need to decrease it");

@@ -1,17 +1,17 @@
 CREATE TABLE `temperature` (
-`timestamp` DATETIME NOT NULL,
-`temperature` INT NOT NULL,
+`timestamp` TIMESTAMP NOT NULL,
+`temperature` DOUBLE NOT NULL,
 PRIMARY KEY (`timestamp`))
 ENGINE = InnoDB;
 
 CREATE TABLE `oxygen` (
-`timestamp` DATETIME NOT NULL,
+`timestamp` TIMESTAMP NOT NULL,
 `oxygen` DOUBLE NOT NULL,
 PRIMARY KEY (`timestamp`))
 ENGINE = InnoDB;
 
 CREATE TABLE `fire_alarm` (
-`timestamp` DATETIME NOT NULL,
+`timestamp` TIMESTAMP NOT NULL,
 `alarm` BOOLEAN NOT NULL,
 PRIMARY KEY (`timestamp`))
 ENGINE = InnoDB;

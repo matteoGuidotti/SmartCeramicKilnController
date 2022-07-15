@@ -206,14 +206,14 @@ static void oxygen_event_handler(void)
 	current_risk = sensed_risk;
 	switch (current_risk) {
 		case LOW:
-			LOG_INFO("Oxygen level: %f,low risk \n", oxygen_level);
+			LOG_INFO("Oxygen level: %d,low risk \n", oxygen_level);
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
 			
 			break;
 		case MEDIUM_LOW:
-			printf("Oxygen level: %f, medium-low risk\n", oxygen_level);
+			printf("Oxygen level: %d, medium-low risk\n", oxygen_level);
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);

@@ -16,6 +16,9 @@ public class MqttClientCollector implements MqttCallback{
 	private final String brokerAddr = "tcp://127.0.0.1:1883";
 	private final String clientId = "Java_MqttClient";
 
+	private final String JSON_HEATER_ON = "{\"heater_on\":true}";
+	private final String JSON_HEATER_OFF = "{\"heater_on\":false}";
+
 	//topic to be subscribed to
 	private final String subTopic = "current_temperature";
 	//topic to publish in
@@ -86,9 +89,9 @@ public class MqttClientCollector implements MqttCallback{
 				//need to decrease temperature
 				System.out.println("Temperature is too high, need to decrease it");
 				if(heater_state.equals("ON")){
-					Map<String, Object> jsonResponse = new HashMap<String,Object>();
-					jsonResponse.put("heater_on", false);
-					publish(pubTopic, Utils.jsonToString(jsonResponse));
+					//Map<String, Object> jsonResponse = new HashMap<String,Object>();
+					//jsonResponse.put("heater_on", false);
+					publish(pubTopic, JSON_HEATER_OFF);
 				}
 				//if the heater is already OFF, we have only to wait
 			}
@@ -96,9 +99,9 @@ public class MqttClientCollector implements MqttCallback{
 				//need to increase the temperature
 				System.out.println("Temperature is too low, need to encrease it");
 				if(heater_state.equals("OFF")){
-					Map<String, Object> jsonResponse = new HashMap<String,Object>();
-					jsonResponse.put("heater_on", true);
-					publish(pubTopic, Utils.jsonToString(jsonResponse));
+					//Map<String, Object> jsonResponse = new HashMap<String,Object>();
+					//jsonResponse.put("heater_on", true);
+					publish(pubTopic, JSON_HEATER_ON);
 				}
 				//if the heater is already ON, we have only to wait
 			}

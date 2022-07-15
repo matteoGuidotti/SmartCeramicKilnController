@@ -27,8 +27,8 @@ public class CoapNetworkHandler{
 	private final String JSON_OX_EMITTER_FAST = "{\"type\":\"emitter\", \"cause\": \"ADMIN\", \"mode\":\"on\"}";
 	private final String JSON_OX_FILTER_FAST = 	"{\"type\":\"filter\", \"cause\": \"FIRE\", \"mode\":\"on\"}";
 	private final String JSON_OX_FILTER_SLOW = 	"{\"type\":\"filter\", \"cause\": \"CTRL\", \"mode\":\"on\"}";
-	private final String JSON_OX_EMITTER_OFF = 	"{\"type\":\"emitter\", \"mode\":\"off\"}"
-	private final String JSON_OX_FILTER_OFF = 	"{\"type\":\"filter\", \"mode\":\"off\"}"
+	private final String JSON_OX_EMITTER_OFF = 	"{\"type\":\"emitter\", \"mode\":\"off\"}";
+	private final String JSON_OX_FILTER_OFF = 	"{\"type\":\"filter\", \"mode\":\"off\"}";
 	private final String JSON_STOP_ALARM = 		"{\"alarm\":\"stop\"}";
 	private final String JSON_START_ALARM = 	"{\"alarm\":\"start\"}";
 

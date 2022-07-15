@@ -184,7 +184,8 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	
 	sprintf(message, "%g", oxygen_level);
 	//data =	&message[0];
-
+	printf("{%s\n}", message);
+	printf("{%f}\n", oxygen_level);
 	sprintf(json_response, "{\"oxygen_value\": %f}", oxygen_level);
 	printf("I'm sending %s\n", json_response);
 

@@ -185,8 +185,8 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	sprintf(message, "%g", oxygen_level);
 	//data =	&message[0];
 	printf("{%s\n}", message);
-	printf("{%f}\n", oxygen_level);
-	sprintf(json_response, "{\"oxygen_value\": %f}", oxygen_level);
+	printf("{%d}\n", oxygen_level);
+	sprintf(json_response, "{\"oxygen_value\": %d}", oxygen_level);
 	printf("I'm sending %s\n", json_response);
 
 
@@ -200,7 +200,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 static void oxygen_event_handler(void)
 {
   enum Risk sensed_risk = simulate_oxygen_change();
-  printf("NEW Oxygen level: %f\n, ", oxygen_level);
+  printf("NEW Oxygen level: %d\n, ", oxygen_level);
   
   if (current_risk != sensed_risk){
 	current_risk = sensed_risk;
@@ -220,7 +220,7 @@ static void oxygen_event_handler(void)
 			leds_on(LEDS_RED);
 		
 		case MEDIUM:
-			printf("Oxygen level: %f, medium risk\n", oxygen_level);
+			printf("Oxygen level: %d, medium risk\n", oxygen_level);
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
@@ -228,7 +228,7 @@ static void oxygen_event_handler(void)
 		
 			break;
 		case HIGH:
-			printf("Oxygen level: %f, high risk\n", oxygen_level);
+			printf("Oxygen level: %d, high risk\n", oxygen_level);
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_RED);

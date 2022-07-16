@@ -61,14 +61,13 @@ public class CoapNetworkHandler{
 		int index = 0;
 		if(fireDetectorAddress[0] != null)
 			index = 1;
-		System.out.println("The ipAddress of the registering sensor is " + ipAddress);
 		fireDetectorAddress[index] = ipAddress;
 		client_FireDetectorSensor[index] = new CoapClient("coap://[" + ipAddress + "]/fire_detector");
 		client_FireDetectorSensor[index].observe(
 			new CoapHandler() {
                     public void onLoad(CoapResponse response) {
                         if(!response.getResponseText().equals(""))
-				handleFireAlarm(response);
+							handleFireAlarm(response);
                     }
 
                     public void onError() {
@@ -79,19 +78,14 @@ public class CoapNetworkHandler{
 
 	public void handleFireAlarm(CoapResponse response){
 			String responseText = response.getResponseText();
-			System.out.println("a" + responseText + "a");
-			CoapResponse postResponse;
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
-			for(String key: jsonResponse.keySet()){
-				System.out.println("chiave json: " + key);
-			}
 			if((Boolean)jsonResponse.get("fire_detected")){
 				DbUtility.insertFireAlarm(true, fire_index);
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Post unsuccessful");
 							}
 						}
 					}
@@ -136,7 +130,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Post unsuccessful");
 							}
 						}
 					}
@@ -158,7 +152,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Post unsuccessful");
 							}
 						}
 					}
@@ -179,7 +173,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Post unsuccessful");
 							}
 						}
 					}
@@ -196,7 +190,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Post unsuccessful");
 							}
 						}
 					}
@@ -215,7 +209,7 @@ public class CoapNetworkHandler{
                                         	public void onLoad(CoapResponse response) {
                                                 	if(response != null){
                                                         	if(!response.isSuccess()){
-                                                                	System.out.println("non success");
+                                                                	System.out.println("Post unsuccessful");
                                                         	}
                                                 	}
                                         	}
@@ -233,7 +227,7 @@ public class CoapNetworkHandler{
                                                 public void onLoad(CoapResponse response) {
                                                         if(response != null){
                                                                 if(!response.isSuccess()){
-                                                                        System.out.println("non success");
+                                                                        System.out.println("Post unsuccessful");
                                                                 }   
                                                         }   
                                                 }   
@@ -263,7 +257,7 @@ public class CoapNetworkHandler{
 				public void onLoad(CoapResponse response) {
 					if(response != null){
 						if(!response.isSuccess()){
-							System.out.println("non success");
+							System.out.println("Post unsuccessful");
 						}
 					}
 				}
@@ -283,7 +277,7 @@ public class CoapNetworkHandler{
 				public void onLoad(CoapResponse response) {
 					if(response != null){
 						if(!response.isSuccess()){
-							System.out.println("non success");
+							System.out.println("Post unsuccessful");
 						}
 					}
 				}
@@ -303,7 +297,7 @@ public class CoapNetworkHandler{
 			public void onLoad(CoapResponse response) {
 				if(response != null){
 					if(!response.isSuccess()){
-						System.out.println("non success");
+						System.out.println("Post unsuccessful");
 					}
 				}
 			}
@@ -322,7 +316,7 @@ public class CoapNetworkHandler{
 				public void onLoad(CoapResponse response) {
 					if(response != null){
 						if(!response.isSuccess()){
-							System.out.println("non success");
+							System.out.println("Post unsuccessful");
 						}
 					}
 				}
@@ -340,7 +334,7 @@ public class CoapNetworkHandler{
 			public void onLoad(CoapResponse response) {
 				if(response != null){
 					if(!response.isSuccess()){
-						System.out.println("non success");
+						System.out.println("Post unsuccessful");
 					}
 				}
 			}

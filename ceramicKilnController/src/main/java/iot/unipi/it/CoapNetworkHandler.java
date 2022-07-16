@@ -98,13 +98,6 @@ public class CoapNetworkHandler{
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 			if((Boolean)jsonResponse.get("fire_detected")){
 				DbUtility.insertFireAlarm(true, fire_index);
-<<<<<<< Updated upstream
-				client_OxygenControllerSensor.post(new CoapHandler() {
-					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Post fire alarm unsuccessful");
-=======
 				/*success = false;
 				while(!success){
 					client_OxygenControllerSensor.post(new CoapHandler() {
@@ -115,7 +108,6 @@ public class CoapNetworkHandler{
 								}
 								else
 									success = true;
->>>>>>> Stashed changes
 							}
 						}
 
@@ -157,13 +149,6 @@ public class CoapNetworkHandler{
 			if(new_oxygenLevel <= 10){
 				//this level of oxygen does not enable to the flames to rise
 				System.out.println("Sending stop alarm messages");
-<<<<<<< Updated upstream
-				client_OxygenControllerSensor.post(new CoapHandler() {
-					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Post <10 unsuccessful");
-=======
 				/*success = false;
 				while(!success){
 					client_OxygenControllerSensor.post(new CoapHandler() {
@@ -174,7 +159,6 @@ public class CoapNetworkHandler{
 								} 
 								else
 									success = true;
->>>>>>> Stashed changes
 							}
 						}
 

@@ -231,7 +231,10 @@ static void oxygen_event_handler(void)
   
  
 	if(old_oxygen_level != oxygen_level)
+	{
 		printf("There is a change, I'm going to notify it!\n");
   		coap_notify_observers(&oxygen_sensor);
+	}
+		
   
 }

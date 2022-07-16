@@ -279,6 +279,7 @@ PROCESS_THREAD(mqtt_temperature_sensor, ev, data){
 			etimer_set(&periodic_timer, MEASUREMENT_PERIOD);
 		}
 		else if(ev == button_hal_press_event){
+			printf("Premuto!\n");
 			button_hal_button_t* btn = (button_hal_button_t*) data;
 			//if the left button is pressed, the heater is turned on
 			if(btn -> unique_id == BOARD_BUTTON_HAL_INDEX_KEY_LEFT)

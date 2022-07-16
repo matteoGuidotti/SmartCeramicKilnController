@@ -1,17 +1,11 @@
 package iot.unipi.it;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.californium.core.CoapClient;
 import org.eclipse.californium.core.CoapHandler;
-import org.eclipse.californium.core.CoapObserveRelation;
 import org.eclipse.californium.core.CoapResponse;
-import org.eclipse.californium.core.coap.CoAP.Code;
 import org.eclipse.californium.core.coap.MediaTypeRegistry;
-import org.eclipse.californium.core.coap.Request;
-
-import iot.unipi.it.Utils;
 
 public class CoapNetworkHandler{
 
@@ -31,6 +25,7 @@ public class CoapNetworkHandler{
 	private final String JSON_OX_FILTER_OFF = 	"{\"type\":\"filter\", \"mode\":\"off\"}";
 	private final String JSON_STOP_ALARM = 		"{\"alarm\":\"stop\"}";
 	private final String JSON_START_ALARM = 	"{\"alarm\":\"start\"}";
+	private boolean success = false;
 
 	private CoapClient[] client_FireDetectorSensor = new CoapClient[2];
 	private CoapClient client_OxygenControllerSensor;
@@ -57,6 +52,28 @@ public class CoapNetworkHandler{
         return instance;
 	}
 
+	private boolean doPost(CoapClient client, final String payload){
+		success = false;
+		while(!success){
+			client.post(new CoapHandler() {
+				public void onLoad(CoapResponse response) {
+					if(response != null){
+						if(!response.isSuccess()){
+							System.out.println("Posting " + payload + " unsuccessful");
+						}
+						else
+							success = true;
+					}
+				}
+
+				public void onError() {
+					System.err.println("OBSERVING FAILED");
+				}	
+			}, payload, MediaTypeRegistry.APPLICATION_JSON);
+		}
+		return success;
+	}
+
 	public void addFireDetector(String ipAddress){
 		int index = 0;
 		if(fireDetectorAddress[0] != null)
@@ -81,19 +98,33 @@ public class CoapNetworkHandler{
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
 			if((Boolean)jsonResponse.get("fire_detected")){
 				DbUtility.insertFireAlarm(true, fire_index);
+<<<<<<< Updated upstream
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
 								System.out.println("Post fire alarm unsuccessful");
+=======
+				/*success = false;
+				while(!success){
+					client_OxygenControllerSensor.post(new CoapHandler() {
+						public void onLoad(CoapResponse response) {
+							if(response != null){
+								if(!response.isSuccess()){
+									System.out.println("Posting " + JSON_OX_FILTER_FAST + " unsuccessful");
+								}
+								else
+									success = true;
+>>>>>>> Stashed changes
 							}
 						}
-					}
 
-					public void onError() {
-						System.err.println("OBSERVING FAILED");
-					}	
-				}, JSON_OX_FILTER_FAST, MediaTypeRegistry.APPLICATION_JSON);
+						public void onError() {
+							System.err.println("OBSERVING FAILED");
+						}	
+					}, JSON_OX_FILTER_FAST, MediaTypeRegistry.APPLICATION_JSON);
+				}*/
+				doPost(client_OxygenControllerSensor, JSON_OX_FILTER_FAST);
 				System.out.println("Request to switch on the oxygen filter [mode FAST] sent");
 				controllerMode = Controller_mode.DOWN_FAST;
 			}
@@ -126,19 +157,33 @@ public class CoapNetworkHandler{
 			if(new_oxygenLevel <= 10){
 				//this level of oxygen does not enable to the flames to rise
 				System.out.println("Sending stop alarm messages");
+<<<<<<< Updated upstream
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
 								System.out.println("Post <10 unsuccessful");
+=======
+				/*success = false;
+				while(!success){
+					client_OxygenControllerSensor.post(new CoapHandler() {
+						public void onLoad(CoapResponse response) {
+							if(response != null){
+								if(!response.isSuccess()){
+									System.out.println("Posting " + JSON_OX_FILTER_OFF + " unsuccessful");
+								} 
+								else
+									success = true;
+>>>>>>> Stashed changes
 							}
 						}
-					}
 
-					public void onError() {
-						System.err.println("OBSERVING FAILED");
-					}	
-				}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
+						public void onError() {
+							System.err.println("OBSERVING FAILED");
+						}	
+					}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
+				}*/
+				doPost(client_OxygenControllerSensor, JSON_OX_FILTER_OFF);
 				System.out.println("Request to switch off the oxygen filter sent");
 				fire_index++;
 				controllerMode = Controller_mode.OFF;
@@ -148,7 +193,7 @@ public class CoapNetworkHandler{
 			//we are trying to enter in the kiln
 			if(new_oxygenLevel >= 21){
 				//this level of oxygen is sufficient to consent to humans to live well
-				client_OxygenControllerSensor.post(new CoapHandler() {
+				/*client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
@@ -160,7 +205,8 @@ public class CoapNetworkHandler{
 					public void onError() {
 						System.err.println("OBSERVING FAILED");
 					}	
-				}, JSON_OX_EMITTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
+				}, JSON_OX_EMITTER_OFF, MediaTypeRegistry.APPLICATION_JSON);*/
+				doPost(client_OxygenControllerSensor, JSON_OX_EMITTER_OFF);
 				System.out.println("Request to switch off the oxygen emitter sent");
 				controllerMode = Controller_mode.OFF;
 			}
@@ -169,24 +215,27 @@ public class CoapNetworkHandler{
 			//we are in a normal situation, in which the oxygen level has to be as near as possible to the target
 			if(new_oxygenLevel > oxygen_target + acceptableRange && controllerMode != Controller_mode.DOWN_SLOW){
 				controllerMode = Controller_mode.DOWN_SLOW;
-				client_OxygenControllerSensor.post(new CoapHandler() {
+				/*client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
 								System.out.println("Post target unsuccessful");
 							}
+							else
+								controllerMode = Controller_mode.DOWN_SLOW;;
 						}
 					}
 
 					public void onError() {
 						System.err.println("OBSERVING FAILED");
 					}	
-				}, JSON_OX_FILTER_SLOW, MediaTypeRegistry.APPLICATION_JSON);
+				}, JSON_OX_FILTER_SLOW, MediaTypeRegistry.APPLICATION_JSON);*/
+				doPost(client_OxygenControllerSensor, JSON_OX_FILTER_SLOW);
 				System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 			}
 			else if(new_oxygenLevel < oxygen_target - acceptableRange && controllerMode != Controller_mode.UP_SLOW){
 				controllerMode = Controller_mode.UP_SLOW;
-				client_OxygenControllerSensor.post(new CoapHandler() {
+				/*client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
@@ -198,14 +247,15 @@ public class CoapNetworkHandler{
 					public void onError() {
 						System.err.println("OBSERVING FAILED");
 					}	
-				}, JSON_OX_EMITTER_SLOW, MediaTypeRegistry.APPLICATION_JSON);
+				}, JSON_OX_EMITTER_SLOW, MediaTypeRegistry.APPLICATION_JSON);*/
+				doPost(client_OxygenControllerSensor, JSON_OX_EMITTER_SLOW);
 				System.out.println("Request to switch on the oxygen emitter [mode SLOW] sent");
 			}
 			else if(new_oxygenLevel == oxygen_target){
 				//the oxygen level has the right value
 				if(controllerMode == Controller_mode.UP_SLOW){
 					//we have to turn off the emitter
-					client_OxygenControllerSensor.post(new CoapHandler() {
+					/*client_OxygenControllerSensor.post(new CoapHandler() {
                                         	public void onLoad(CoapResponse response) {
                                                 	if(response != null){
                                                         	if(!response.isSuccess()){
@@ -217,13 +267,14 @@ public class CoapNetworkHandler{
                                         	public void onError() {
                                                 	System.err.println("OBSERVING FAILED");
                                         	}    
-                                	}, JSON_OX_EMITTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
+                                	}, JSON_OX_EMITTER_OFF, MediaTypeRegistry.APPLICATION_JSON);*/
+									doPost(client_OxygenControllerSensor, JSON_OX_EMITTER_OFF);
                                 	System.out.println("Request to switch off the oxygen emitter sent");
 					controllerMode = Controller_mode.OFF;
 				}
 				else{
 					//we have to turn off the filter
-					client_OxygenControllerSensor.post(new CoapHandler() {
+					/*client_OxygenControllerSensor.post(new CoapHandler() {
                                                 public void onLoad(CoapResponse response) {
                                                         if(response != null){
                                                                 if(!response.isSuccess()){
@@ -235,7 +286,8 @@ public class CoapNetworkHandler{
                                                 public void onError() {
                                                         System.err.println("OBSERVING FAILED");
                                                 }    
-                                        }, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
+                                        }, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);*/
+										doPost(client_OxygenControllerSensor, JSON_OX_FILTER_OFF);
                                         System.out.println("Request to switch off the oxygen filter sent");
                                         controllerMode = Controller_mode.OFF;
 				}

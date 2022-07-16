@@ -53,7 +53,6 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 	if(fire_detected)
 	{
 		sprintf(json_response, FIRE_ALARM);
-		printf(json_response);
 		coap_set_header_content_format(response, APPLICATION_JSON);
 		coap_set_header_etag(response, (uint8_t *)&len, 1);
 		coap_set_payload(response, json_response, strlen(json_response));
@@ -89,6 +88,8 @@ static void res_post_handler(coap_message_t *request, coap_message_t *response, 
 		}else if(strcmp((char*)payload, JSON_STOP_ALARM) == 0){
 			printf("Switch OFF fire alarm\n");
 			leds_single_off(LEDS_RED);
+			leds_single_off(LEDS_GREEN);
+			leds_single_off(LEDS_GREEN);
 			fire_detected = false;
 			counter_fire = 0;
 			

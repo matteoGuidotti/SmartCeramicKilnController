@@ -19,7 +19,7 @@ static int counter_fire = 0;
 
 
 EVENT_RESOURCE(fire_detector,
-         "title=\"Fire detector\", POST alarm=on|off\";obs",
+         "title=\"Fire detector\";obs",
          get_fire_detection_handler,
          res_post_handler,
          NULL,
@@ -48,22 +48,12 @@ static bool simulate_fire_detection(){
 
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-
-	char message[30];
-	//char *data = NULL;
 	int len;
 
 	if(fire_detected)
 	{
-		sprintf(message, "%s", FIRE_ALARM);
-		//data =	&message[0];
-		printf("message: %s, length of the message: %d\n", message, strlen(message));
-		//printf("data: %s, length of the data: %d\n", data, strlen(data));
-
 		sprintf(json_response, FIRE_ALARM);
 		printf(json_response);
-
-
 		coap_set_header_content_format(response, APPLICATION_JSON);
 		coap_set_header_etag(response, (uint8_t *)&len, 1);
 		coap_set_payload(response, json_response, strlen(json_response));
@@ -71,28 +61,23 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 	else{
 	
 		sprintf(json_response, "{\"fire_detected\": false}");
-        	printf("la json_respnse che invio è %s\n", json_response);
-  
   
   		coap_set_header_content_format(response, APPLICATION_JSON);
-        	coap_set_header_etag(response, (uint8_t *)&len, 1);
+        coap_set_header_etag(response, (uint8_t *)&len, 1);
  		coap_set_payload(response, json_response, strlen(json_response));
 	}
 }
 
-//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/fire_detector -e {"alarm":"start"}|{"alarm":"stop"}
+//coap-client -m POST|PUT coap://[fd00::20x:x:x:x]/fire_detector -e {"alarm":"start"}|{"alarm":"stop"}
 
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
   size_t len = 0;
   const uint8_t* payload = NULL;
   int success = 1;
-  printf("POST arrived\n");
 
 	if((len = coap_get_payload(request, &payload))) 
 	{
-		printf("This is the payload: %s\n", payload);
-		
 		if(strcmp((char*)payload, JSON_START_ALARM) == 0){
 			printf("Switch ON fire alarm\n");
 			leds_single_off(LEDS_RED);
@@ -134,7 +119,7 @@ static void fire_detector_event_handler(void)
 			leds_on(LEDS_RED);
 			if(counter_fire == 0){
 				coap_notify_observers(&fire_detector);
-				printf("Notify to the observers!\n");
+				printf("Alarm notified!\n");
 				counter_fire++;
 			}
 			else if(counter_fire ==  SECONDS_ALARM_PERIOD -1 ){

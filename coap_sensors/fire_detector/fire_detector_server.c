@@ -52,8 +52,9 @@ static void check_connection(){
 
     LOG_INFO("Now the Border Router is reachable\n");
 	leds_single_off(LEDS_GREEN);
-	leds_on(LEDS_GREEN);
 	leds_single_off(LEDS_RED);
+	leds_on(LEDS_GREEN);
+	
     connected = true;
   }
 }

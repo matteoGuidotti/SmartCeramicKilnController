@@ -14,6 +14,8 @@ public final class Utils {
 	
 	//Function that parses a JSON message returning the corresponding Map of the key-value pairs contained in the JSON message. 
 	public static Map<String, Object> jsonParser(String requestText) {
+			
+		System.out.println("Json da convertire " + requestText);
 		Map<String, Object> responseJsonObject = new HashMap<String, Object>();
 		
 		try {

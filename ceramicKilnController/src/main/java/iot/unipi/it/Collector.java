@@ -77,7 +77,7 @@ public class Collector extends CoapServer {
 					continue;
 				}
 				mqttClient.changeAccTemp(Integer.parseInt(tokens[1]));
-				System.out.println("Acceptable range for the temperature changed succesfully");
+				System.out.println("Acceptable range for the temeprature changed succesfully");
 			}
 			else if(insertedCommand.equals("!changeTargetOxygen")){
 				if(tokens.length < 2){

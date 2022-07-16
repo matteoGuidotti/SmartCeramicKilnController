@@ -11,7 +11,7 @@
 #define LOG_LEVEL LOG_LEVEL_APP
 
 
-/* A simple actuator example, depending on the type query parameter and post variable mode, the actuator is turn on or off */
+/* Two simple actuators example, depending on the post variables, the actuators are turn on or off */
 
 static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
@@ -42,7 +42,7 @@ static enum Cause emission_cause  = CTRL;
 
 char json_response[512];
 
-//coap-client -m POST|PUT coap://[fd00::202:2:2:2]/oxygen_sensor -e "{\"type\":\"emitter\", \"mode\":\"on|off\"}"
+//coap-client -m POST|PUT coap://[fd00::20x:x:x:x]/oxygen_sensor -e "{\"type\":\"emitter|filter\", \"cause\": \"CTRL|FIRE|ADMIN\", \"mode\":\"on|off\"}"
 
 
 static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
@@ -126,7 +126,6 @@ static enum Risk simulate_oxygen_change(){
 
 	int type = 0;
 	double variation = (double)(rand() % 5) / 10;
-	printf("la variation è %f\n", variation);
 	double variationFast = 0.5;
 	double variationCTRL = 0.1;
 	
@@ -157,7 +156,7 @@ static enum Risk simulate_oxygen_change(){
 				//With an high probability, oxygen is decreasing due to internal combustion in the furnace
 				if(type >= 2)
 					oxygen_level = oxygen_level - variation;
-				//With a low probability (2%) the oxygen level inside the furnace increases due to a failure
+				//With a low probability the oxygen level inside the furnace increases due to a failure
 				else if(type < 2 )
 					oxygen_level = oxygen_level + variation;
 			}	
@@ -184,17 +183,9 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 
 	
 	sprintf(message, "%g", oxygen_level);
-	//data =	&message[0];
-	//printf("{%s\n}", message);
-	//printf("{%lf}\n", oxygen_level);
-	//sprintf(json_response, "{\"oxygen_value\": %lf}", oxygen_level);
-	printf("l'ossigeno normale è %f\n", oxygen_level);
 	int parteIntera = (int) oxygen_level;
 	int parteDecimale = (int)((oxygen_level - parteIntera) * 10);
 	sprintf(json_response, "{\"oxygen_value\": %d.%d}", parteIntera, parteDecimale);
-
-	printf("I'm sending %s\n", json_response);
-
 
 	coap_set_header_content_format(response, APPLICATION_JSON);
 	coap_set_header_etag(response, (uint8_t *)&len, 1);
@@ -206,7 +197,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 static void oxygen_event_handler(void)
 {
   enum Risk sensed_risk = simulate_oxygen_change();
-  printf("NEW Oxygen level: %f\n, ", oxygen_level);
+  printf("NEW Oxygen level: %f\n", oxygen_level);
   
   if (current_risk != sensed_risk){
 	current_risk = sensed_risk;
@@ -244,6 +235,7 @@ static void oxygen_event_handler(void)
   
  
 	if(old_oxygen_level != oxygen_level)
+		printf("There is a change, I'm going to notify it!\n");
   		coap_notify_observers(&oxygen_sensor);
   
 }

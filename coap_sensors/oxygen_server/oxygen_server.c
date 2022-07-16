@@ -71,7 +71,6 @@ void client_chunk_handler(coap_message_t *response)
 	printf("|%.*s", len, (char *)chunk);
 
 	if(strncmp((char*)chunk, "Registration Completed!", len) == 0){ 
-		//leds_set(LEDS_NUM_TO_MASK(LEDS_GREEN));
 		registered = true;
 	}else
 		etimer_set(&wait_registration, CLOCK_SECOND* REGISTRATION_TRY_INTERVAL);
@@ -82,10 +81,9 @@ PROCESS_THREAD(oxygen_server, ev, data)
 {
 
 	static coap_endpoint_t server_ep;
-	static coap_message_t request[1]; /* This way the packet can be treated as pointer as usual. */			
+	static coap_message_t request[1]; 	
 
 	PROCESS_BEGIN();
-	//leds_toggle(LEDS_NUM_TO_MASK(LEDS_GREEN));
 
   	etimer_set(&wait_connectivity, CLOCK_SECOND* CONNECTION_TRY_INTERVAL);
   
@@ -126,8 +124,6 @@ PROCESS_THREAD(oxygen_server, ev, data)
     PROCESS_WAIT_EVENT();
       
 		if(ev == PROCESS_EVENT_TIMER && data == &simulation){	
-			printf("mi sveglio, faccio trigger\n");
-			//oxygen_event_handler	  
 			oxygen_sensor.trigger();
 			etimer_set(&simulation, CLOCK_SECOND * SIMULATION_INTERVAL);
 		}

@@ -50,12 +50,9 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
   size_t len = 0;
   const uint8_t* payload = NULL;
   int success = 1;
- 
-  printf("POST arrived\n");
 
 	if((len = coap_get_payload(request, &payload))) 
 	{
-		printf("This is the payload: %s\n", payload);
 		if(success && strcmp((char*)payload, JSON_OX_EMITTER_SLOW) == 0) {
 		
 			oxygen_emitter = true;
@@ -178,7 +175,6 @@ static enum Risk simulate_oxygen_change(){
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
 	char message[30];
-	//char *data = NULL;
 	int len;
 
 	

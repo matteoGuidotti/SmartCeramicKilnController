@@ -59,16 +59,21 @@ public class CoapNetworkHandler{
 
 	public void addFireDetector(String ipAddress){
 		int index = 0;
+		System.out.println("Add Fire detector");
 		if(fireDetectorAddress[0] != null)
 			index = 1;
+		System.out.println("Index del fire = " + index);
 		System.out.println("The ipAddress of the registering sensor is " + ipAddress);
 		fireDetectorAddress[index] = ipAddress;
 		client_FireDetectorSensor[index] = new CoapClient("coap://[" + ipAddress + "]/fire_detector");
 		client_FireDetectorSensor[index].observe(
 			new CoapHandler() {
                     public void onLoad(CoapResponse response) {
+						System.out.println("OnLoad del fire detector");
                         if(!response.getResponseText().equals(""))
-				handleFireAlarm(response);
+							handleFireAlarm(response);
+						else
+							System.out.println("Ricevuto payload vuoto dal fire detector");
                     }
 
                     public void onError() {

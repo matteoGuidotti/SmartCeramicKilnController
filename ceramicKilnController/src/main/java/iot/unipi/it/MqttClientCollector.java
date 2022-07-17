@@ -88,18 +88,12 @@ public class MqttClientCollector implements MqttCallback{
 			if(averageTemp >= targetTemp){
 				//need to decrease temperature
 				System.out.println("Temperature is too high, need to decrease it");
-				if(heater_state.equals("ON")){
-					publish(pubTopic, JSON_HEATER_OFF);
-				}
-				//if the heater is already OFF, we have only to wait
+				publish(pubTopic, JSON_HEATER_OFF);
 			}
 			else if(averageTemp < targetTemp - acceptableRange){
 				//need to increase the temperature
 				System.out.println("Temperature is too low, need to encrease it");
-				if(heater_state.equals("OFF")){
-					publish(pubTopic, JSON_HEATER_ON);
-				}
-				//if the heater is already ON, we have only to wait
+				publish(pubTopic, JSON_HEATER_ON);
 			}
 			firstTemperatureValue = 0;
 		}

@@ -87,12 +87,14 @@ static void res_put_post_handler(coap_message_t *request, coap_message_t *respon
 		else if(success && strcmp((char*)payload, JSON_OX_EMITTER_OFF) == 0)
 		{	
 				oxygen_emitter = false;
+				oxygen_filter = false;
 				LOG_INFO("Oxygen emitter turn off!\n");
 
 		}
 		else if(success && strcmp((char*)payload, JSON_OX_FILTER_OFF) == 0)
 		{	
 				oxygen_filter = false;
+				oxygen_emitter = false;
 				LOG_INFO("Oxygen filter turn off!\n");
 
 		}

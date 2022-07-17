@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/putchar.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/putchar.o: \
  ../../../../os/lib/dbg-io/putchar.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

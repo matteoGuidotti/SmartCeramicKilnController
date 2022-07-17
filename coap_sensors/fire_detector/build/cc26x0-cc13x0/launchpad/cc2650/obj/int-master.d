@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/int-master.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/int-master.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/./int-master.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

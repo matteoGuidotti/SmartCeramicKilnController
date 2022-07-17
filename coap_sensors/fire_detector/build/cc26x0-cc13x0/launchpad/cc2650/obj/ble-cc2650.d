@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ble-cc2650.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ble-cc2650.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/rf-core/ble-cc2650.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

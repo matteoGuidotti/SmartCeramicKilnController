@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/spi.o: ../../../../os/dev/spi.c \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/spi.o: ../../../../os/dev/spi.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/dev/spi.h ../../../../os/contiki.h \
  ../../../../arch/platform/cc26x0-cc13x0/./contiki-conf.h project-conf.h \

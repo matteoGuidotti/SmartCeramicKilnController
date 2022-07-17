@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/sicslowpan.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/sicslowpan.o: \
  ../../../../os/net/ipv6/sicslowpan.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

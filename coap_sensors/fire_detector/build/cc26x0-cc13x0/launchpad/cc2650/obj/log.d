@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/log.o: ../../../../os/sys/log.c \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/log.o: ../../../../os/sys/log.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/sys/log.h ../../../../os/net/linkaddr.h \
  ../../../../os/contiki.h \

@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/uip6.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/uip6.o: \
  ../../../../os/net/ipv6/uip6.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/sys/cc.h ../../../../os/contiki.h \

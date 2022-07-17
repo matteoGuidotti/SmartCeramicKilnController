@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/rpl.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/rpl.o: \
  ../../../../os/net/routing/rpl-lite/rpl.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/routing/rpl-lite/rpl.h ../../../../os/net/ipv6/uip.h \

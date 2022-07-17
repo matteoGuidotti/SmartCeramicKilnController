@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ringbufindex.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ringbufindex.o: \
  ../../../../os/lib/ringbufindex.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/lib/ringbufindex.h ../../../../os/contiki.h \

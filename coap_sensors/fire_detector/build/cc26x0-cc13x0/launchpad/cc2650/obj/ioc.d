@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ioc.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ioc.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ioc.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ioc.h \

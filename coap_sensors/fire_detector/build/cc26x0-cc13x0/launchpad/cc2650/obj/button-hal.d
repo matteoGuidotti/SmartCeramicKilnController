@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/button-hal.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/button-hal.o: \
  ../../../../os/dev/button-hal.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

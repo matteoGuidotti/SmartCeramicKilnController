@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/board.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/board.o: \
  ../../../../arch/platform/cc26x0-cc13x0/launchpad/board.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

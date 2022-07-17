@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/fire_detector.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/fire_detector.o: \
  resources/fire_detector.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/app-layer/coap/coap-engine.h \
@@ -46,6 +46,67 @@ build/cc26x0-cc13x0//launchpad/cc2650/obj/fire_detector.o: \
  ../../../../os/net/app-layer/coap/coap-observe.h \
  ../../../../os/net/app-layer/coap/coap-separate.h \
  ../../../../os/net/app-layer/coap/coap-observe-client.h \
+ ../../../../os/dev/leds.h ../../../../os/dev/gpio-hal.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/./dev/gpio-hal-arch.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/./ti-lib.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_batmon.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_batmon.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_event.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_device.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_event.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_ioc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_ioc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_rtc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_rtc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_wuc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_wuc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aux_adc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_event.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi_4_aux.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aux_anaif.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aux_wuc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aux_wuc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/chipinfo.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_fcfg1.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ddi.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_ddi.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aux_smph.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/i2c.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_i2c.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_sysctl.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ioc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/osc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_ddi_0_osc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/prcm.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_prcm.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/pwr_ctrl.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_sysctl.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi_2_refsys.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/adi.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_uart.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rfc.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_rfc_pwr.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_rfc_dbell.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rf_common_cmd.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rf_mailbox.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rf_prop_cmd.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi_3_refsys.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/sys_ctrl.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/vims.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_vims.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ssi.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_ssi.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/systick.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/timer.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_gpt.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/trng.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_trng.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/uart.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/watchdog.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_wdt.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/crypto.h \
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_crypto.h \
  ../utils/constants.h ../../../../os/sys/log.h \
  ../../../../os/sys/log-conf.h
  resources/fire_detector.c :
@@ -95,5 +156,66 @@ build/cc26x0-cc13x0//launchpad/cc2650/obj/fire_detector.o: \
  ../../../../os/net/app-layer/coap/coap-observe.h :
  ../../../../os/net/app-layer/coap/coap-separate.h :
  ../../../../os/net/app-layer/coap/coap-observe-client.h :
+ ../../../../os/dev/leds.h ../../../../os/dev/gpio-hal.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/./dev/gpio-hal-arch.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/./ti-lib.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_batmon.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_batmon.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_event.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_device.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_event.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_ioc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_ioc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_rtc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_rtc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aon_wuc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_wuc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aux_adc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_event.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi_4_aux.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aux_anaif.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aux_wuc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aux_wuc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/chipinfo.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_fcfg1.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ddi.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_ddi.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aux_smph.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/i2c.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_i2c.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_sysctl.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ioc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/osc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_ddi_0_osc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/prcm.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_prcm.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/pwr_ctrl.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_aon_sysctl.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi_2_refsys.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/adi.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_uart.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rfc.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_rfc_pwr.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_rfc_dbell.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rf_common_cmd.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rf_mailbox.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/rf_prop_cmd.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_adi_3_refsys.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/sys_ctrl.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/vims.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_vims.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/ssi.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_ssi.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/systick.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/timer.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_gpt.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/trng.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_trng.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/uart.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/watchdog.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_wdt.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/crypto.h :
+ ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_crypto.h :
  ../utils/constants.h ../../../../os/sys/log.h :
  ../../../../os/sys/log-conf.h :

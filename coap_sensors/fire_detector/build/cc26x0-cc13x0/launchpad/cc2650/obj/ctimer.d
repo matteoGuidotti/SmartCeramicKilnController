@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ctimer.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ctimer.o: \
  ../../../../os/sys/ctimer.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/sys/ctimer.h ../../../../os/contiki.h \

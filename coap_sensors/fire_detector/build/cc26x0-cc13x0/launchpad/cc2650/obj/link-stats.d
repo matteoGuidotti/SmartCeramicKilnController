@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/link-stats.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/link-stats.o: \
  ../../../../os/net/link-stats.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

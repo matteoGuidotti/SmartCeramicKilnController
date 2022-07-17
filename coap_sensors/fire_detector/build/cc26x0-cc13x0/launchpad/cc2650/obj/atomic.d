@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/atomic.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/atomic.o: \
  ../../../../os/sys/atomic.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/sys/atomic.h ../../../../os/contiki.h \

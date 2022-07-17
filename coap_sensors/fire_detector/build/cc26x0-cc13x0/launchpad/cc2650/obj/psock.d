@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/psock.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/psock.o: \
  ../../../../os/net/ipv6/psock.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/ipv6/psock.h ../../../../os/contiki.h \

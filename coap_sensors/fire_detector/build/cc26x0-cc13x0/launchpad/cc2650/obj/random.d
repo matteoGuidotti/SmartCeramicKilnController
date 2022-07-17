@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/random.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/random.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/./random.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/netstack.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/netstack.o: \
  ../../../../os/net/netstack.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/netstack.h ../../../../os/contiki.h \

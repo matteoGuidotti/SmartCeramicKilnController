@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/coap-blocking-api.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/coap-blocking-api.o: \
  ../../../../os/net/app-layer/coap/coap-blocking-api.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/app-layer/coap/coap-engine.h \

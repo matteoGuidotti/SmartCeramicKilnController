@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/coap-transactions.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/coap-transactions.o: \
  ../../../../os/net/app-layer/coap/coap-transactions.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/app-layer/coap/coap-transactions.h \

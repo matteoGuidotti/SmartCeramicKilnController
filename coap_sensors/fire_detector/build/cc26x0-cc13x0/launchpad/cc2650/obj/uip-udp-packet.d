@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/uip-udp-packet.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/uip-udp-packet.o: \
  ../../../../os/net/ipv6/uip-udp-packet.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

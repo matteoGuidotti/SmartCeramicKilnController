@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/coap-keystore-simple.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/coap-keystore-simple.o: \
  ../../../../os/net/app-layer/coap/coap-keystore-simple.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/app-layer/coap/coap-endpoint.h \

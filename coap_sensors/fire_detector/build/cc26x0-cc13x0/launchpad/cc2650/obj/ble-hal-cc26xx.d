@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ble-hal-cc26xx.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ble-hal-cc26xx.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/rf-core/ble-hal/ble-hal-cc26xx.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../arch/cpu/cc26x0-cc13x0/./lpm.h \

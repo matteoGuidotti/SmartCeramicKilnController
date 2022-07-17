@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/packetbuf.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/packetbuf.o: \
  ../../../../os/net/packetbuf.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki-net.h ../../../../os/contiki.h \

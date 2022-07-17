@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/adc-sensor.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/adc-sensor.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/dev/adc-sensor.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

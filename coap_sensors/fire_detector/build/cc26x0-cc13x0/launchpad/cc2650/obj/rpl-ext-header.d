@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/rpl-ext-header.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/rpl-ext-header.o: \
  ../../../../os/net/routing/rpl-lite/rpl-ext-header.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/routing/routing.h ../../../../os/contiki.h \

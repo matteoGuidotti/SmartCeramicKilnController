@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/aux_smph.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/aux_smph.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aux_smph.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/aux_smph.h \

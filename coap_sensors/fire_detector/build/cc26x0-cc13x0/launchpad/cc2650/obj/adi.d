@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/adi.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/adi.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/driverlib/adi.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../arch/cpu/cc26x0-cc13x0/lib/cc26xxware/inc/hw_types.h \

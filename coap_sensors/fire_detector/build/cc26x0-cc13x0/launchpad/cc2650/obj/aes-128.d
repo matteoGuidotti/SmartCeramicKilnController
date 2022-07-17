@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/aes-128.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/aes-128.o: \
  ../../../../os/lib/aes-128.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/lib/aes-128.h ../../../../os/contiki.h \

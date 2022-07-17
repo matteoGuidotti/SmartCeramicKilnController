@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/tcp-socket.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/tcp-socket.o: \
  ../../../../os/net/ipv6/tcp-socket.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/ipv6/uip-debug.h ../../../../os/net/net-debug.h \

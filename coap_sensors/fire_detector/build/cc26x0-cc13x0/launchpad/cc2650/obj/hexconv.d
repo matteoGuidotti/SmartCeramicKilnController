@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/hexconv.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/hexconv.o: \
  ../../../../os/lib/hexconv.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/lib/hexconv.h ../../../../os/sys/cc.h \

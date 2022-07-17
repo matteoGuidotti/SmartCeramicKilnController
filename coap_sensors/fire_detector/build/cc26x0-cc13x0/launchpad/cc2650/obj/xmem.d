@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/xmem.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/xmem.o: \
  ../../../../arch/platform/cc26x0-cc13x0/common/xmem.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

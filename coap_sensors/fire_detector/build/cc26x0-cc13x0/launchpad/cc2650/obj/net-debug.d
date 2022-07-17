@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/net-debug.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/net-debug.o: \
  ../../../../os/net/net-debug.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/net-debug.h ../../../../os/net/ipv6/uip.h \

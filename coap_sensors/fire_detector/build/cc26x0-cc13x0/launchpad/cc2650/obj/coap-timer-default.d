@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/coap-timer-default.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/coap-timer-default.o: \
  ../../../../os/net/app-layer/coap/coap-timer-default.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/app-layer/coap/coap-timer.h ../../../../os/contiki.h \

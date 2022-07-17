@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/uip-packetqueue.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/uip-packetqueue.o: \
  ../../../../os/net/ipv6/uip-packetqueue.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/ipv6/uip.h ../../../../os/net/ipv6/uipopt.h \

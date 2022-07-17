@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/uip-ds6-route.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/uip-ds6-route.o: \
  ../../../../os/net/ipv6/uip-ds6-route.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/ipv6/uip-ds6.h ../../../../os/net/ipv6/uip.h \

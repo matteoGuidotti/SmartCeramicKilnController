@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/mac.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/mac.o: \
  ../../../../os/net/mac/mac.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/mac/mac.h ../../../../os/contiki.h \

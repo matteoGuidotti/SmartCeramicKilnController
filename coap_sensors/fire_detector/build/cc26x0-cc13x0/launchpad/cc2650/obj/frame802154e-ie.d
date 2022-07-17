@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/frame802154e-ie.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/frame802154e-ie.o: \
  ../../../../os/net/mac/framer/frame802154e-ie.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/mac/framer/frame802154e-ie.h ../../../../os/contiki.h \

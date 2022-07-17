@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/nullframer.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/nullframer.o: \
  ../../../../os/net/mac/framer/nullframer.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/mac/framer/framer.h ../../../../os/net/packetbuf.h \

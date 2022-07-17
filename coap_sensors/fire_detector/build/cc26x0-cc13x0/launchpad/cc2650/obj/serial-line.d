@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/serial-line.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/serial-line.o: \
  ../../../../os/dev/serial-line.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/dev/serial-line.h ../../../../os/contiki.h \

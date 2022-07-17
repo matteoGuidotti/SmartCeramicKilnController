@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ccm-star.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ccm-star.o: \
  ../../../../os/lib/ccm-star.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/lib/ccm-star.h ../../../../os/contiki.h \

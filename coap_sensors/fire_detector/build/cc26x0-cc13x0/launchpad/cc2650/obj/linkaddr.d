@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/linkaddr.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/linkaddr.o: \
  ../../../../os/net/linkaddr.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/linkaddr.h ../../../../os/contiki.h \

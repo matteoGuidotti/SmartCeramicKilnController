@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/board-buttons.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/board-buttons.o: \
  ../../../../arch/platform/cc26x0-cc13x0/launchpad/board-buttons.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

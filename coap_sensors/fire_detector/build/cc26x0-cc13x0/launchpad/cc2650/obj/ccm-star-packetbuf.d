@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ccm-star-packetbuf.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ccm-star-packetbuf.o: \
  ../../../../os/net/mac/csma/ccm-star-packetbuf.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/linkaddr.h ../../../../os/contiki.h \

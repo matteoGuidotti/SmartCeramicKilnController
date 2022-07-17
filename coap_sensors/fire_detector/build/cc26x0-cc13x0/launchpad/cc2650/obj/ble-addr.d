@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/ble-addr.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/ble-addr.o: \
  ../../../../arch/cpu/cc26x0-cc13x0/./ble-addr.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../arch/platform/cc26x0-cc13x0/./contiki-conf.h project-conf.h \

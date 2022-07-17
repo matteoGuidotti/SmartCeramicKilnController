@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/rpl-dag-root.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/rpl-dag-root.o: \
  ../../../../os/net/routing/rpl-lite/rpl-dag-root.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

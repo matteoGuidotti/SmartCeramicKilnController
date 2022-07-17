@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/csma-output.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/csma-output.o: \
  ../../../../os/net/mac/csma/csma-output.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/mac/csma/csma.h ../../../../os/contiki.h \

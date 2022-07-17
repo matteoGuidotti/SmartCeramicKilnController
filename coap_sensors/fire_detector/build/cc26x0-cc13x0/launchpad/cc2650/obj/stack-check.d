@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/stack-check.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/stack-check.o: \
  ../../../../os/sys/stack-check.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

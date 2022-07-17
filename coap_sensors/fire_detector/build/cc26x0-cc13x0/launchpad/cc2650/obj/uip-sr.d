@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/uip-sr.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/uip-sr.o: \
  ../../../../os/net/ipv6/uip-sr.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/contiki.h \

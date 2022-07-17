@@ -1,4 +1,4 @@
-build/cc26x0-cc13x0//launchpad/cc2650/obj/coap-res-well-known-core.o: \
+build/cc26x0-cc13x0/launchpad/cc2650/obj/coap-res-well-known-core.o: \
  ../../../../os/net/app-layer/coap/coap-res-well-known-core.c \
  ../../../../os/net/app-layer/coap/module-macros.h \
  ../../../../os/net/app-layer/coap/coap-engine.h \

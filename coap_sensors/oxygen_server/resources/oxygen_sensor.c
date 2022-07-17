@@ -221,7 +221,7 @@ static void oxygen_event_handler(void)
 		
 			break;
 		case HIGH:
-			pLOG_INFO("HIGH risk \n");
+			LOG_INFO("HIGH risk \n");
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_RED);

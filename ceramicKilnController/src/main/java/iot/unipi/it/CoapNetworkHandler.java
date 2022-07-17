@@ -153,7 +153,7 @@ public class CoapNetworkHandler{
 		}
 		else{
 			//we are in a normal situation, in which the oxygen level has to be as near as possible to the target
-			if(new_oxygenLevel > oxygen_target + acceptableRange && controllerMode != Controller_mode.DOWN_SLOW){
+			if(new_oxygenLevel > oxygen_target + acceptableRange){
 				System.out.println("Oxygen level is too high");
 				controllerMode = Controller_mode.DOWN_SLOW;
 				client_OxygenControllerSensor.post(new CoapHandler() {
@@ -169,7 +169,7 @@ public class CoapNetworkHandler{
 				}, JSON_OX_FILTER_SLOW, MediaTypeRegistry.APPLICATION_JSON);
 				System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 			}
-			else if(new_oxygenLevel < oxygen_target - acceptableRange && controllerMode != Controller_mode.UP_SLOW){
+			else if(new_oxygenLevel < oxygen_target - acceptableRange){
 				System.out.println("Oxygen level is too low");
 				controllerMode = Controller_mode.UP_SLOW;
 				client_OxygenControllerSensor.post(new CoapHandler() {

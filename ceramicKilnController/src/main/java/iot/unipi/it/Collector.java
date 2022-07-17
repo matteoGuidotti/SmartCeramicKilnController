@@ -122,7 +122,7 @@ public class Collector extends CoapServer {
 		System.out.println("!changeAccOxygen [new_value]: set new acceptable range for the oxygen");
 		System.out.println("!stopAlarm: stop the fire alarm");
 		System.out.println("!startAlarm: start a fire alarm");
-		System.out.println("!oxygenFill: fill the kiln with the oxygen so that a person ca enter in");
+		System.out.println("!oxygenFill: fill the kiln with the oxygen so that a person can enter in");
 		System.out.println("\n");
 	}
 

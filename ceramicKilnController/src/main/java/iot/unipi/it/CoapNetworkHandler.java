@@ -33,7 +33,7 @@ public class CoapNetworkHandler{
 	private final String JSON_START_ALARM = 	"{\"alarm\":\"start\"}";
 
 	private CoapClient[] client_FireDetectorSensor = new CoapClient[2];
-	private CoapClient client_OxygenControllerSensor;
+	private CoapClient client_OxygenControllerSensor = null;
 	private double oxygen_target;
 	private double acceptableRange;
 	private Controller_mode controllerMode = Controller_mode.OFF;
@@ -59,21 +59,16 @@ public class CoapNetworkHandler{
 
 	public void addFireDetector(String ipAddress){
 		int index = 0;
-		System.out.println("Add Fire detector");
 		if(fireDetectorAddress[0] != null)
 			index = 1;
-		System.out.println("Index del fire = " + index);
 		System.out.println("The ipAddress of the registering sensor is " + ipAddress);
 		fireDetectorAddress[index] = ipAddress;
 		client_FireDetectorSensor[index] = new CoapClient("coap://[" + ipAddress + "]/fire_detector");
 		client_FireDetectorSensor[index].observe(
 			new CoapHandler() {
                     public void onLoad(CoapResponse response) {
-						System.out.println("OnLoad del fire detector");
                         if(!response.getResponseText().equals(""))
 							handleFireAlarm(response);
-						else
-							System.out.println("Ricevuto payload vuoto dal fire detector");
                     }
 
                     public void onError() {
@@ -84,20 +79,15 @@ public class CoapNetworkHandler{
 
 	public void handleFireAlarm(CoapResponse response){
 			String responseText = response.getResponseText();
-			System.out.println("a" + responseText + "a");
 			CoapResponse postResponse;
 			Map<String, Object> jsonResponse = Utils.jsonParser(responseText);
-			for(String key: jsonResponse.keySet()){
-				System.out.println("chiave json: " + key);
-			}
-			if((Boolean)jsonResponse.get("fire_detected")){
+			if((Boolean)jsonResponse.get("fire_detected") && client_OxygenControllerSensor != null){
+				System.out.println("A fire has been detected!");
 				DbUtility.insertFireAlarm(true, fire_index);
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Request to switch on the oxygen filter [mode FAST] NOT sent. Error: " + String.valueOf(response.getCode().value));
-							}
+						if(response == null){
+							System.out.println("POST error");
 						}
 					}
 
@@ -137,35 +127,19 @@ public class CoapNetworkHandler{
 			if(new_oxygenLevel <= 10){
 				//this level of oxygen does not enable to the flames to rise
 				System.out.println("Sending stop alarm messages");
-				/*client_OxygenControllerSensor.post(new CoapHandler() {
-					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Request to switch off the oxygen filter NOT sent. Error: " + response.getCode().value);
-							}
-						}
-					}
-
-					public void onError() {
-						System.err.println("OBSERVING FAILED");
-					}	
-				}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);*/
 				stopFireAlarm();
-				System.out.println("Request to switch off the oxygen filter sent");
-				//fire_index++;
 				controllerMode = Controller_mode.OFF;
 			}
 		}
 		else if(controllerMode == Controller_mode.UP_FAST){
 			//we are trying to enter in the kiln
 			if(new_oxygenLevel >= 21){
+				System.out.println("The oxygen level is good for humans");
 				//this level of oxygen is sufficient to consent to humans to live well
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Request to switch off the oxygen emitter NOT sent. Error: " + response.getCode().value);
-							}
+						if(response == null){
+							System.out.println("POST error");
 						}
 					}
 
@@ -180,13 +154,12 @@ public class CoapNetworkHandler{
 		else{
 			//we are in a normal situation, in which the oxygen level has to be as near as possible to the target
 			if(new_oxygenLevel > oxygen_target + acceptableRange && controllerMode != Controller_mode.DOWN_SLOW){
+				System.out.println("Oxygen level is too high");
 				controllerMode = Controller_mode.DOWN_SLOW;
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Request to switch on the oxygen filter [mode SLOW] NOT sent. Error: " + response.getCode().value);
-							}
+						if(response == null){
+							System.out.println("POST error");
 						}
 					}
 
@@ -197,13 +170,12 @@ public class CoapNetworkHandler{
 				System.out.println("Request to switch on the oxygen filter [mode SLOW] sent");
 			}
 			else if(new_oxygenLevel < oxygen_target - acceptableRange && controllerMode != Controller_mode.UP_SLOW){
+				System.out.println("Oxygen level is too low");
 				controllerMode = Controller_mode.UP_SLOW;
 				client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
-						if(response != null){
-							if(!response.isSuccess()){
-								System.out.println("Request to switch on the oxygen emitter [mode SLOW] NOT sent. Error: " + response.getCode().value);
-							}
+						if(response == null){
+							System.out.println("POST error");
 						}
 					}
 
@@ -219,10 +191,8 @@ public class CoapNetworkHandler{
 					//we have to turn off the emitter
 					client_OxygenControllerSensor.post(new CoapHandler() {
                                         	public void onLoad(CoapResponse response) {
-                                                	if(response != null){
-                                                        	if(!response.isSuccess()){
-                                                                	System.out.println("Request to switch off the oxygen emitter NOT sent. Error: " + response.getCode().value);
-                                                        	}
+                                                	if(response == null){
+                                                        	System.out.println("POST error");
                                                 	}
                                         	}
 
@@ -237,10 +207,8 @@ public class CoapNetworkHandler{
 					//we have to turn off the filter
 					client_OxygenControllerSensor.post(new CoapHandler() {
                                                 public void onLoad(CoapResponse response) {
-                                                        if(response != null){
-                                                                if(!response.isSuccess()){
-                                                                        System.out.println("Request to switch off the oxygen filter NOT sent. Error: " + response.getCode().value);
-                                                                }   
+                                                        if(response == null){
+                                                                System.out.println("POST error");  
                                                         }   
                                                 }   
 
@@ -267,10 +235,8 @@ public class CoapNetworkHandler{
 		if(controllerMode == Controller_mode.DOWN_FAST){
 			client_OxygenControllerSensor.post(new CoapHandler() {
 				public void onLoad(CoapResponse response) {
-					if(response != null){
-						if(!response.isSuccess()){
-							System.out.println("non success");
-						}
+					if(response == null){
+						System.out.println("POST error");
 					}
 				}
 
@@ -278,7 +244,7 @@ public class CoapNetworkHandler{
 					System.err.println("OBSERVING FAILED");
 				}	
 			}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
-			System.out.println("Request to switch on the oxygen filter sent");
+			System.out.println("Request to switch off the oxygen filter sent");
 			controllerMode = Controller_mode.OFF;
 		}
 		//sending to the fire_detector sensors the stop alarm messages
@@ -287,10 +253,8 @@ public class CoapNetworkHandler{
 				continue;
 			client_FireDetectorSensor[i].post(new CoapHandler() {
 				public void onLoad(CoapResponse response) {
-					if(response != null){
-						if(!response.isSuccess()){
-							System.out.println("non success");
-						}
+					if(response == null){
+						System.out.println("POST error");
 					}
 				}
 
@@ -307,10 +271,8 @@ public class CoapNetworkHandler{
 		DbUtility.insertFireAlarm(true, fire_index);
 		client_OxygenControllerSensor.post(new CoapHandler() {
 			public void onLoad(CoapResponse response) {
-				if(response != null){
-					if(!response.isSuccess()){
-						System.out.println("non success");
-					}
+				if(response == null){
+					System.out.println("POST error");
 				}
 			}
 
@@ -326,10 +288,8 @@ public class CoapNetworkHandler{
 				continue;
 			client_FireDetectorSensor[i].post(new CoapHandler() {
 				public void onLoad(CoapResponse response) {
-					if(response != null){
-						if(!response.isSuccess()){
-							System.out.println("non success");
-						}
+					if(response == null){
+						System.out.println("POST error");
 					}
 				}
 
@@ -344,10 +304,8 @@ public class CoapNetworkHandler{
 	public void oxygenFill(){
 		client_OxygenControllerSensor.post(new CoapHandler() {
 			public void onLoad(CoapResponse response) {
-				if(response != null){
-					if(!response.isSuccess()){
-						System.out.println("non success");
-					}
+				if(response == null){
+					System.out.println("POST error");
 				}
 			}
 

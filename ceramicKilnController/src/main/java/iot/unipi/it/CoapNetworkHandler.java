@@ -91,7 +91,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Request to switch on the oxygen filter [mode FAST] NOT sent. Error: " + String.valueOf(response.getCode().value));
 							}
 						}
 					}
@@ -136,7 +136,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Request to switch off the oxygen filter NOT sent. Error: " + response.getCode().value);
 							}
 						}
 					}
@@ -158,7 +158,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Request to switch off the oxygen emitter NOT sent. Error: " + response.getCode().value);
 							}
 						}
 					}
@@ -179,7 +179,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Request to switch on the oxygen filter [mode SLOW] NOT sent. Error: " + response.getCode().value);
 							}
 						}
 					}
@@ -196,7 +196,7 @@ public class CoapNetworkHandler{
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
-								System.out.println("non success");
+								System.out.println("Request to switch on the oxygen emitter [mode SLOW] NOT sent. Error: " + response.getCode().value);
 							}
 						}
 					}
@@ -215,7 +215,7 @@ public class CoapNetworkHandler{
                                         	public void onLoad(CoapResponse response) {
                                                 	if(response != null){
                                                         	if(!response.isSuccess()){
-                                                                	System.out.println("non success");
+                                                                	System.out.println("Request to switch off the oxygen emitter NOT sent. Error: " + response.getCode().value);
                                                         	}
                                                 	}
                                         	}
@@ -233,7 +233,7 @@ public class CoapNetworkHandler{
                                                 public void onLoad(CoapResponse response) {
                                                         if(response != null){
                                                                 if(!response.isSuccess()){
-                                                                        System.out.println("non success");
+                                                                        System.out.println("Request to switch off the oxygen filter NOT sent. Error: " + response.getCode().value);
                                                                 }   
                                                         }   
                                                 }   

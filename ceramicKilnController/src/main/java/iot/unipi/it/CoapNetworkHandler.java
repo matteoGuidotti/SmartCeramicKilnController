@@ -137,7 +137,7 @@ public class CoapNetworkHandler{
 			if(new_oxygenLevel <= 10){
 				//this level of oxygen does not enable to the flames to rise
 				System.out.println("Sending stop alarm messages");
-				client_OxygenControllerSensor.post(new CoapHandler() {
+				/*client_OxygenControllerSensor.post(new CoapHandler() {
 					public void onLoad(CoapResponse response) {
 						if(response != null){
 							if(!response.isSuccess()){
@@ -149,9 +149,10 @@ public class CoapNetworkHandler{
 					public void onError() {
 						System.err.println("OBSERVING FAILED");
 					}	
-				}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);
+				}, JSON_OX_FILTER_OFF, MediaTypeRegistry.APPLICATION_JSON);*/
+				stopFireAlarm();
 				System.out.println("Request to switch off the oxygen filter sent");
-				fire_index++;
+				//fire_index++;
 				controllerMode = Controller_mode.OFF;
 			}
 		}

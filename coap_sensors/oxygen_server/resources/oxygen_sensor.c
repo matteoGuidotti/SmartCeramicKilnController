@@ -19,7 +19,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 static void oxygen_event_handler(void);
 
 EVENT_RESOURCE(oxygen_sensor,
-         "title=\"Oxygen sensor;obs",
+         "title=\"Oxygen sensor\";obs",
          get_oxygen_handler,
          res_put_post_handler,
          res_put_post_handler,

@@ -18,15 +18,12 @@ static void fire_detector_event_handler(void);
 static int counter_fire = 0;
 
 
-EVENT_RESOURCE(fire_detector,
-         //"title=\"Fire detector\", POST alarm=on|off\";obs",
-         //"title=\"Fire detector\", POST {\"alarm\":\"start\"|\"stop\"}\";obs",
-	 "title=\"Fire detector,  POST {alarm:start|stop}\";obs",
-	 get_fire_detection_handler,
-         res_post_handler,
-         NULL,
-         NULL,
-         fire_detector_event_handler);
+EVENT_RESOURCE(fire_detector, "title=\"Fire detector,  POST {alarm:start|stop}\";obs",
+		get_fire_detection_handler,
+		res_post_handler,
+		NULL,
+		NULL,
+		fire_detector_event_handler);
 
 
 static bool fire_detected = false;
@@ -51,10 +48,8 @@ static bool simulate_fire_detection(){
 static void get_fire_detection_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
 	int len;
-	printf("GET\n");
 	if(fire_detected)
 	{
-		printf("GET: preparo l'invio del fire\n");
 		sprintf(json_response, FIRE_ALARM);
 		coap_set_header_content_format(response, APPLICATION_JSON);
 		coap_set_header_etag(response, (uint8_t *)&len, 1);
@@ -63,7 +58,6 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 	else{
 	
 		sprintf(json_response, "{\"fire_detected\": false}");
-  
   		coap_set_header_content_format(response, APPLICATION_JSON);
         coap_set_header_etag(response, (uint8_t *)&len, 1);
  		coap_set_payload(response, json_response, strlen(json_response));

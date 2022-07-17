@@ -15,7 +15,6 @@
 
 static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
-//static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void oxygen_event_handler(void);
 
 EVENT_RESOURCE(oxygen_sensor,
@@ -176,15 +175,12 @@ static enum Risk simulate_oxygen_change(){
 
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {
-	char message[30];
 	int len;
 
-	
-	sprintf(message, "%g", oxygen_level);
 	int parteIntera = (int) oxygen_level;
 	int parteDecimale = (int)((oxygen_level - parteIntera) * 10);
 	sprintf(json_response, "{\"oxygen_value\": %d.%d}", parteIntera, parteDecimale);
-	printf("%s\n", json_response);
+	printf("NEW oxygen level: %d.%d\n", parteIntera, parteDecimale);
 
 	coap_set_header_content_format(response, APPLICATION_JSON);
 	coap_set_header_etag(response, (uint8_t *)&len, 1);
@@ -195,40 +191,39 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 
 static void oxygen_event_handler(void)
 {
-  enum Risk sensed_risk = simulate_oxygen_change();
-  printf("NEW Oxygen level: %f\n", oxygen_level);
-  
-  if (current_risk != sensed_risk){
-	current_risk = sensed_risk;
-	switch (current_risk) {
-		case LOW:
-			LOG_INFO("Oxygen level: %lf,low risk \n", oxygen_level);
-			leds_single_off(LEDS_GREEN);
-			leds_single_off(LEDS_RED);
-			leds_on(LEDS_GREEN);
+  	enum Risk sensed_risk = simulate_oxygen_change();
+
+	if (current_risk != sensed_risk){
+		current_risk = sensed_risk;
+		switch (current_risk) {
+			case LOW:
+				LOG_INFO("LOW risk \n");
+				leds_single_off(LEDS_GREEN);
+				leds_single_off(LEDS_RED);
+				leds_on(LEDS_GREEN);
+				
+				break;
+			case MEDIUM_LOW:
+				printf("MEDIUM-LOW risk\n");
+				leds_single_off(LEDS_GREEN);
+				leds_single_off(LEDS_RED);
+				leds_on(LEDS_GREEN);
+				leds_on(LEDS_RED);
 			
-			break;
-		case MEDIUM_LOW:
-			printf("Oxygen level: %lf, medium-low risk\n", oxygen_level);
-			leds_single_off(LEDS_GREEN);
-			leds_single_off(LEDS_RED);
-			leds_on(LEDS_GREEN);
-			leds_on(LEDS_RED);
-		
-		case MEDIUM:
-			printf("Oxygen level: %lf, medium risk\n", oxygen_level);
-			leds_single_off(LEDS_GREEN);
-			leds_single_off(LEDS_RED);
-			leds_on(LEDS_GREEN);
-			leds_on(LEDS_RED);
-		
-			break;
-		case HIGH:
-			printf("Oxygen level: %lf, high risk\n", oxygen_level);
-			leds_single_off(LEDS_GREEN);
-			leds_single_off(LEDS_RED);
-			leds_on(LEDS_RED);
-			break;
+			case MEDIUM:
+				printf("MEDIUM risk\n");
+				leds_single_off(LEDS_GREEN);
+				leds_single_off(LEDS_RED);
+				leds_on(LEDS_GREEN);
+				leds_on(LEDS_RED);
+			
+				break;
+			case HIGH:
+				printf("HIGH risk\n");
+				leds_single_off(LEDS_GREEN);
+				leds_single_off(LEDS_RED);
+				leds_on(LEDS_RED);
+				break;
 	}
   }
   

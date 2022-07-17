@@ -64,7 +64,7 @@ static void get_fire_detection_handler(coap_message_t *request, coap_message_t *
 	}
 }
 
-//coap-client -m POST|PUT coap://[fd00::20x:x:x:x]/fire_detector -e {"alarm":"start"}|{"alarm":"stop"}
+//coap-client -m POST coap://[fd00::20x:x:x:x]/fire_detector -e {"alarm":"start"}|{"alarm":"stop"}
 
 static void res_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset)
 {

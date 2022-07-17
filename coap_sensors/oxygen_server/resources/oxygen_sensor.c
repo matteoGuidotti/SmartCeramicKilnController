@@ -182,6 +182,7 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 	int parteIntera = (int) oxygen_level;
 	int parteDecimale = (int)((oxygen_level - parteIntera) * 10);
 	sprintf(json_response, "{\"oxygen_value\": %d.%d}", parteIntera, parteDecimale);
+	printf("%s\n", json_response);
 
 	coap_set_header_content_format(response, APPLICATION_JSON);
 	coap_set_header_etag(response, (uint8_t *)&len, 1);

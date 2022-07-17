@@ -15,7 +15,7 @@
 
 static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
 static void get_oxygen_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
-//static void res_put_post_handler(coap_message_t *request, coap_message_t *response, uint8_t *buffer, uint16_t preferred_size, int32_t *offset);
+
 static void oxygen_event_handler(void);
 
 EVENT_RESOURCE(oxygen_sensor,
@@ -178,8 +178,6 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 {
 	char message[30];
 	int len;
-
-	
 	sprintf(message, "%g", oxygen_level);
 	int parteIntera = (int) oxygen_level;
 	int parteDecimale = (int)((oxygen_level - parteIntera) * 10);
@@ -196,27 +194,26 @@ static void get_oxygen_handler(coap_message_t *request, coap_message_t *response
 static void oxygen_event_handler(void)
 {
   enum Risk sensed_risk = simulate_oxygen_change();
-  printf("NEW Oxygen level: %f\n", oxygen_level);
   
   if (current_risk != sensed_risk){
 	current_risk = sensed_risk;
 	switch (current_risk) {
 		case LOW:
-			LOG_INFO("Oxygen level: %lf,low risk \n", oxygen_level);
+			LOG_INFO("LOW risk \n");
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
 			
 			break;
 		case MEDIUM_LOW:
-			printf("Oxygen level: %lf, medium-low risk\n", oxygen_level);
+			LOG_INFO("MEDIUM-LOW risk \n");
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
 			leds_on(LEDS_RED);
 		
 		case MEDIUM:
-			printf("Oxygen level: %lf, medium risk\n", oxygen_level);
+			LOG_INFO("MEDIUM risk \n");
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_GREEN);
@@ -224,7 +221,7 @@ static void oxygen_event_handler(void)
 		
 			break;
 		case HIGH:
-			printf("Oxygen level: %lf, high risk\n", oxygen_level);
+			pLOG_INFO("HIGH risk \n");
 			leds_single_off(LEDS_GREEN);
 			leds_single_off(LEDS_RED);
 			leds_on(LEDS_RED);
